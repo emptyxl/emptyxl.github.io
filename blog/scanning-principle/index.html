@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="scan,port scanning,fingerprint recognition,service detection" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="我们分以下几种类型来分析扫描器原理：  端口扫描 服务检测 操作系统检测  端口扫描一般我们使用以下协议进行端口扫描：  TCP UDP ICMP">
+<meta name="keywords" content="scan,port scanning,fingerprint recognition,service detection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="扫描器原理总结">
+<meta property="og:url" content="http://yoursite.com/blog/scanning-principle/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="我们分以下几种类型来分析扫描器原理：  端口扫描 服务检测 操作系统检测  端口扫描一般我们使用以下协议进行端口扫描：  TCP UDP ICMP">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/scanning-principle/tcp-connect.png">
+<meta property="og:image" content="http://yoursite.com/blog/scanning-principle/tcp-syn.png">
+<meta property="og:image" content="http://yoursite.com/blog/scanning-principle/tcp-xmas.png">
+<meta property="og:image" content="http://yoursite.com/blog/scanning-principle/tcp-null.png">
+<meta property="og:image" content="http://yoursite.com/blog/scanning-principle/tcp-ack.png">
+<meta property="og:image" content="http://yoursite.com/blog/scanning-principle/udp.png">
+<meta property="og:image" content="http://yoursite.com/blog/scanning-principle/icmp.png">
+<meta property="og:image" content="http://yoursite.com/blog/scanning-principle/icmp-error.png">
+<meta property="og:updated_time" content="2018-03-16T12:32:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="扫描器原理总结">
+<meta name="twitter:description" content="我们分以下几种类型来分析扫描器原理：  端口扫描 服务检测 操作系统检测  端口扫描一般我们使用以下协议进行端口扫描：  TCP UDP ICMP">
+<meta name="twitter:image" content="http://yoursite.com/blog/scanning-principle/tcp-connect.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/scanning-principle/"/>
+
+
+
+
+
+  <title>扫描器原理总结 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/scanning-principle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">扫描器原理总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T11:12:45+08:00">
+                2018-02-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-16T20:32:08+08:00">
+                2018-03-16
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/penetration-testing/" itemprop="url" rel="index">
+                    <span itemprop="name">penetration testing</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们分以下几种类型来分析扫描器原理：</p>
+<ul>
+<li>端口扫描</li>
+<li>服务检测</li>
+<li>操作系统检测</li>
+</ul>
+<h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><p>一般我们使用以下协议进行端口扫描：</p>
+<ul>
+<li>TCP</li>
+<li>UDP</li>
+<li>ICMP</li>
+</ul>
+<a id="more"></a>
+<h4 id="TCP-端口扫描"><a href="#TCP-端口扫描" class="headerlink" title="TCP 端口扫描"></a>TCP 端口扫描</h4><ol>
+<li><code>TCP connect</code> 扫描</li>
+<li><code>TCP SYN</code> 扫描</li>
+<li><code>TCP Xmas Tree</code> 扫描</li>
+<li><code>TCP null</code> 扫描</li>
+<li><code>TCP ACK</code> 扫描</li>
+</ol>
+<h5 id="TCP-connect-扫描"><a href="#TCP-connect-扫描" class="headerlink" title="# TCP connect 扫描"></a># TCP connect 扫描</h5><p>与目标端口建立3次握手，如果成功建立则为<code>open</code>，收到<code>RST</code>则为<code>close</code></p>
+<img src="/blog/scanning-principle/tcp-connect.png" alt="TCP connect 扫描" title="TCP connect 扫描">  
+<h5 id="TCP-SYN-扫描"><a href="#TCP-SYN-扫描" class="headerlink" title="# TCP SYN 扫描"></a># TCP SYN 扫描</h5><p>也称为TCP半连接扫描，只发送三次握手的第一次SYN报文段，如果收到<code>ACK+SYN</code>则为<code>open</code>，收到<code>RST</code>则为<code>close</code>，这种好处是不必等待三次握手完全完成，速度快且不容易被防火墙记录进日志。</p>
+<img src="/blog/scanning-principle/tcp-syn.png" alt="TCP SYN 扫描" title="TCP SYN 扫描">  
+<h5 id="TCP-Xmas-Tree-扫描"><a href="#TCP-Xmas-Tree-扫描" class="headerlink" title="# TCP Xmas Tree 扫描"></a># TCP Xmas Tree 扫描</h5><p>客户端向服务端发送带有 <code>PSH</code>，<code>FIN</code>，<code>URG</code> 标识的数据包(即不含有<code>ACK SYN RST</code>)，被称为TCP Xmas Tree扫描。其利用的是<code>RFC</code>的规定:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">如果不设置SYN，RST，或者ACK位的报文发送到开放端口，理论上，这不应该发生，如果您确实收到了，丢弃该报文，返回。</div></pre></td></tr></table></figure>
+<p>那么有以下规则：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">如果扫描系统遵循该RFC，当端口关闭时，任何不包含SYN，RST，或者ACK位的报文会导致 一个RST返回</div><div class="line">而当端口开放时，应该没有任何响应。只要不包含SYN，RST，或者ACK, 任何其它三种(FIN，PSH，<span class="keyword">and</span> URG)的组合都行。</div></pre></td></tr></table></figure>
+<img src="/blog/scanning-principle/tcp-xmas.png" alt="TCP Xmas Tree 扫描" title="TCP Xmas Tree 扫描">  
+<h5 id="TCP-null-扫描"><a href="#TCP-null-扫描" class="headerlink" title="# TCP null 扫描"></a># TCP null 扫描</h5><p>空扫描即flag位全0，如果没有回复则为<code>open</code>，收到<code>RST</code>则为<code>close</code></p>
+<img src="/blog/scanning-principle/tcp-null.png" alt="TCP null 扫描" title="TCP null 扫描">  
+<h5 id="TCP-ACK-扫描"><a href="#TCP-ACK-扫描" class="headerlink" title="# TCP ACK 扫描"></a># TCP ACK 扫描</h5><p>这种扫描无法得知端口的开放状态，只能探知端口是否被过滤，因为无论端口开放与否都会返回<code>RST</code>报文段。</p>
+<img src="/blog/scanning-principle/tcp-ack.png" alt="TCP ACK 扫描" title="TCP ACK 扫描">  
+<h4 id="UDP-扫描"><a href="#UDP-扫描" class="headerlink" title="UDP 扫描"></a>UDP 扫描</h4><p>UDP扫描比较简单，一般如果返回<code>ICMP port unreachable</code>说明端口是关闭的，而如果没有回应或有回应(有些UDP服务是有回应的但不常见)则认为是<code>open</code>，但由于UDP的不可靠性，无法判断报文段是丢了还是没有回应，所以一般扫描器会发送多次，然后根据结果再判断。这也是为什么UDP扫描这么慢的原因。</p>
+<img src="/blog/scanning-principle/udp.png" alt="UDP 扫描" title="UDP 扫描">  
+<h4 id="ICMP-扫描"><a href="#ICMP-扫描" class="headerlink" title="ICMP 扫描"></a>ICMP 扫描</h4><img src="/blog/scanning-principle/icmp.png" alt="ICMP结构" title="ICMP结构">  
+<ul>
+<li>类型字段：指明该数据包属于什么大分类</li>
+<li>代码字段：指明数据包属于大类里面的哪个小类</li>
+<li>校验和 ： 指明该数据包的校验和</li>
+</ul>
+<p>除了正常的<code>ICMP echo</code>(发送回显<code>Type＝8</code>，返回<code>Type=0</code>，或不可达<code>Type=3</code>),高级ICMP扫描技术采用的是ICMP数据报错误处理。</p>
+<blockquote>
+<p>根据网络协议，如果按照协议出现了错误，那么接收端将产生一个icmp的错误报文。这些错误报文并不是主动发送的，而是由于错误，根据协议自动产生。</p>
+</blockquote>
+<p>所有Type类型如下：</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">0 </span>响应应答（ECHO-REPLY）</div><div class="line"><span class="symbol">3 </span>不可到达</div><div class="line"><span class="symbol">4 </span>源抑制</div><div class="line"><span class="symbol">5 </span>重定向</div><div class="line"><span class="symbol">8 </span>响应请求（ECHO-REQUEST）</div><div class="line"><span class="symbol">11 </span>超时</div><div class="line"><span class="symbol">12 </span>参数失灵</div><div class="line"><span class="symbol">13 </span>时间戳请求</div><div class="line"><span class="symbol">14 </span>时间戳应答</div><div class="line"><span class="symbol">15 </span>信息请求（*已作废）</div><div class="line"><span class="symbol">16 </span>信息应答（*已作废）</div><div class="line"><span class="symbol">17 </span>地址掩码请求</div><div class="line"><span class="symbol">18 </span>地址掩码应答</div></pre></td></tr></table></figure>
+<p>常见错误利用如下：</p>
+<img src="/blog/scanning-principle/icmp-error.png" alt="ICMP错误利用" title="ICMP错误利用">  
+<h3 id="服务版本检测"><a href="#服务版本检测" class="headerlink" title="服务版本检测"></a>服务版本检测</h3><p>我们以nmap的版本检测为例,观察<code>nmap-service-probes</code>文件内容:</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"># This is the NULL probe that just compares any banners given to us</div><div class="line">##############################NEXT PROBE##############################</div><div class="line">Probe TCP NULL q||</div><div class="line"># Wait for at least 6 seconds for data.  It used to be 5, but some</div><div class="line"># smtp services have lately been instituting an artificial pause (see</div><div class="line"># FEATURE('greet_pause') in Sendmail, for example)</div><div class="line">totalwaitms 6000</div><div class="line"># If the service closes the connection before 3 seconds, it's probably</div><div class="line"># tcpwrapped. Adjust up or down depending on your false-positive rate.</div><div class="line">tcpwrappedms 3000</div><div class="line"></div><div class="line">match 1c-server m|^S<span class="symbol">\x</span>f5<span class="symbol">\x</span>c6<span class="symbol">\x</span>1a&#123;| p/1C:Enterprise business management server/</div><div class="line"></div><div class="line">match 4d-server m|^<span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span>H<span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\x</span>02.[^<span class="symbol">\0</span>]*<span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span>$|s p/4th Dimension database server/ cpe:/a:4d_sas:4d/</div><div class="line"></div><div class="line">match aastra-pbx m|^BUSY$| p|Aastra/Mitel 400-series PBX service port|</div><div class="line">match acap m|^<span class="symbol">\*</span> ACAP <span class="symbol">\(</span>IMPLEMENTATION <span class="symbol">\"</span>CommuniGate Pro ACAP (<span class="symbol">\d</span>[-.<span class="symbol">\w</span>]+)<span class="symbol">\"</span><span class="symbol">\)</span> | p/CommuniGate Pro ACAP server/ v/$1/ i/for mail client preference sharing/ cpe:/a:stalker:communigate_pro:$1/</div><div class="line">match acarsd m|^g<span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\x</span>1b<span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span>acarsd<span class="symbol">\t</span>([<span class="symbol">\w</span>._-]+)<span class="symbol">\t</span>API-([<span class="symbol">\w</span>._-]+)<span class="symbol">\)</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\x</span>06<span class="symbol">\x</span>05<span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span>&lt;<span class="symbol">\?</span>xml | p/acarsd/ v/$1/ i/API $2/ cpe:/a:acarsd:acarsd:$1/</div><div class="line">match acmp m|^ACMP Server Version ([<span class="symbol">\w</span>._-]+)<span class="symbol">\r</span><span class="symbol">\n</span>| p/Aagon ACMP Inventory/ v/$1/</div><div class="line"></div><div class="line">match apachemq m|^<span class="symbol">\0</span><span class="symbol">\0</span>..<span class="symbol">\x</span>01ActiveMQ<span class="symbol">\0</span><span class="symbol">\0</span><span class="symbol">\0</span>.<span class="symbol">\x</span>01<span class="symbol">\0</span><span class="symbol">\0</span>.*<span class="symbol">\x</span>0cProviderName<span class="symbol">\t</span><span class="symbol">\0</span><span class="symbol">\x</span>08ActiveMQ.*<span class="symbol">\x</span>0fPlatformDetails<span class="symbol">\t</span>..JVM: (<span class="symbol">\d</span>[^,]*), [^,]*, Oracle Corporation, OS: Linux, (<span class="symbol">\d</span><span class="symbol">\.</span>[<span class="symbol">\d</span>.]+)[^,]*, ([<span class="symbol">\w</span>_-]+).*<span class="symbol">\x</span>0fProviderVersion<span class="symbol">\t</span>..(<span class="symbol">\d</span>[<span class="symbol">\w</span>._-]*)|s p/ActiveMQ OpenWire transport/ v/$4/ i/Java $1; arch: $3/ o/Linux $2/ cpe:/a:apache:activemq:$4/ cpe:/o:linux:linux_kernel:$2/a</div><div class="line">softmatch apachemq m|^<span class="symbol">\0</span><span class="symbol">\0</span>..<span class="symbol">\x</span>01ActiveMQ<span class="symbol">\0</span>| p/ActiveMQ OpenWire transport/</div></pre></td></tr></table></figure>
+<p>我们可以看到，发送了一个<code>NULL</code>探针，正则匹配相应的banner内容来确定服务</p>
+<h3 id="操作系统检测"><a href="#操作系统检测" class="headerlink" title="操作系统检测"></a>操作系统检测</h3><p>查看<code>nmap-os-db</code>，内容如下，截取了一段，好像….有点难读:</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"># Acorp-W<span class="number">422</span>G, wireless ADSL router.</div><div class="line"># Linux <span class="number">2.4</span>.<span class="number">17</span>_mvl<span class="number">21</span>-malta-mips_fp_le (root<span class="title">@home1.homework</span>) (gcc version <span class="number">2.95</span>.<span class="number">3</span> <span class="number">20010315</span> (<span class="keyword">release</span>/MontaVista)) <span class="symbol">#1</span> Sat Sep <span class="number">8</span> <span class="number">00</span>:<span class="number">03</span>:<span class="number">33</span> MSD <span class="number">2007</span>, Acorp-W<span class="number">400</span>G ADSL <span class="keyword">and</span> Wi-Fi router,</div><div class="line">Fingerprint Acorp W<span class="number">400</span>G <span class="keyword">or</span> W<span class="number">422</span>G wireless ADSL modem (MontaVista embedded Linux <span class="number">2.4</span>.<span class="number">17</span>)</div><div class="line">Class Acorp | embedded || WAP</div><div class="line">SEQ(SP=C<span class="number">2</span>-CC<span class="symbol">%GCD</span>=<span class="number">1</span><span class="number">-6</span><span class="symbol">%ISR</span>=C<span class="number">7</span>-D<span class="number">1</span><span class="symbol">%TI</span>=Z<span class="symbol">%II</span>=I<span class="symbol">%TS</span>=<span class="number">7</span>)</div><div class="line">OPS(O<span class="number">1</span>=M<span class="number">5</span>B<span class="number">4</span>ST<span class="number">11</span><span class="symbol">%O2</span>=M<span class="number">5</span>B<span class="number">4</span>ST<span class="number">11</span><span class="symbol">%O3</span>=M<span class="number">5</span>B<span class="number">4</span>NNT<span class="number">11</span><span class="symbol">%O4</span>=M<span class="number">5</span>B<span class="number">4</span>ST<span class="number">11</span><span class="symbol">%O5</span>=M<span class="number">5</span>B<span class="number">4</span>ST<span class="number">11</span><span class="symbol">%O6</span>=M<span class="number">5</span>B<span class="number">4</span>ST<span class="number">11</span>)</div><div class="line">WIN(W<span class="number">1</span>=<span class="number">16</span>A<span class="number">0</span><span class="symbol">%W2</span>=<span class="number">16</span>A<span class="number">0</span><span class="symbol">%W3</span>=<span class="number">16</span>A<span class="number">0</span><span class="symbol">%W4</span>=<span class="number">16</span>A<span class="number">0</span><span class="symbol">%W5</span>=<span class="number">16</span>A<span class="number">0</span><span class="symbol">%W6</span>=<span class="number">16</span>A<span class="number">0</span>)</div><div class="line">ECN(R=Y<span class="symbol">%DF</span>=Y<span class="symbol">%T</span>=<span class="number">3</span>B<span class="number">-45</span><span class="symbol">%TG</span>=<span class="number">40</span><span class="symbol">%W</span>=<span class="number">16</span>D<span class="number">0</span><span class="symbol">%O</span>=M<span class="number">5</span>B<span class="number">4</span>NNS<span class="symbol">%CC</span>=N<span class="symbol">%Q</span>=)</div><div class="line">T<span class="number">1</span>(R=Y<span class="symbol">%DF</span>=Y<span class="symbol">%T</span>=<span class="number">3</span>B<span class="number">-45</span><span class="symbol">%TG</span>=<span class="number">40</span><span class="symbol">%S</span>=O<span class="symbol">%A</span>=S+<span class="symbol">%F</span>=AS<span class="symbol">%RD</span>=<span class="number">0</span><span class="symbol">%Q</span>=)</div><div class="line">T<span class="number">2</span>(R=N)</div><div class="line">T<span class="number">3</span>(R=N)</div><div class="line">T<span class="number">4</span>(R=N)</div><div class="line">T<span class="number">5</span>(R=Y<span class="symbol">%DF</span>=Y<span class="symbol">%T</span>=FA<span class="number">-104</span><span class="symbol">%TG</span>=FF<span class="symbol">%W</span>=<span class="number">0</span><span class="symbol">%S</span>=Z<span class="symbol">%A</span>=S+<span class="symbol">%F</span>=AR<span class="symbol">%O</span>=<span class="symbol">%RD</span>=<span class="number">0</span><span class="symbol">%Q</span>=)</div><div class="line">T<span class="number">6</span>(R=N)</div><div class="line">T<span class="number">7</span>(R=N)</div><div class="line">U<span class="number">1</span>(DF=N<span class="symbol">%T</span>=FA<span class="number">-104</span><span class="symbol">%TG</span>=FF<span class="symbol">%IPL</span>=<span class="number">164</span><span class="symbol">%UN</span>=<span class="number">0</span><span class="symbol">%RIPL</span>=G<span class="symbol">%RID</span>=G<span class="symbol">%RIPCK</span>=G<span class="symbol">%RUCK</span>=G<span class="symbol">%RUD</span>=G)</div><div class="line">IE(DFI=N<span class="symbol">%T</span>=FA<span class="number">-104</span><span class="symbol">%TG</span>=FF<span class="symbol">%CD</span>=S)</div><div class="line"></div><div class="line"># This is a GT<span class="number">701</span>, which is issued by QWEST.</div><div class="line">Fingerprint Actiontec GT<span class="number">701</span> DSL modem</div><div class="line">Class Actiontec | embedded || broadband router</div><div class="line">CPE cpe:/h:actiontec:gt<span class="number">701</span> auto</div><div class="line">SEQ(SP=C<span class="number">8</span>-D<span class="number">2</span><span class="symbol">%GCD</span>=<span class="number">1</span><span class="number">-6</span><span class="symbol">%ISR</span>=CC-D<span class="number">6</span><span class="symbol">%TI</span>=Z<span class="symbol">%II</span>=I<span class="symbol">%TS</span>=<span class="number">7</span>)</div><div class="line">OPS(O<span class="number">1</span>=M<span class="number">5</span>B<span class="number">4</span>ST<span class="number">11</span>NW<span class="number">0</span><span class="symbol">%O2</span>=M<span class="number">5</span>B<span class="number">4</span>ST<span class="number">11</span>NW<span class="number">0</span><span class="symbol">%O3</span>=M<span class="number">5</span>B<span class="number">4</span>NNT<span class="number">11</span>NW<span class="number">0</span><span class="symbol">%O4</span>=M<span class="number">5</span>B<span class="number">4</span>ST<span class="number">11</span>NW<span class="number">0</span><span class="symbol">%O5</span>=M<span class="number">5</span>B<span class="number">4</span>ST<span class="number">11</span>NW<span class="number">0</span><span class="symbol">%O6</span>=M<span class="number">5</span>B<span class="number">4</span>ST<span class="number">11</span>)</div><div class="line">WIN(W<span class="number">1</span>=<span class="number">16</span>A<span class="number">0</span><span class="symbol">%W2</span>=<span class="number">16</span>A<span class="number">0</span><span class="symbol">%W3</span>=<span class="number">16</span>A<span class="number">0</span><span class="symbol">%W4</span>=<span class="number">16</span>A<span class="number">0</span><span class="symbol">%W5</span>=<span class="number">16</span>A<span class="number">0</span><span class="symbol">%W6</span>=<span class="number">16</span>A<span class="number">0</span>)</div><div class="line">ECN(R=Y<span class="symbol">%DF</span>=Y<span class="symbol">%T</span>=<span class="number">3</span>B<span class="number">-45</span><span class="symbol">%TG</span>=<span class="number">40</span><span class="symbol">%W</span>=<span class="number">16</span>D<span class="number">0</span><span class="symbol">%O</span>=M<span class="number">5</span>B<span class="number">4</span>NNSNW<span class="number">0</span><span class="symbol">%CC</span>=Y<span class="symbol">%Q</span>=)</div><div class="line">T<span class="number">1</span>(R=Y<span class="symbol">%DF</span>=Y<span class="symbol">%T</span>=<span class="number">3</span>B<span class="number">-45</span><span class="symbol">%TG</span>=<span class="number">40</span><span class="symbol">%S</span>=O<span class="symbol">%A</span>=S+<span class="symbol">%F</span>=AS<span class="symbol">%RD</span>=<span class="number">0</span><span class="symbol">%Q</span>=)</div><div class="line">T<span class="number">2</span>(R=N)</div><div class="line">T<span class="number">3</span>(R=N)</div><div class="line">T<span class="number">4</span>(R=N)</div><div class="line">T<span class="number">5</span>(R=Y<span class="symbol">%DF</span>=Y<span class="symbol">%T</span>=FA<span class="number">-104</span><span class="symbol">%TG</span>=FF<span class="symbol">%W</span>=<span class="number">0</span><span class="symbol">%S</span>=Z<span class="symbol">%A</span>=S+<span class="symbol">%F</span>=AR<span class="symbol">%O</span>=<span class="symbol">%RD</span>=<span class="number">0</span><span class="symbol">%Q</span>=)</div><div class="line">T<span class="number">6</span>(R=N)</div><div class="line">T<span class="number">7</span>(R=N)</div><div class="line">U<span class="number">1</span>(DF=N<span class="symbol">%T</span>=FA<span class="number">-104</span><span class="symbol">%TG</span>=FF<span class="symbol">%IPL</span>=<span class="number">164</span><span class="symbol">%UN</span>=<span class="number">0</span><span class="symbol">%RIPL</span>=G<span class="symbol">%RID</span>=G<span class="symbol">%RIPCK</span>=G<span class="symbol">%RUCK</span>=G<span class="symbol">%RUD</span>=G)</div><div class="line">IE(DFI=N<span class="symbol">%T</span>=FA<span class="number">-104</span><span class="symbol">%TG</span>=FF<span class="symbol">%CD</span>=S)</div></pre></td></tr></table></figure>
+<p>根据注释可以看到第一个是<code>linux</code>以及一些分类信息，下面的就是特征数据.  </p>
+<p>每一行都是一项测试的结果，其中 <code>XXX()</code> 中的 <code>XXX</code> 是测试的名字(例如<code>SEQ</code>、<code>OPS</code>测试)。括号内以 <code>%</code> 分隔的各项是测试中的各种指标。每项指标的值都是<code>key-value</code>形式.</p>
+<p>所有的测试分成五组，</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">第一组测试包含 SEQ、OPS、WIN、<span class="built_in">T1</span>。这项测试会发送六个 TCP 包，然后检查响应的各种细节。</div><div class="line">第二组测试是 IE，会发送两个不同的 ICMP echo 请求，检测其响应特征。</div><div class="line">第三组测试是 U1，发送一个 UDP 包给一个关闭的端口，然后看下 ICMP 的 port unreachable 回复。</div><div class="line">第四组测试是 ECN，全称是 Explicit Congestion Notification，即“显式拥塞通知”。该测试会发送带 ECN 位的 TCP 请求，比较其响应。</div><div class="line">最后一组是发送六个不同的 TCP 包，这六个 TCP 包的响应结果将对应<span class="built_in">T2</span>到<span class="built_in">T7</span>的各项指标，其中 <span class="built_in">T2</span>-<span class="built_in">T4</span> 会发给打开的 TCP 端口，<span class="built_in">T5</span>-<span class="built_in">T7</span> 会发给关闭的 TCP 端口。</div></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/scanning-principle/" title="扫描器原理总结">http://yoursite.com/blog/scanning-principle/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web-security/" rel="tag"><i class="fa fa-tag"></i> web security</a>
+          
+            <a href="/tags/penetration-testing/" rel="tag"><i class="fa fa-tag"></i> penetration testing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/penetration-testing/" rel="next" title="渗透测试相关总结">
+                <i class="fa fa-chevron-left"></i> 渗透测试相关总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/ctf-web-interesting-topics/" rel="prev" title="CTF-web题目集合">
+                CTF-web题目集合 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#端口扫描"><span class="nav-number">1.</span> <span class="nav-text">端口扫描</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP-端口扫描"><span class="nav-number">1.1.</span> <span class="nav-text">TCP 端口扫描</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP-connect-扫描"><span class="nav-number">1.1.1.</span> <span class="nav-text"># TCP connect 扫描</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP-SYN-扫描"><span class="nav-number">1.1.2.</span> <span class="nav-text"># TCP SYN 扫描</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP-Xmas-Tree-扫描"><span class="nav-number">1.1.3.</span> <span class="nav-text"># TCP Xmas Tree 扫描</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP-null-扫描"><span class="nav-number">1.1.4.</span> <span class="nav-text"># TCP null 扫描</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP-ACK-扫描"><span class="nav-number">1.1.5.</span> <span class="nav-text"># TCP ACK 扫描</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UDP-扫描"><span class="nav-number">1.2.</span> <span class="nav-text">UDP 扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ICMP-扫描"><span class="nav-number">1.3.</span> <span class="nav-text">ICMP 扫描</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务版本检测"><span class="nav-number">2.</span> <span class="nav-text">服务版本检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作系统检测"><span class="nav-number">3.</span> <span class="nav-text">操作系统检测</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

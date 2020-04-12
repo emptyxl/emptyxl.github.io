@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="web security,java,java deserialization" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="java 序列化与反序列化简单例子首先我们来看下简单的例子: 123456789101112131415161718public static void main( String[] args) throws Exception&amp;#123;    String s = &quot;abcd是我啊&quot;;    int i = 5;    FileOutputStream sfos= new FileOutput">
+<meta name="keywords" content="web security,java,java deserialization">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 序列化与反序列化 &amp; Apache Commons Collections反序列化漏洞">
+<meta property="og:url" content="http://yoursite.com/blog/java-deserialization/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="java 序列化与反序列化简单例子首先我们来看下简单的例子: 123456789101112131415161718public static void main( String[] args) throws Exception&amp;#123;    String s = &quot;abcd是我啊&quot;;    int i = 5;    FileOutputStream sfos= new FileOutput">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/simple.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/stream_magic.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/class.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/reference.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/wr.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/de.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/base.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/test.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/carbon.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/constant.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/chain.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/transfrom-chain.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/checksetvalue.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/poc.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/workflow.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/AIH.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/payload.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/anhandler.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/anhandler.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/success.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/annotationtype.png">
+<meta property="og:image" content="http://yoursite.com/blog/java-deserialization/try.png">
+<meta property="og:updated_time" content="2018-07-29T03:33:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 序列化与反序列化 &amp; Apache Commons Collections反序列化漏洞">
+<meta name="twitter:description" content="java 序列化与反序列化简单例子首先我们来看下简单的例子: 123456789101112131415161718public static void main( String[] args) throws Exception&amp;#123;    String s = &quot;abcd是我啊&quot;;    int i = 5;    FileOutputStream sfos= new FileOutput">
+<meta name="twitter:image" content="http://yoursite.com/blog/java-deserialization/simple.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/java-deserialization/"/>
+
+
+
+
+
+  <title>Java 序列化与反序列化 & Apache Commons Collections反序列化漏洞 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/java-deserialization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java 序列化与反序列化 & Apache Commons Collections反序列化漏洞</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-18T22:15:34+08:00">
+                2018-07-18
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-29T11:33:55+08:00">
+                2018-07-29
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="java-序列化与反序列化"><a href="#java-序列化与反序列化" class="headerlink" title="java 序列化与反序列化"></a>java 序列化与反序列化</h3><h4 id="简单例子"><a href="#简单例子" class="headerlink" title="简单例子"></a>简单例子</h4><p>首先我们来看下简单的例子:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</div><div class="line">    String s = <span class="string">"abcd是我啊"</span>;</div><div class="line">    <span class="keyword">int</span> i = <span class="number">5</span>;</div><div class="line">    FileOutputStream sfos= <span class="keyword">new</span> FileOutputStream(<span class="string">"string.out"</span>);</div><div class="line">    FileOutputStream ifos= <span class="keyword">new</span> FileOutputStream(<span class="string">"int.out"</span>);</div><div class="line">    ObjectOutputStream soos = <span class="keyword">new</span> ObjectOutputStream(sfos);</div><div class="line">    ObjectOutputStream ioos = <span class="keyword">new</span> ObjectOutputStream(ifos);</div><div class="line">    soos.writeObject(s);</div><div class="line">    ioos.writeObject(i);</div><div class="line">    soos.close();</div><div class="line">    ioos.close();</div><div class="line">    </div><div class="line">    FileInputStream fis = <span class="keyword">new</span> FileInputStream(<span class="string">"string.out"</span>);</div><div class="line">    ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(fis);</div><div class="line">    String obj = (String) ois.readObject();</div><div class="line">    System.out.println(obj);</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<img src="/blog/java-deserialization/simple.png" alt="simple" title="simple">  
+<p>根据结果我们可以看到，序列化了2个，一个<code>String</code>一个<code>int</code>.</p>
+<p>先看string:<br><code>0x ACED</code>作为序列化的标识符<br><code>0x 0005</code>作为序列化版本号，这些都是常量，定义在<code>Constants</code>中。<br><code>0x 74</code>表示<code>String</code>类型<br><code>0x 000D</code>string长度 为13字节<br><code>0x 61626364 E698AFE6 8891E595 8A</code>后面对应于内容的<code>UTF-8</code>编码值。  </p>
+<p>而int序列化<br><code>0x 73</code>表示<code>TC_OBJECT</code><br><code>0x 74</code>表示<code>TC_CLASSDESC</code>(class描述符)<br><code>0x 11</code>表示描述符长度，对应<code>java.lang.Integer</code><br><code>0x 12E2A0A4 F7818738</code>为<code>SerialVersionUID</code>，如果不指定，会随机生成8字节uid<br><code>0x 02</code>为标记号. 该值声明该对象支持序列化<br><code>0x 0001</code> 表示域个数<br><code>0x 49</code> 表示域类型 对应<code>I</code> 表示Integer<br><code>0x 0005</code> 域名字长度<br><code>0x 76616C75 65</code> 对应域名字描述value<br><code>0x 78</code> 对应于<code>TC_ENDBLOCKDATA</code> 表示对象块结束<br>…<br><code>0x 78</code> 对应于<code>TC_ENDBLOCKDATA</code> 表示对象块结束<br><code>0x 70</code> 对应于<code>TC_NULL</code> 表示没有超类了<br><code>0x 0000 0005</code> 对应值5</p>
+<p>其中的<code>Constants</code>字段值可以参考<code>java.io.ObjectStreamConstants</code></p>
+<img src="/blog/java-deserialization/stream_magic.png" alt="stream_magic" title="stream_magic"> 
+<h4 id="复杂例子"><a href="#复杂例子" class="headerlink" title="复杂例子"></a>复杂例子</h4><p>之前的例子使用的都是java常见的内部类，如果复杂一点呢？如果是我们自己定义的class，只需要实现<code>Serializable</code>接口即可。<code>Serializable</code>接口中没有任何方法，可以理解为一个标记，即表明这个类可以序列化。例如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span>  <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID= <span class="number">305419896L</span>;</div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">long</span> date;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Test</span><span class="params">(String name, <span class="keyword">int</span> age)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">        <span class="keyword">this</span>.age = age;</div><div class="line">        <span class="keyword">this</span>.date = <span class="keyword">new</span> Date().getTime();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"Test&#123;"</span> +</div><div class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</div><div class="line">                <span class="string">", age="</span> + age +</div><div class="line">                <span class="string">", date="</span> + date +</div><div class="line">                <span class="string">'&#125;'</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>序列化后的结果如下:</p>
+<img src="/blog/java-deserialization/class.png" alt="class" title="class"> 
+<p>我们可以看到，我们指定了uid之后，其值为<code>12345678</code>.</p>
+<p>关于字段的详细含义，可以看这篇文章<a href="https://docs.oracle.com/javase/8/docs/platform/serialization/spec/protocol.html" target="_blank" rel="external">Object Serialization Stream Protocol</a> <strong>极其推荐！极其推荐！极其推荐！</strong> 这里引用一些比较关键的点:</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">A basic structure is needed <span class="built_in">to</span> represent objects <span class="keyword">in</span> <span class="keyword">a</span> stream. </div><div class="line">Each attribute <span class="keyword">of</span> <span class="keyword">the</span> object needs <span class="built_in">to</span> be represented: its classes, its fields, <span class="keyword">and</span> data written <span class="keyword">and</span> later <span class="built_in">read</span> <span class="keyword">by</span> class-specific methods.</div><div class="line">The representation <span class="keyword">of</span> objects <span class="keyword">in</span> <span class="keyword">the</span> stream can be described <span class="keyword">with</span> <span class="keyword">a</span> grammar. </div><div class="line">There are special representations <span class="keyword">for</span> <span class="literal">null</span> objects, <span class="built_in">new</span> objects, classes, arrays, strings, <span class="keyword">and</span> back references <span class="built_in">to</span> <span class="keyword">any</span> object already <span class="keyword">in</span> <span class="keyword">the</span> stream. </div><div class="line">Each object written <span class="built_in">to</span> <span class="keyword">the</span> stream is assigned <span class="keyword">a</span> handle that is used <span class="built_in">to</span> refer back <span class="built_in">to</span> <span class="keyword">the</span> object. </div><div class="line">Handles are assigned sequentially starting <span class="built_in">from</span> <span class="number">0x7E0000</span>. The handles restart <span class="keyword">at</span> <span class="number">0x7E0000</span> when <span class="keyword">the</span> stream is reset.</div><div class="line"></div><div class="line"></div><div class="line">New objects <span class="keyword">in</span> <span class="keyword">the</span> stream are represented <span class="keyword">by</span> <span class="keyword">the</span> following:</div><div class="line"></div><div class="line"> The most derived class <span class="keyword">of</span> <span class="keyword">the</span> object.</div><div class="line"> Data <span class="keyword">for</span> <span class="keyword">each</span> serializable class <span class="keyword">of</span> <span class="keyword">the</span> object, <span class="keyword">with</span> <span class="keyword">the</span> highest superclass <span class="keyword">first</span>. For <span class="keyword">each</span> class <span class="keyword">the</span> stream <span class="keyword">contains</span> <span class="keyword">the</span> following:</div><div class="line">The serializable fields.See Section <span class="number">1.5</span>, <span class="string">"Defining Serializable Fields for a Class."</span></div><div class="line">If <span class="keyword">the</span> class has writeObject/readObject methods, there may be optional objects <span class="keyword">and</span>/<span class="keyword">or</span> block-data records <span class="keyword">of</span> primitive types written <span class="keyword">by</span> <span class="keyword">the</span> writeObject method followed <span class="keyword">by</span> <span class="keyword">an</span> endBlockData code.</div></pre></td></tr></table></figure>
+<p>其中的<code>Rules of the Grammar</code>可以仔细看下。</p>
+<h4 id="serialVersionUID"><a href="#serialVersionUID" class="headerlink" title="serialVersionUID"></a>serialVersionUID</h4><p>随着项目的更新，不同的<code>serialVersionUID</code>被认为是不同的<code>class</code>版本，在反序列化中可能会报错。如果手动设置<code>UID</code>，可以遵守以下规则：</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">只修改了类的方法，无需改变serialVersionUID；</div><div class="line">只修改了类的<span class="keyword">static</span>变量和使用<span class="keyword">transient</span> 修饰的实例变量，无需改变serialVersionUID；</div><div class="line">如果修改了实例变量的类型，例如一个变量原来是<span class="built_in">int</span>改成了<span class="keyword">String</span>,则反序列化会失败，需要修改serialVersionUID；如果删除了类的一些实例变量，可以兼容无需修改；如果给类增加了一些实例变量，可以兼容无需修改，只是反序列化后这些多出来的变量的值都是默认值。</div><div class="line"></div><div class="line">[注] </div><div class="line"><span class="number">1.</span> 如果不想把变量序列化 可以加 <span class="keyword">transient</span>字段</div><div class="line"><span class="number">2.</span> 序列化对象 父类和其引用也必须可以序列化</div></pre></td></tr></table></figure>
+<h3 id="序列化引用"><a href="#序列化引用" class="headerlink" title="序列化引用"></a>序列化引用</h3><p>在之前，提到每个序列化后的stream都会分配一个handler值，从<code>0x 007E 0000</code>开始，当同一类的不同对象再序列化时，其会首先查看原始是否存在，如果存在则直接引用，不会再去重新生成一个。</p>
+<img src="/blog/java-deserialization/reference.png" alt="reference" title="reference"> 
+<h3 id="自定义序列化"><a href="#自定义序列化" class="headerlink" title="自定义序列化"></a>自定义序列化</h3><h4 id="writeObject-amp-readObject"><a href="#writeObject-amp-readObject" class="headerlink" title="writeObject &amp; readObject"></a>writeObject &amp; readObject</h4><p>在序列化和反序列化过程中，我们可以实现:</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeObject</span>(<span class="params">ObjectOutputStream <span class="keyword">out</span></span>)</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span>(<span class="params">ObjectInputStream <span class="keyword">in</span></span>)</div></pre></td></tr></table></figure>
+<p>来完全控制序列化和反序列化的过程</p>
+<blockquote>
+<p>ObjectOutputStream先通过反射在要被序列化的对象的类中查找有无自定义的writeObject方法，若有，则会优先调用自定义的writeObject方法。因为查找反射方法时使用的是getPrivateMethod，所以自定以的writeObject方法的作用域要被设置为private。通过自定义writeObject和readObject方法可以完全控制对象的序列化与反序列化。</p>
+</blockquote>
+<img src="/blog/java-deserialization/wr.png" alt="wr" title="wr"> 
+<p>当然，我们需要对应write和read的顺序，不然会报错，如图所示，可以看到我们在所Test对象之后附带了一个字符串，且字符串和原始对象均被正常读入处理。类似这种操作一般用于session中，添加session处理时间而不将时间戳信息写入session对象当中。</p>
+<h4 id="writeReplace-amp-readResolve"><a href="#writeReplace-amp-readResolve" class="headerlink" title="writeReplace &amp; readResolve"></a>writeReplace &amp; readResolve</h4><p>这两个方法分别在<code>writeObject</code>和<code>readObject</code>的前、后进行处理，与PHP反序列化中的<code>__sleep</code> &amp; <code>__wakeup</code>类似，都是用于序列化与反序列化前后对对象进行处理的函数</p>
+<h4 id="implement-Externalizable接口"><a href="#implement-Externalizable接口" class="headerlink" title="implement Externalizable接口"></a>implement Externalizable接口</h4><p>实现<code>Externalizable</code>则序列化反序列化流程完全由我们自己决定:</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeExternal</span>(<span class="params">ObjectOutput <span class="keyword">out</span></span>)</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">readExternal</span>(<span class="params">ObjectInput <span class="keyword">in</span></span>)</div></pre></td></tr></table></figure>
+<h3 id="java反序列化漏洞"><a href="#java反序列化漏洞" class="headerlink" title="java反序列化漏洞"></a>java反序列化漏洞</h3><p>我们再看下面的例子，由于java反序列化中没有指定反序列化对象的类型，任意对象均可被反序列化，那么在反序列化过程中，如果对象本身有一些函数会自动调用，则会造成任意代码执行。</p>
+<img src="/blog/java-deserialization/de.png" alt="de" title="de"> 
+<p>由于反序列化存在于一些公共库，例如Apache Commons Collections，所以危害影响非常广。</p>
+<h4 id="漏洞基本原理"><a href="#漏洞基本原理" class="headerlink" title="漏洞基本原理"></a>漏洞基本原理</h4><img src="/blog/java-deserialization/base.png" alt="基本原理" title="基本原理"> 
+<p>如图，如果我们在<code>readObject</code>代码之后还去执行了一些其他东西，这就是漏洞的基本原理，但可能会想，谁会这样写？但实际上，一些有潜在危险的地方通过精心构造，是可以实现的。</p>
+<p>所以一般漏洞产生的条件实现了<code>Serializable</code>接口以及 重写了<code>readObject</code>方法</p>
+<h3 id="Apache-Commons-Collections"><a href="#Apache-Commons-Collections" class="headerlink" title="Apache Commons Collections"></a>Apache Commons Collections</h3><p>问题出现在<code>commons-collections</code>这个apache组件当中，其中有个<code>InvokerTransformer</code>存在问题。我们先看一下这个类的内容:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InvokerTransformer</span> <span class="keyword">implements</span> <span class="title">Transformer</span>, <span class="title">Serializable</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">8653385846894047688L</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String iMethodName;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Class[] iParamTypes;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Object[] iArgs;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Transformer <span class="title">getInstance</span><span class="params">(String methodName)</span> </span>&#123;</div><div class="line">    	...</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Transformer <span class="title">getInstance</span><span class="params">(String methodName, Class[] paramTypes, Object[] args)</span> </span>&#123;</div><div class="line">		...</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">InvokerTransformer</span><span class="params">(String methodName)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.iMethodName = methodName;</div><div class="line">        <span class="keyword">this</span>.iParamTypes = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">this</span>.iArgs = <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">InvokerTransformer</span><span class="params">(String methodName, Class[] paramTypes, Object[] args)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.iMethodName = methodName;</div><div class="line">        <span class="keyword">this</span>.iParamTypes = paramTypes;</div><div class="line">        <span class="keyword">this</span>.iArgs = args;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">transform</span><span class="params">(Object input)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (input == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                Class cls = input.getClass();</div><div class="line">                Method method = cls.getMethod(<span class="keyword">this</span>.iMethodName, <span class="keyword">this</span>.iParamTypes);</div><div class="line">                <span class="keyword">return</span> method.invoke(input, <span class="keyword">this</span>.iArgs);</div><div class="line">            &#125; <span class="keyword">catch</span> (NoSuchMethodException var5) &#123;</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> FunctorException(<span class="string">"InvokerTransformer: The method '"</span> + <span class="keyword">this</span>.iMethodName + <span class="string">"' on '"</span> + input.getClass() + <span class="string">"' does not exist"</span>);</div><div class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException var6) &#123;</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> FunctorException(<span class="string">"InvokerTransformer: The method '"</span> + <span class="keyword">this</span>.iMethodName + <span class="string">"' on '"</span> + input.getClass() + <span class="string">"' cannot be accessed"</span>);</div><div class="line">            &#125; <span class="keyword">catch</span> (InvocationTargetException var7) &#123;</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> FunctorException(<span class="string">"InvokerTransformer: The method '"</span> + <span class="keyword">this</span>.iMethodName + <span class="string">"' on '"</span> + input.getClass() + <span class="string">"' threw an exception"</span>, var7);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们看下这个类，在<code>transform</code>方法中，我们看到了和基本漏洞相似的写法:</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Class</span> cls = input.getClass();</div><div class="line"><span class="function"><span class="keyword">Method</span> <span class="title">method</span> = <span class="title">cls</span>.<span class="title">getMethod</span><span class="params">(this.iMethodName, this.iParamTypes)</span>;</span></div><div class="line">return <span class="function"><span class="keyword">method</span>.<span class="title">invoke</span><span class="params">(input, this.iArgs)</span>;</span></div></pre></td></tr></table></figure>
+<p>是不是很熟悉，如果<code>input</code>、<code>iMethodName</code>、<code>iParamTypes</code>、<code>iArgs</code>都是由我们控制传入的话，是不是就可以像之前一样弹出计算器，很巧的是，在<code>InvokerTransformer</code>的构造方法中，可以传入其中的三个参数，<code>transform</code>的调用也可以传入1个，完美达成条件。我们来测试一下:</p>
+<img src="/blog/java-deserialization/test.png" alt="简单测试" title="简单测试"> 
+<p>我们可以看到，是可以的，于是我们尝试去找谁调用了<code>transform</code>这个方法。在<code>org.apache.commons.collections.map ==&gt; TransformedMap</code>中找到3处:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> Object transformKey(Object <span class="keyword">object</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.keyTransformer == <span class="literal">null</span> ? <span class="keyword">object</span> : <span class="keyword">this</span>.keyTransformer.transform(<span class="keyword">object</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">protected</span> Object transformValue(Object <span class="keyword">object</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.valueTransformer == <span class="literal">null</span> ? <span class="keyword">object</span> : <span class="keyword">this</span>.valueTransformer.transform(<span class="keyword">object</span>);</div><div class="line">&#125;</div><div class="line"><span class="keyword">protected</span> Object checkSetValue(Object value) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.valueTransformer.transform(value);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<img src="/blog/java-deserialization/carbon.png" alt="TransformedMap" title="TransformedMap"> 
+<p>我们来仔细看下这个类。<code>TransformedMap</code>类实现了<code>Map</code>类的扩展，可以将两个实现了<code>Transformer</code>对象进行转换。首先是调用<code>decorate</code>方法初始化，<code>decorate</code>会调用构造方法进行实例化，对外暴露2个方法，<code>put</code>与<code>putall</code>分别用于传入一个或多个。如果原始不为null,则会调用<code>this.[]Transformer.transform(object)</code>.</p>
+<p>再来看下其他的两个类:<br><img src="/blog/java-deserialization/constant.png" alt="ConstantTransformer" title="ConstantTransformer"> </p>
+<p><code>ConstantTransformer</code>的构造方法返回传入的值到<code>iConstant</code></p>
+<img src="/blog/java-deserialization/chain.png" alt="ChainedTransformer" title="ChainedTransformer"> 
+<p><code>ChainedTransformer</code>这个类的构造方法传入多个<code>transformer</code>且其<code>transform</code>可以触发每个元素的<code>transform</code>方法</p>
+<img src="/blog/java-deserialization/transfrom-chain.png" alt="transform-chain" title="transform-chain"> 
+<p>我们来看这个<code>transform-chain</code>，我们构造了一个<code>Transformer[]</code>，其内容如下:</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="section">[0]</span></div><div class="line"><span class="attr">iConstant</span> = Runtime.class</div><div class="line"><span class="section"></span></div><div class="line">[1]</div><div class="line"><span class="attr">iMethodName</span> = <span class="string">"getMethod"</span></div><div class="line"><span class="attr">iParamTypes</span> = String.class</div><div class="line"><span class="attr">iArgs</span> = <span class="string">"getRuntime"</span></div><div class="line"><span class="section"></span></div><div class="line">[2]</div><div class="line"><span class="attr">iMethodName</span> = <span class="string">"invoke"</span></div><div class="line"><span class="attr">iParamTypes</span> = Object.class</div><div class="line"><span class="attr">iArgs</span> = <span class="string">"getRuntime"</span></div><div class="line"><span class="section"></span></div><div class="line">[3]</div><div class="line"><span class="attr">iMethodName</span> = <span class="string">"exec"</span></div><div class="line"><span class="attr">iParamTypes</span> = String.class</div><div class="line"><span class="attr">iArgs</span> = <span class="string">"open /Applications/Calculator.app/"</span></div></pre></td></tr></table></figure>
+<p>现在我们构造了一个<code>chain</code>，但是缺少一个触发<code>chain.transform</code>的途径从而往下传递触发。而我们在之前看到<code>TransformedMap</code>的<code>checkSetValue</code>可以触发<code>transform</code>方法,但<code>checkSetValue</code>无法直接调用，我们进一步看:</p>
+<img src="/blog/java-deserialization/checksetvalue.png" alt="checksetvalue" title="checksetvalue"> 
+<p>发现<code>MapEntry</code>可以直接调用<code>setValue</code>方法触发<code>checkSetValue</code> 所以整个的<code>POC</code>如下:</p>
+<img src="/blog/java-deserialization/poc.png" alt="poc" title="poc"> 
+<p>即构造了个<code>TransformedMap</code>然后对其第一个元素进行赋值。调用了<code>setValue</code>方法，触发了<code>checkSetValue</code>从而调用了<code>ChainedTransformer</code>的<code>transform</code>方法，从而对内部的4个<code>Transform</code>分别调用<code>transform</code>，从而完成了命令执行，但我们对细节还是一知半解，我们通过debug来一步步看下他执行的流程.</p>
+<ol>
+<li>首先是<code>transformers</code> 的定义，为4个<code>Transformer</code>的数组，然后新建<code>hashmap</code>对象，并写入一个kv值</li>
+<li>之后调用<code>TransformedMap.decorate</code>生成一个<code>outerMap</code>对象，<code>outerMap.map</code>是之前的<code>hashmap</code>, <code>outerMap.keyTransformer</code>为<code>null</code>,<code>keyTransformer.valueTransformer</code>是之前的<code>chainedTransform</code></li>
+<li><code>elEntry</code> 指向Map的第一个kv对</li>
+<li><strong>重点来了</strong></li>
+</ol>
+<img src="/blog/java-deserialization/workflow.png" alt="workflow" title="workflow"> 
+<p>之后我们看到，调用<code>setValue</code>会调用<code>parent.checkSetValue</code>,会返回<code>valueTransformer.transform</code>，而<code>valueTransformer</code>是之前的<code>chainedTransform</code>从而对每一个<code>Transform</code>对象都进行<code>transform</code>。</p>
+<p>注意!<strong><code>ChainedTransformer</code></strong>的<code>transform</code>是链式的(这一点我到这里才注意到，也才想通整个过程)，即前一个的结果会作为参数传到下一个的<code>transform</code>方法中<code>object = iTransformers[i].transform(object);</code></p>
+<ol>
+<li>第一个<code>ConstantTransformer</code>的<code>transform</code>会返回<code>java.lang.Runtime</code>类</li>
+<li>第二个<code>InvokerTransformer</code>之后返回<code>Runtime.getRuntime()</code>对象</li>
+<li>第三个之后返回<code>Runtime()</code>对象</li>
+<li>第三个则返回<code>Runtime.getRuntime().getMethod(&quot;exec&quot;, String.class).invoke(,&quot;open.....&quot;)</code>最终执行命令</li>
+</ol>
+<p>以上就是核心的原理，那我我们如何利用呢？参考之前的的漏洞原理，我们需要找到一个接收Map类对象反序列化，且在<code>readObject</code>方法时调用Map对象的Entry的setValue方法.</p>
+<p>所利用的类是<code>AnnotationInvocationHandler</code>，这个类无法直接访问(。。。一直以为是jdk的问题删掉了…哭晕)，可以直接去github上看源码，这里提供一个<a href="https://github.com/frohoff/jdk8u-jdk/blob/master/src/share/classes/sun/reflect/annotation/AnnotationInvocationHandler.java" target="_blank" rel="external">镜像链接</a>。我们把它download下来看。</p>
+<img src="/blog/java-deserialization/AIH.png" alt="AnnotationInvocationHandler" title="AnnotationInvocationHandler"> 
+<p>我们可以看到，当反序列化<code>AnnotationInvocationHandler</code>类时，其<code>memberValues</code>为我们传入的Map对象，在<code>readObject</code>会调用<code>Map.Entry</code>的<code>setValue</code>函数，从而触发漏洞:</p>
+<img src="/blog/java-deserialization/payload.png" alt="payload" title="payload"> 
+<p>完整<code>payload</code>如图，但这里本地无法成功，具体原因往下看。到这里我发现运行失败，而且无法进入<code>AnnotationInvocationHandler</code>里面单步调试，一开始我以为是<code>oracle jdk</code>与<code>openjdk</code>区别，下载了很多版本在idea中可以用<code>Class.forName()</code>调用但是就是无法import，也无法进入调试。由于不知道为什么错误也看不见具体逻辑，一度陷入僵局，而且网站的分析基本到给出payload就结束了。</p>
+<p>于是采用一个骚操作，由于我们在镜像链接上可以看到，<code>/sun/reflect/annotation/</code>中有11个类，而我们在idea <code>import sun.reflect.annotation</code>中只能看到9个，唯独少了<code>AnnotationInvocationHandler</code>和<code>AnnotationTypeMismatchExceptionProxy</code>，且后者在前者中使用了，于是我打算把这两个类下载下来，作为我们本地类，这样就可以单步调试了。</p>
+<img src="/blog/java-deserialization/anhandler.png" alt="AnnotationInvocationHandler" title="AnnotationInvocationHandler"> 
+<p>注意，<code>ExceptionProxy</code>这个类只能在内部使用，我们把它注释掉就好，没有影响。一步步调试，一切如我们预期，在反序列化中，调用了<code>AnnotationInvocationHandler</code>类的<code>readObject</code>方法，一直到for循环中，如下图，在<code>Class&lt;?&gt; memberType = memberTypes.get(name);</code>中取得的值是<code>value</code>而我们之前HashMap的key是<code>name</code>导致不等没有进入<code>setValue</code>的过程。</p>
+<img src="/blog/java-deserialization/anhandler.png" alt="AnnotationInvocationHandler" title="AnnotationInvocationHandler"> 
+<p>这下就明白了，所以我们只需要更改<code>innerMap.put(&quot;value&quot;, &quot;hello&quot;);</code>，保证key是<code>value</code>即可成功执行命令:</p>
+<img src="/blog/java-deserialization/success.png" alt="success.png" title="success.png"> 
+<p>当然代码可以改回<code>sun.reflect.AnnotationInvocationHandler</code></p>
+<p>我们再看下，为什么必须是<code>value</code>，<code>annotationtype</code>是注解类型，<code>annotationType = AnnotationType.getInstance(type);</code>的作用是返回<code>@Target</code>注解的内容，其<code>memberTypes</code>的key值为<code>value</code>，所以传入的内容也需要为value.</p>
+<img src="/blog/java-deserialization/annotationtype.png" alt="annotationtype" title="annotationtype"> 
+<p>那么可以合理推测，我们将原始payload改成其他类型的注解，应该由于其<code>memberTypes</code>应该是表明其注解类型，应该也是<code>value-&gt;...</code>的Map形式，应该也可以成功执行，尝试后发现，符合我们预期，这样整个原理就算非常透彻的理解了。</p>
+<img src="/blog/java-deserialization/try.png" alt="try" title="try"> 
+<h4 id="漏洞修复"><a href="#漏洞修复" class="headerlink" title="漏洞修复"></a>漏洞修复</h4><blockquote>
+<p>Apache Commons Collections在3.2.2版本中做了一定的安全处理，对这些不安全的Java类的序列化支持增加了开关，默认为关闭状态。涉及的类包括CloneTransformer,ForClosure, InstantiateFactory, InstantiateTransformer, InvokerTransformer, PrototypeCloneFactory,PrototypeSerializationFactory, WhileClosure。</p>
+</blockquote>
+<p>我们可以看到，官方对于这种反序列化问题，往往采取的是黑名单，这也是之后为什么漏洞被频繁各种绕过，由于<code>Apache Commons Collections</code>当时存在于各种web server或容器中，导致当时各种组件被攻击。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/java-deserialization/" title="Java 序列化与反序列化 & Apache Commons Collections反序列化漏洞">http://yoursite.com/blog/java-deserialization/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web-security/" rel="tag"><i class="fa fa-tag"></i> web security</a>
+          
+            <a href="/tags/java-deserialization/" rel="tag"><i class="fa fa-tag"></i> java deserialization</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/Heartbleed/" rel="next" title="OpenSSL Heartbleed  CVE-2014-0160">
+                <i class="fa fa-chevron-left"></i> OpenSSL Heartbleed  CVE-2014-0160
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/weblogic/" rel="prev" title="Weblogic 常见漏洞分析">
+                Weblogic 常见漏洞分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#java-序列化与反序列化"><span class="nav-number">1.</span> <span class="nav-text">java 序列化与反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单例子"><span class="nav-number">1.1.</span> <span class="nav-text">简单例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复杂例子"><span class="nav-number">1.2.</span> <span class="nav-text">复杂例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serialVersionUID"><span class="nav-number">1.3.</span> <span class="nav-text">serialVersionUID</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序列化引用"><span class="nav-number">2.</span> <span class="nav-text">序列化引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义序列化"><span class="nav-number">3.</span> <span class="nav-text">自定义序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#writeObject-amp-readObject"><span class="nav-number">3.1.</span> <span class="nav-text">writeObject & readObject</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#writeReplace-amp-readResolve"><span class="nav-number">3.2.</span> <span class="nav-text">writeReplace & readResolve</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#implement-Externalizable接口"><span class="nav-number">3.3.</span> <span class="nav-text">implement Externalizable接口</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java反序列化漏洞"><span class="nav-number">4.</span> <span class="nav-text">java反序列化漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#漏洞基本原理"><span class="nav-number">4.1.</span> <span class="nav-text">漏洞基本原理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Apache-Commons-Collections"><span class="nav-number">5.</span> <span class="nav-text">Apache Commons Collections</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#漏洞修复"><span class="nav-number">5.1.</span> <span class="nav-text">漏洞修复</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

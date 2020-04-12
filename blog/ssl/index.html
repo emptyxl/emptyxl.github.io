@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="https,tls,ssl,network protocol" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="TLS/SSLSSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。TLS/SSL在传输层对网络连接进行加密。常见的HTTP、FTP由于采用明文传输，所以可以使用SSL进行数据传输加密。SSL分为两个部分：handshake和application data两个">
+<meta name="keywords" content="https,tls,ssl,network protocol">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TLS&#x2F;SSL流程详解 &amp; HTTPS中间人攻击 &amp; 流量分析SSL题目">
+<meta property="og:url" content="http://yoursite.com/blog/ssl/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="TLS/SSLSSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。TLS/SSL在传输层对网络连接进行加密。常见的HTTP、FTP由于采用明文传输，所以可以使用SSL进行数据传输加密。SSL分为两个部分：handshake和application data两个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/ssl_handshake_rsa.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/client-hello.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/server-hello.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/certificate.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/baidu-cer.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/server-key-exchange.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/server-hello-done.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/client-key-exchange.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/new-session-ticket.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/change-cipher-spec.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/encrypted-handshake-message.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/application-data.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/ssl_handshake_diffie_hellman.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/ssl-hijack.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/sslstrip.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/wireshark.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/ftp.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/imf.png">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/mail.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/ssl/ssl_de.png">
+<meta property="og:updated_time" content="2018-07-22T11:42:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TLS&#x2F;SSL流程详解 &amp; HTTPS中间人攻击 &amp; 流量分析SSL题目">
+<meta name="twitter:description" content="TLS/SSLSSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。TLS/SSL在传输层对网络连接进行加密。常见的HTTP、FTP由于采用明文传输，所以可以使用SSL进行数据传输加密。SSL分为两个部分：handshake和application data两个">
+<meta name="twitter:image" content="http://yoursite.com/blog/ssl/ssl_handshake_rsa.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/ssl/"/>
+
+
+
+
+
+  <title>TLS/SSL流程详解 & HTTPS中间人攻击 & 流量分析SSL题目 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/ssl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TLS/SSL流程详解 & HTTPS中间人攻击 & 流量分析SSL题目</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-23T15:06:43+08:00">
+                2018-05-23
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-22T19:42:13+08:00">
+                2018-07-22
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/network-protocol/" itemprop="url" rel="index">
+                    <span itemprop="name">network protocol</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="TLS-SSL"><a href="#TLS-SSL" class="headerlink" title="TLS/SSL"></a>TLS/SSL</h3><p>SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。<code>TLS/SSL</code>在传输层对网络连接进行加密。常见的HTTP、FTP由于采用明文传输，所以可以使用SSL进行数据传输加密。SSL分为两个部分：<code>handshake</code>和<code>application data</code>两个阶段，后者使用前者协商的对称密钥加密数据，前者的流程图如下：</p>
+<img src="/blog/ssl/ssl_handshake_rsa.jpg" alt="SSL handshake" title="SSL handshake">
+<a id="more"></a>
+<p><code>TLS/SSL</code>使用<code>非对称加密</code>提供身份认证和密钥协商(RSA、DH、ECC)，使用<code>对称加密</code>完成信息加密(AES、DES、RC4)，使用<code>散列算法</code>提供完整校验(MD5、SHA)</p>
+<p>整个流程分为5个部分：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">流程</th>
+<th style="text-align:left">详细内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1.<code>client hello</code></td>
+<td style="text-align:left">client发送client hello类型包，其中包括TLS版本，随机数<code>random_c</code>，<code>session id</code>,支持的密码套件<code>cipher suite</code>、支持的压缩算法、扩展字段</td>
+</tr>
+<tr>
+<td style="text-align:center">2.<code>server hello</code></td>
+<td style="text-align:left">server发送server hello包,其中包括协议版本，随机数<code>random_s</code>,<code>session id</code>,选择的密码套件<code>cipher suite</code>,选择的压缩算法，选择的扩展</td>
+</tr>
+<tr>
+<td style="text-align:center">3.<code>certificate</code></td>
+<td style="text-align:left">发送证书信息</td>
+</tr>
+<tr>
+<td style="text-align:center">(<code>server key exchange</code>)</td>
+<td style="text-align:left">有些算法例如DH会发送这一步用于交换密钥</td>
+</tr>
+<tr>
+<td style="text-align:center">4.<code>server hello done</code></td>
+<td style="text-align:left">hello done 标志</td>
+</tr>
+<tr>
+<td style="text-align:center">5.<code>client key Exchange,change cipher spec,encypted handshake message</code></td>
+<td style="text-align:left">分为3个部分，<code>client key exchange</code>用于对称密钥第三部分<code>per-master</code>部分的生成，<code>changecipherspec</code>指从现在开始数据是加密的，<code>encrypted handshake message</code>使用生成的密钥进行加密通信参数</td>
+</tr>
+<tr>
+<td style="text-align:center">6.<code>server ChangeCipherSpec</code></td>
+<td style="text-align:left">表示服务器从现在开始发送加密信息</td>
+</tr>
+<tr>
+<td style="text-align:center">7.<code>server encrypted handshake message</code></td>
+<td style="text-align:left">服务器发送也结合所有当前的通信参数信息生成一段数据</td>
+</tr>
+</tbody>
+</table>
+<p>下面我们根据抓包内容对每一个步骤进行详细说明:</p>
+<h4 id="Client-Hello"><a href="#Client-Hello" class="headerlink" title="Client Hello"></a>Client Hello</h4><img src="/blog/ssl/client-hello.png" alt="Client Hello" title="Client Hello">
+<p>可以看见，发送的内容有：TLS版本，<code>handshake type</code>, 随机数<code>random_c</code>，支持的密码套件<code>cipher suites</code>,压缩方法，扩展。<br>如此包内容，提供了15个套件可供选择，使用null压缩算法（不使用）以及10个可供使用的<code>extension</code></p>
+<h4 id="Server-Hello"><a href="#Server-Hello" class="headerlink" title="Server Hello"></a>Server Hello</h4><img src="/blog/ssl/server-hello.png" alt="Server Hello" title="Server Hello">
+<p>服务器根据客户端发送的内容进行选择，这里返回了随机数<code>random_s</code>,选择的套件<code>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</code>，以及扩展</p>
+<h4 id="Certificate"><a href="#Certificate" class="headerlink" title="Certificate"></a>Certificate</h4><img src="/blog/ssl/certificate.png" alt="Certificate" title="Certificate">
+<p>服务器向客户端发送证书内容，包括其完整证书链，可以看到有2个证书，后者比前者等级高</p>
+<p>src ip地址为baidu，我们用浏览器看下证书：<br><img src="/blog/ssl/baidu-cer.png" alt="baidu cer" title="baidu cer"></p>
+<p>可以看到返回的两级证书链都被成功认证。</p>
+<p>数字证书和数字签名：<br>数字证书为有权威的CA机构颁发，如果出现问题，颁发机构会负全部责任。如上图，<code>baidu.com</code>的证书由<code>GlobalSign Organization Validation CA - SHA256 - G2</code>机构颁发，证书的内容包括目标公司信息，扩展，所使用算法，目标网站公钥，以及签发机构本身信息。<br>其中的签名为颁发机构对<code>certificate</code>报文内容的散列值(例如SHA256)然后再用自身的私钥加密得到的结果。</p>
+<p>验签：<br>将获得的证书的hash值和用颁发机构公钥解密的签名值对比，相同则为正确。</p>
+<h4 id="Server-key-exchange"><a href="#Server-key-exchange" class="headerlink" title="Server key exchange"></a>Server key exchange</h4><img src="/blog/ssl/server-key-exchange.png" alt="Server Key Exchange" title="Server Key Exchange">
+<p>由于这里采用的是ECDHE算法，类似DH算法，所以需要密钥交换阶段，RSA算法是没有这步的</p>
+<h4 id="Server-Hello-Done"><a href="#Server-Hello-Done" class="headerlink" title="Server Hello Done"></a>Server Hello Done</h4><img src="/blog/ssl/server-hello-done.png" alt="Server Hello" title="Server Hello">
+<p>表示server hello 完成</p>
+<h4 id="Client-Key-Exchange-Change-Cipher-Spec-Encypted-Handshake-Message"><a href="#Client-Key-Exchange-Change-Cipher-Spec-Encypted-Handshake-Message" class="headerlink" title="Client Key Exchange,Change Cipher Spec,Encypted Handshake Message"></a>Client Key Exchange,Change Cipher Spec,Encypted Handshake Message</h4><img src="/blog/ssl/client-key-exchange.png" alt="Client Key Exchange,Change Cipher Spec,Encypted Handshake Message" title="Client Key Exchange,Change Cipher Spec,Encypted Handshake Message">
+<p>这里分了三部分，第一部分是<code>Client Key Exchange</code>,如果是DH算法，则是发送交换密钥，如果是RSA则是使用服务器公钥加密随机数<code>pre-master</code>，与<code>random_c</code>、<code>random_s</code>共同构成协商密钥</p>
+<p>第二部分是<code>Change Cipher Spec</code>，指此端之后的数据均为协商密钥加密的密文</p>
+<p>第三部分是<code>Encypted Handshake Message</code>，为结合所有当前的通信参数信息生成一段数据，并使用协商密钥加密后的内容</p>
+<h4 id="New-Session-Ticket"><a href="#New-Session-Ticket" class="headerlink" title="New Session Ticket"></a>New Session Ticket</h4><img src="/blog/ssl/new-session-ticket.png" alt="New Session Ticket" title="New Session Ticket">
+<p>会话标识符，解决会话缓存问题，这些数据采用一个只有服务器知道的密钥进行加密。<code>Session Ticket</code>由客户端进行存储，并可以在随后的一次会话中添加到 ClientHello消息的SessionTicket扩展中</p>
+<h4 id="Change-Cipher-Spec"><a href="#Change-Cipher-Spec" class="headerlink" title="Change Cipher Spec"></a>Change Cipher Spec</h4><img src="/blog/ssl/change-cipher-spec.png" alt="Server Change Cipher Spec" title="Server Change Cipher Spec">
+<p>表示服务器从现在开始发送加密信息</p>
+<h4 id="Encrypted-Handshake-Message"><a href="#Encrypted-Handshake-Message" class="headerlink" title="Encrypted Handshake Message"></a>Encrypted Handshake Message</h4><img src="/blog/ssl/encrypted-handshake-message.png" alt="Server Encrypted Handshake Message" title="Server Encrypted Handshake Message">
+<p>也叫<code>Finished</code>包，是完成协商密钥后的第一个加密信息包，用于验证密钥交换成功和认证成功。</p>
+<p>使用该协商密钥加密之前所有收发握手消息的Hash和MAC值，发送给服务器，服务器将相同的会话密钥（使用相同方法生成）解密此消息，校验其中的Hash和MAC值。如果匹配，则成功。</p>
+<h4 id="Appication-Data"><a href="#Appication-Data" class="headerlink" title="Appication Data"></a>Appication Data</h4><img src="/blog/ssl/application-data.png" alt="Application Data" title="Application Data">
+<p>数据传输，为应用层协议内容使用协商密钥加密结果</p>
+<p>附一张DH算法的图<br><img src="/blog/ssl/ssl_handshake_diffie_hellman.jpg" alt="DH-Handshake" title="DH-Handshake"></p>
+<h3 id="SSL中间人攻击"><a href="#SSL中间人攻击" class="headerlink" title="SSL中间人攻击"></a>SSL中间人攻击</h3><p>目前的SSL中间人攻击分为两种: SSL劫持(欺骗)、SSL剥离(降级)</p>
+<h4 id="SSL中间人劫持"><a href="#SSL中间人劫持" class="headerlink" title="SSL中间人劫持"></a>SSL中间人劫持</h4><img src="/blog/ssl/ssl-hijack.png" alt="SSL中间人劫持" title="SSL中间人劫持">
+<p>SSL中间人劫持即攻击者首先通过ARP欺骗、DNS劫持甚至网关劫持等等，将客户端的访问重定向到攻击者的机器，让客户端机器与攻击者机器建立HTTPS连接（使用伪造证书），而攻击者机器再跟服务端连接。</p>
+<p>这种情况由于证书是伪造的，所以证书认证会失败，浏览器会提示，如果不点继续是不会被劫持的，而一般用户由于安全意识比较淡薄，都会心甘情愿的上钩。</p>
+<h4 id="SSL剥离"><a href="#SSL剥离" class="headerlink" title="SSL剥离"></a>SSL剥离</h4><img src="/blog/ssl/sslstrip.png" alt="SSL中间人剥离" title="SSL中间人剥离">
+<p>该攻击方式主要是利用用户并不会每次都直接在浏览器上输入<code>https://xxx.xxx.com</code>来访问网站，或者有些网站<strong>并非全网HTTPS</strong>，而是只在需要进行敏感数据传输时才使用HTTPS的漏洞。</p>
+<p>假如客户端直接访问HTTPS的URL，攻击者是没办法直接进行降级的，因为HTTPS与HTTP虽然都是TCP连接，但HTTPS在传输HTTP数据之前，需要在进行了SSL握手，并协商传输密钥用来后续的加密传输；假如客户端与攻击者进行SSL握手，而攻击者无法提供可信任的证书来让客户端验证通过进行连接，所以客户端的系统会判断为SSL握手失败，断开连接。</p>
+<p>中间人攻击者在劫持了客户端与服务端的HTTP会话后，将HTTP页面里面所有的 <code>https://</code> 超链接都换成 <code>http://</code> ，用户在点击相应的链接时，是使用HTTP协议来进行访问；这样，就算服务器对相应的URL只支持HTTPS链接，但中间人一样可以和服务建立HTTPS连接之后，将数据使用HTTP协议转发给客户端，实现会话劫持。</p>
+<p>由于使用HTTP，不会让浏览器出现HTTPS证书不可信的警告，而且用户很少会去看浏览器上的URL是 <code>https://</code> 还是 <code>http://</code> 。特别是App的WebView中，应用一般会把URL隐藏掉，用户根本无法直接查看到URL出现异常。</p>
+<h3 id="DDCTF-2018-流量分析"><a href="#DDCTF-2018-流量分析" class="headerlink" title="DDCTF 2018 流量分析"></a>DDCTF 2018 流量分析</h3><p>下载流量包，打开后分析协议种类:<br><img src="/blog/ssl/wireshark.png" alt="wireshark" title="wireshark"><br>发现由3部分，<code>SMTP</code>,<code>FTP</code>和<code>SSL</code>组成，先看<code>FTP</code>包：<br><img src="/blog/ssl/ftp.png" alt="ftp" title="ftp"><br>可以发现，发送了两个压缩包<code>Fl-g.zip</code>和<code>sqlmap.zip</code>，但数据大量丢包，无法复原出来。之后看<code>SMTP</code>，发现其发送了几封邮件，查看<code>IMF</code>协议内容：<br><img src="/blog/ssl/imf.png" alt="IMF" title="IMF"><br>将<code>Internet Message Format</code>的内容以<code>纯文本</code>方式拷出来，然后保存为<code>.eml</code>文件，可以发现:<br><img src="/blog/ssl/mail.jpg" alt="mail" title="mail"><br>发现是私钥，而其中还有SSL流量，从而推测用私钥去解密。根据图片生成私钥值，用图像识别去获取文字然后对照修改，看的眼睛都瞎了。。吐槽一下。最后倒入，即可在其中看见HTTP flag内容。<br><img src="/blog/ssl/ssl_de.png" alt="ssl decrypt" title="ssl decrypt"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/ssl/" title="TLS/SSL流程详解 & HTTPS中间人攻击 & 流量分析SSL题目">http://yoursite.com/blog/ssl/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/security/" rel="tag"><i class="fa fa-tag"></i> security</a>
+          
+            <a href="/tags/ssl/" rel="tag"><i class="fa fa-tag"></i> ssl</a>
+          
+            <a href="/tags/network-protocol/" rel="tag"><i class="fa fa-tag"></i> network protocol</a>
+          
+            <a href="/tags/https/" rel="tag"><i class="fa fa-tag"></i> https</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/redis-unauthorized-vulnerability/" rel="next" title="Redis 未授权访问漏洞利用分析">
+                <i class="fa fa-chevron-left"></i> Redis 未授权访问漏洞利用分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/dns-hijack/" rel="prev" title="DNS 协议 & DNS 常见攻击">
+                DNS 协议 & DNS 常见攻击 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#TLS-SSL"><span class="nav-number">1.</span> <span class="nav-text">TLS/SSL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Client-Hello"><span class="nav-number">1.1.</span> <span class="nav-text">Client Hello</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Server-Hello"><span class="nav-number">1.2.</span> <span class="nav-text">Server Hello</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Certificate"><span class="nav-number">1.3.</span> <span class="nav-text">Certificate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Server-key-exchange"><span class="nav-number">1.4.</span> <span class="nav-text">Server key exchange</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Server-Hello-Done"><span class="nav-number">1.5.</span> <span class="nav-text">Server Hello Done</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Client-Key-Exchange-Change-Cipher-Spec-Encypted-Handshake-Message"><span class="nav-number">1.6.</span> <span class="nav-text">Client Key Exchange,Change Cipher Spec,Encypted Handshake Message</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#New-Session-Ticket"><span class="nav-number">1.7.</span> <span class="nav-text">New Session Ticket</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Change-Cipher-Spec"><span class="nav-number">1.8.</span> <span class="nav-text">Change Cipher Spec</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Encrypted-Handshake-Message"><span class="nav-number">1.9.</span> <span class="nav-text">Encrypted Handshake Message</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Appication-Data"><span class="nav-number">1.10.</span> <span class="nav-text">Appication Data</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSL中间人攻击"><span class="nav-number">2.</span> <span class="nav-text">SSL中间人攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SSL中间人劫持"><span class="nav-number">2.1.</span> <span class="nav-text">SSL中间人劫持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSL剥离"><span class="nav-number">2.2.</span> <span class="nav-text">SSL剥离</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDCTF-2018-流量分析"><span class="nav-number">3.</span> <span class="nav-text">DDCTF 2018 流量分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

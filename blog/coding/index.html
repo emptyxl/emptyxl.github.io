@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="coding,编码,utf-8,Unicode,USC,UTF,ASCII,GBK,str,bytes,hex" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="我们在计算机编程中，经常会遇见输出的字符串不是我们想要的，或者同样的字符串在不同环境中输出却不一致，第一部分主要是搞懂以下这些内容究竟有什么区别：    str、Unicode、通用字符集、UTF-8、GBK、烫烫烫 锟斤拷、ASCII、bytes、16进制字符串、字符串的16进制数">
+<meta name="keywords" content="coding,编码,utf-8,Unicode,USC,UTF,ASCII,GBK,str,bytes,hex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编码相关内容详解">
+<meta property="og:url" content="http://yoursite.com/blog/coding/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="我们在计算机编程中，经常会遇见输出的字符串不是我们想要的，或者同样的字符串在不同环境中输出却不一致，第一部分主要是搞懂以下这些内容究竟有什么区别：    str、Unicode、通用字符集、UTF-8、GBK、烫烫烫 锟斤拷、ASCII、bytes、16进制字符串、字符串的16进制数">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/coding/coding-1.png">
+<meta property="og:image" content="http://yoursite.com/blog/coding/gbk-01.png">
+<meta property="og:updated_time" content="2017-11-03T03:33:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="编码相关内容详解">
+<meta name="twitter:description" content="我们在计算机编程中，经常会遇见输出的字符串不是我们想要的，或者同样的字符串在不同环境中输出却不一致，第一部分主要是搞懂以下这些内容究竟有什么区别：    str、Unicode、通用字符集、UTF-8、GBK、烫烫烫 锟斤拷、ASCII、bytes、16进制字符串、字符串的16进制数">
+<meta name="twitter:image" content="http://yoursite.com/blog/coding/coding-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/coding/"/>
+
+
+
+
+
+  <title>编码相关内容详解 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/coding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">编码相关内容详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-30T17:11:15+08:00">
+                2017-10-30
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-11-03T11:33:16+08:00">
+                2017-11-03
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coding/" itemprop="url" rel="index">
+                    <span itemprop="name">coding</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们在计算机编程中，经常会遇见输出的字符串不是我们想要的，或者同样的字符串在不同环境中输出却不一致，第一部分主要是搞懂以下这些内容究竟有什么区别：  </p>
+<blockquote>
+<p><code>str</code>、<code>Unicode</code>、<code>通用字符集</code>、<code>UTF-8</code>、<code>GBK</code>、<code>烫烫烫 锟斤拷</code>、<code>ASCII</code>、<code>bytes</code>、<code>16进制字符串</code>、<code>字符串的16进制数</code></p>
+</blockquote>
+<a id="more"></a>
+<h3 id="Unicode码-与-通用字符集"><a href="#Unicode码-与-通用字符集" class="headerlink" title="Unicode码 与 通用字符集"></a>Unicode码 与 通用字符集</h3><blockquote>
+<p><strong>Unicode</strong><br>（中文：万国码、国际码、统一码、单一码）是计算机科学领域里的一项业界标准。它对世界上大部分的文字系统进行了整理、编码，使得电脑可以用更为简单的方式来呈现和处理文字。  </p>
+<p>Unicode伴随着通用字符集的标准而发展，同时也以书本的形式对外发表。Unicode至今仍在不断增修，每个新版本都加入更多新的字符。目前最新的版本为2017年6月20日公布的10.0.0，已经收录超过十万个字符（第十万个字符在2005年获采纳）  </p>
+<p>Unicode涵盖的数据除了视觉上的字形、编码方法、标准的字符编码外，还包含了字符特性，如大小写字母。  </p>
+<p>Unicode发展由<strong>非营利机构统一码联盟</strong>（区别于ISO组织）负责，该机构致力于让Unicode方案取代既有的字符编码方案。因为既有的方案往往空间非常有限，亦不适用于多语环境。  </p>
+<p>Unicode备受认可，并广泛地应用于电脑软件的国际化与本地化过程。有很多新科技，如可扩展置标语言(Extensible Markup Language，简称：XML)、Java编程语言以及现代的操作系统，都采用Unicode编码。</p>
+</blockquote>
+<p><a href="https://zh.wikipedia.org/wiki/Unicode" target="_blank" rel="external">Unicode wiki</a> 这里可以看到相关的介绍，可以看一下。</p>
+<blockquote>
+<p><strong>通用字符集</strong><br>（英语：Universal Character Set, UCS）是由ISO制定的ISO 10646（或称ISO/IEC 10646）标准所定义的标准字符集。<br>通用字符集的初衷是包括世界上所有字符，那么其他所有字符集的内容都能在通用字符集中找到。它保证了与其他字符集的双向兼容，即，如果你将任何文本字符串翻译到UCS格式，然后再翻译回原编码，你不会丢失任何信息。  </p>
+<p>UCS包含了已知语言的所有字符。除了拉丁语、希腊语、斯拉夫语、希伯来语、阿拉伯语、亚美尼亚语、格鲁吉亚语，还包括中文、日文、韩文这样的方块文字，UCS还包括大量的图形、印刷、数学、科学符号。  </p>
+<p>UCS不仅给每个字符分配一个代码，而且赋予了一个正式的名字。表示一个UCS或Unicode值的十六进制数通常在前面加上“U+”，例如“U+0041”代表字符“A”。</p>
+</blockquote>
+<p>根据上面的介绍，我们可以概括的来理解这两个东西。</p>
+<ol>
+<li>两者都是一种<code>字符编码方案</code>,即<strong>为每一个字符而非字形定义唯一的代码</strong>,这个方案是一种标准，只是在计算机科学领域，给某一个字符一个确定的值，例如<code>a</code>的Unicode值为<code>97</code>,<code>0</code>的Unicode值为<code>48</code>,<code>你</code>的Unicode值为<code>20320</code>  </li>
+<li><code>Unicode码</code>和<code>通用字符集</code>是两个不同组织出于同样的目的所制定的两套标准，两者相互发展，慢慢的走向一致，因为世界上不需要两套不兼容的字符集。所以两者的字码值是一致的</li>
+<li>使用<code>U+XXXX</code>来表示码值为<code>XXXX</code>的字符  </li>
+<li>两者都是<strong>字符编码标准</strong>,不是实现标准，即其只考虑字符与代码的一一对应，而不考虑计算机中的具体实现。</li>
+<li>统一码的编码方式与<code>ISO 10646</code>的通用字符集概念相对应。目前实际应用的统一码版本对应于<code>UCS-2</code>，使用16位的编码空间。也就是每个字符占用2个字节。这样理论上一共最多可以表示216（即65536）个字符。基本满足各种语言的使用。<br>上述16位统一码字符构成基本多文种平面。基本多文种平面的字符的编码为<code>U+hhhh</code>，其中每个h代表一个十六进制数字，与UCS-2编码完全相同。而其对应的4字节UCS-4编码后两个字节一致，前两个字节则所有位均为0。</li>
+</ol>
+<blockquote>
+<p>最新（但未实际广泛使用）的统一码版本定义了16个辅助平面，两者合起来至少需要占据21位的编码空间，比3字节略少。但事实上辅助平面字符仍然占用4字节编码空间，与UCS-4保持一致。未来版本会扩充到ISO 10646-1实现级别3，即涵盖UCS-4的所有字符。UCS-4是一个更大的尚未填充完全的31位字符集，加上恒为0的首位，共需占据32位，即4字节。理论上最多能表示231个字符，完全可以涵盖一切语言所用的符号。</p>
+</blockquote>
+<h3 id="UTF-Unicode-Transformation-Format"><a href="#UTF-Unicode-Transformation-Format" class="headerlink" title="UTF (Unicode Transformation Format)"></a>UTF (Unicode Transformation Format)</h3><p>Unicode的实现方式不同于编码方式。一个字符的Unicode编码是确定的。但是在实际传输过程中，由于不同系统平台的设计不一定一致，以及出于节省空间的目的，对Unicode编码的实现方式有所不同。Unicode的实现方式称为<strong>Unicode转换格式</strong>（Unicode Transformation Format，简称为UTF）</p>
+<blockquote>
+<p>例如，如果一个仅包含基本7位ASCII字符的Unicode文件，如果每个字符都使用2字节的原Unicode编码传输，其第一字节的8位始终为0。这就造成了比较大的浪费。对于这种情况，可以使用UTF-8编码，这是一种变长编码，它将基本7位ASCII字符仍用7位编码表示，占用一个字节（首位补0）。而遇到与其他Unicode字符混合的情况，将按一定算法转换，每个字符使用1-3个字节编码，并利用首位为0或1进行识别。这样对以7位ASCII字符为主的西文文档就大幅节省了编码长度（具体方案参见UTF-8）。类似的，对未来会出现的需要4个字节的辅助平面字符和其他UCS-4扩充字符，2字节编码的UTF-16也需要通过一定的算法进行转换。  </p>
+<p>再如，如果直接使用与Unicode编码一致（仅限于BMP字符）的UTF-16编码，由于每个字符占用了两个字节，在麦金塔电脑（Mac）机和个人电脑上，对字节顺序的理解是不一致的。这时同一字节流可能会被解释为不同内容，如某字符为十六进制编码4E59，按两个字节拆分为4E和59，在Mac上读取时是从低字节开始，那么在Mac OS会认为此4E59编码为594E，找到的字符为“奎”，而在Windows上从高字节开始读取，则编码为U+4E59的字符为“乙”。就是说在Windows下以UTF-16编码保存一个字符“乙”，在Mac OS环境下打开会显示成“奎”。此类情况说明UTF-16的编码顺序若不加以人为定义就可能发生混淆，于是在UTF-16编码实现方式中使用了大端序（Big-Endian，简写为UTF-16 BE）、小端序（Little-Endian，简写为UTF-16 LE）的概念，以及可附加的字节顺序记号解决方案，目前在PC机上的Windows系统和Linux系统对于UTF-16编码默认使用UTF-16 LE。（具体方案参见UTF-16）</p>
+</blockquote>
+<p>所以常见的<code>UTF-X</code>系列都是编码方式的实现，没有规定要求必须使用哪种编码方式，但会有一些常见的编码方式，如<code>utf-8</code>、<code>utf-7</code>、<code>utf-16</code>、<code>utf-32</code></p>
+<h3 id="UTF-8"><a href="#UTF-8" class="headerlink" title="UTF-8"></a>UTF-8</h3><p><strong>8-bit Unicode Transformation Format</strong>  </p>
+<blockquote>
+<p>是一种针对Unicode的可变长度字符编码，也是一种前缀码。它可以用来表示Unicode标准中的任何字符，且其编码中的第一个字节仍与ASCII兼容，这使得原来处理ASCII字符的软件无须或只须做少部分修改，即可继续使用。因此，它逐渐成为电子邮件、网页及其他存储或发送文字的应用中，优先采用的编码。  </p>
+<p>UTF-8使用一至六个字节为每个字符编码（尽管如此，2003年11月UTF-8被RFC 3629重新规范，只能使用原来Unicode定义的区域，U+0000到U+10FFFF，也就是说最多四个字节）  </p>
+<p>互联网工程工作小组（IETF）要求所有互联网协议都必须支持UTF-8编码。互联网邮件联盟（IMC）建议所有电子邮件软件都支持UTF-8编码。</p>
+</blockquote>
+<p>UTF-8就是以8位为单元对UCS进行编码，而UTF-8不使用大尾序和小尾序的形式，每个使用UTF-8存储的字符，除了第一个字节外，其余字节的头两个比特都是以”10”开始，使文字处理器能够较快地找出每个字符的开始位置。下面是一个UTF-8编码格式表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">码值位数</th>
+<th style="text-align:center">码值起始</th>
+<th style="text-align:center">码值终止</th>
+<th style="text-align:center">字节数</th>
+<th style="text-align:center">byte 1</th>
+<th style="text-align:center">byte 2</th>
+<th style="text-align:center">byte 3</th>
+<th style="text-align:center">byte 4</th>
+<th style="text-align:center">byte 5</th>
+<th style="text-align:center">byte 6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">U+0000</td>
+<td style="text-align:center">U+007F</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0xxxxxxx</td>
+</tr>
+<tr>
+<td style="text-align:center">11</td>
+<td style="text-align:center">U+0080</td>
+<td style="text-align:center">U+07FF</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">110xxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+</tr>
+<tr>
+<td style="text-align:center">16</td>
+<td style="text-align:center">U+0800</td>
+<td style="text-align:center">U+FFFF</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">1110xxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+</tr>
+<tr>
+<td style="text-align:center">21</td>
+<td style="text-align:center">U+10000</td>
+<td style="text-align:center">U+1FFFFF</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">11110xxx</td>
+<td style="text-align:center">10xxxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+</tr>
+<tr>
+<td style="text-align:center">26</td>
+<td style="text-align:center">U+200000</td>
+<td style="text-align:center">U+3FFFFFF</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">111110xx</td>
+<td style="text-align:center">10xxxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+</tr>
+<tr>
+<td style="text-align:center">31</td>
+<td style="text-align:center">U+4000000</td>
+<td style="text-align:center">U+7FFFFFFF</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">1111110x</td>
+<td style="text-align:center">10xxxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+<td style="text-align:center">10xxxxxx</td>
+</tr>
+</tbody>
+</table>
+<p>举个栗子，假设用文本编辑器输入以下内容(mac下默认是utf-8编码格式，win下需要看下记事本编码格式)：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">你好 <span class="number">123</span>abc!@<span class="meta">#</span></div></pre></td></tr></table></figure>
+<p>以二进制格式打开如下：</p>
+<img src="/blog/coding/coding-1.png" alt="utf-8" title="utf-8">  
+<p>我们来分析一下，以<code>你</code>为例：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">'你'的Unicode码值为<span class="number"> 20320 </span>转为16进制 4f60</div><div class="line">按utf-8编码方式 码值位数为16 所以需要3个字节 前三个字节为E4BDA0</div><div class="line">我们将其写为2进制格式 看是否正确</div><div class="line"></div><div class="line">E4BDA0: <span class="number"> 11100100 </span><span class="number"> 10111101 </span> 10100000</div><div class="line">4F60:       <span class="number"> 0100 </span>  <span class="number"> 111101 </span>   100000</div></pre></td></tr></table></figure>
+<p>可以发现确实如编码格式所叙述的那样。我们再来看一下后面的字符,例如<code>@</code>:</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">'@' Unicode 码 为 <span class="number">64</span> 转为<span class="number">16</span>进制 <span class="number">40</span></div><div class="line">发现均为<span class="number">40</span> 也说明了UTf<span class="number">-8</span>在<span class="number">0</span><span class="number">-127</span>与ASCII保持一致</div></pre></td></tr></table></figure>
+<h3 id="UTF-7"><a href="#UTF-7" class="headerlink" title="UTF-7"></a>UTF-7</h3><p><strong>16-bit Unicode Transformation Format</strong>  </p>
+<p>UTF-7本身并非Unicode的标准之一，即使在目前最新的Unicode 5.0里也仅列出UTF-8、UTF-16和UTF-32。由于在过去SMTP的传输仅能接受7比特的字符，而当时Unicode并无法直接满足既有的SMTP传输限制，在这样地背景下UTF-7被提出。严格来说UTF-7不能算是Unicode所定义的字符集之一，较精确的来说，UTF-7是提供了一种将Unicode转换为7比特US-ASCII字符的转换方式。  </p>
+<p>有些字符本身可以直接以单一的ASCII字符来呈现。<br>第一个组群被称作<code>direct characters</code>，其中包含了62个数字与英文字母，以及包含了九个符号字符：<code>&#39; ( ) , - . / : ?</code>。这些<code>direct characters</code>被认为可以很安全的直接在文件里呈现。另一个主要的组群称作<code>optional direct characters</code>，其中包含了所有可被打印的字符，这些字符在<code>U+0020～U+007E</code>之间，除了<code>~ \ +</code>和<code>`空白字符以外。这些</code>optional direct characters`的使用虽可减少空间的使用也可增加人的可阅读性，但却会因为一些不良设计的邮件网关而会产生一些错误，导致必须使用额外的转义字符。  </p>
+<p>空白字符、Tab字符、以及换行字符一般虽也可直接是为单一的ASCII字符来使用，然而，若是邮件中有使用了编码过的字符串，则必须特别注意这些字符有无被使用在其他地方。而加号字符<code>+</code>的一种编码方式可以是<code>+-</code>。<br>其他的字符则必须被编码成UTF-16然后转换为修改的Base64。这些区块的开头会以+符号来标示，结尾则以任何不在Base64里定义的字符来标示。若是在Base64区块之后使用-(连字暨减号)标示为结束的话，则解码器会从下个字符继续解码，反之则用此字符当非Base64的区块的开头继续解码。</p>
+<p><code>UTF-7</code>在现今不太常见，一些CTF题目可能使用这个方式来加密，了解一下就好了。</p>
+<h3 id="UTF-16"><a href="#UTF-16" class="headerlink" title="UTF-16"></a>UTF-16</h3><p><strong>16-bit Unicode Transformation Format</strong></p>
+<p>具体可以看<a href="https://zh.wikipedia.org/wiki/UTF-16" target="_blank" rel="external">UTF-16 wiki</a>，不再赘述</p>
+<h3 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h3><p><strong>美国信息交换标准代码</strong><br><strong>7 bit</strong><br>定义了<strong>128</strong>个字符，其中包括<strong>33个无法显示的控制字符</strong>和<strong>95个可显示的字符</strong>  </p>
+<p><code>ASCII码</code>要早于<code>Unicode</code>，与其所做的事情是一致的。其局限在于只能显示26个基本拉丁字母、阿拉伯数目字和英式标点符号，因此只能用于显示现代美国英语。虽然有ASCII的扩展版(8bit最高位不为0，又扩展了128个)，但仍然无法满足世界众多种语言。</p>
+<p>目前常用的编码，都保留了对ASCII码的兼容，即<code>0-127</code>码值与其ASCII码保持一致。</p>
+<h3 id="GBK"><a href="#GBK" class="headerlink" title="GBK"></a>GBK</h3><p><strong>汉字内码扩展规范</strong><br>中国人那么叼，肯定要开发一套属于自己的编码，于是GBK编码诞生了。这套编码格式为中国程序员带来无数的坑。这个编码是和Unicode兼容的，也就是说映射表是一样的。<br>GBK编码严格使用<code>2字节</code>来表示，因为给中国人使用，汉字和字母足够了。<br>GBK编码范围是<code>0x8140</code>-<code>0xFEFE</code>，即:</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">高位时<span class="number">0x81</span> ～ <span class="number">0xFE</span> 也就是 <span class="number">1000</span> <span class="number">0001</span> － <span class="number">11111110</span></div><div class="line">低位时<span class="number">0x40</span> ～ <span class="number">0xFE</span> 也就是 <span class="number">0100</span> <span class="number">0000</span> － <span class="number">11111110</span></div><div class="line">但不包括低字节是<span class="number">0x7F</span>的组合。</div></pre></td></tr></table></figure>
+<p>简单看一下，可以看到GBK高位最高位为1，可以有效与ascii区分，但低位开头却有<code>0100 0000</code>这种，与单个ASCII码值一致，这就造成了发生冲突的可能性。</p>
+<p>顺便提一下，<code>GBK编码</code>不像<code>UTF-8</code>，可以通过计算得出一个字符的编码结果，举个栗子：</p>
+<p>我们要计算<code>你</code>这个字的<code>UTF-8</code>编码值，之前讲过了，由于<code>你</code>的unicode码值为<code>4f60</code>,然后把其填充进<code>1110xxxx 10xxxxxx 10xxxxxx</code>即可。<br>那么对于<code>GBK编码</code>呢？由于其与<code>Unicode</code>兼容，即也认为<code>你</code>的unicode码值为<code>4f60</code>，然后呢，没有然后了。<strong>GBK编码是无法计算的！需要使用GBK编码表进行转换</strong> 就是类似下边这个玩意：</p>
+<img src="/blog/coding/gbk-01.png" alt="gbk" title="gbk">  
+<p>GBK的内码不是连续的，而且和unicode标准没有必然的关系，所以大部分程序在做转换的时候都是依赖的转换表。</p>
+<h3 id="烫烫烫-屯屯屯-锟斤拷"><a href="#烫烫烫-屯屯屯-锟斤拷" class="headerlink" title="烫烫烫 屯屯屯 锟斤拷"></a>烫烫烫 屯屯屯 锟斤拷</h3><p><strong><code>烫烫烫 屯屯屯</code></strong><br>大名鼎鼎的乱码，写过C语言的人没有没遇见过的吧。  </p>
+<p>这种乱码最常见的地方是Visual Studio里。<br>Visual Studio中，未初始化的栈空间用<code>0xCC</code>填充，而未初始化的堆空间用<code>0xCD</code>填充。<br>而<code>0xCCCC</code>和<code>0xCDCD</code>在中文<code>GB2312编码</code>中分别对应<code>烫</code>字和<code>屯</code>字。</p>
+<p><strong><code>锟斤拷</code></strong><br>这涉及到<code>UTF-8</code>到<code>GBK编码</code> 的转换</p>
+<p>在<code>UTF-8</code>中有一个特殊字符<code>�</code>  （Replacement character）<br>其<code>Unicode</code>码值为<code>0xFFFD</code> 其作用是：</p>
+<blockquote>
+<p>It is used to indicate problems when a system is unable to render a stream of data to a correct symbol. It is usually seen when the data is invalid and does not match any character.</p>
+</blockquote>
+<p>也就是当前设备无法识别其<code>Unicode</code>或版本过低不认识时，使用这个<code>Unicode码</code>值代替,即用来容错的。因为随着UCS标准的更新，之前的设备并不能及时有效的更新。我们用<code>utf-8</code>编码实现以下，填充进<code>1110xxxx 10xxxxxx 10xxxxxx</code>中得到<code>0xEF 0xBF 0xBD</code>,那么如果多个无法识别的字符连续出现，其编码后的值如下格式:</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">0xEF</span> <span class="number">0xBF</span> <span class="number">0xBD</span> <span class="number">0xEF</span> <span class="number">0xBF</span> <span class="number">0xBD</span> <span class="number">0xEF</span> <span class="number">0xBF</span> <span class="number">0xBD</span> ...</div></pre></td></tr></table></figure>
+<p>那么如果有人并不知道其使用的是<code>utf-8编码</code>格式，而直接将其用<code>GBK编码</code>打开，即被解析为<code>0xEFBF 0xBDEF 0xBFBD ...</code>这三个汉字，而这三个汉字，正是：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">锟（<span class="number">0xEFBF</span>）</div><div class="line">斤（<span class="number">0xBDEF</span>）</div><div class="line">拷（<span class="number">0xBFBD</span>）</div></pre></td></tr></table></figure>
+<h3 id="str、bytes、unicode字符串、16进制数、16进制字符串等相互转换"><a href="#str、bytes、unicode字符串、16进制数、16进制字符串等相互转换" class="headerlink" title="str、bytes、unicode字符串、16进制数、16进制字符串等相互转换"></a>str、bytes、unicode字符串、16进制数、16进制字符串等相互转换</h3><p>以下内容均以<code>python</code>为例</p>
+<h4 id="字符编码"><a href="#字符编码" class="headerlink" title="字符编码"></a>字符编码</h4><p>在平常编写程序过程中，经常会遇见对于字符串处理时，所要求的参数不正确，举个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 求MD5值：</span></div><div class="line"><span class="keyword">import</span> hashlib</div><div class="line"></div><div class="line">s = <span class="string">'abc'</span></div><div class="line">md5 = hashlib.md5(s).hexdigest()</div></pre></td></tr></table></figure>
+<p>我们觉得应该能得到结果，但会抛出</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">TypeError</span>: Unicode-objects must <span class="keyword">be </span>encoded <span class="keyword">before </span>hashing</div></pre></td></tr></table></figure>
+<p>查看这个函数会发现，<code>You can now feed this object with bytes-like objects (normally bytes)</code>即其要求一个<code>bytes-like objects</code>，改为：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">hashlib</span><span class="selector-class">.md5</span>(s.encode(<span class="string">'utf-8'</span>))<span class="selector-class">.hexdigest</span>()</div></pre></td></tr></table></figure>
+<p>即可。还有例如接收服务器字符串时有时候是<code>unicode字符串</code>，发现在调用函数时，需要传递一个<code>str</code>字符串，他们之间的转换也是一个常见的问题。再例如在你想在终端中打印你想看到的字符串，但却发现显示是<code>\x40\x45\x46...</code>等内容，更多的情景不再赘述。</p>
+<p>首先摔个锅，python2.x关于字符编码方面非常混乱，导致使用的时候容易出错，再加上从2.x到3.x的迁移，python3.x的设计好很多，但是相同名称的类表示不同的含义，往往会造成不深入了解的人们很大的误会。我们来看下2.x和3.x对字符串的处理：</p>
+<p><strong>python2.x</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">关键字</th>
+<th style="text-align:left">含义及说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">str</td>
+<td style="text-align:left">某种编码类型编码后的字符串<br>UTF-8、GBK等 取决于python文件本身保存的编码格式<br>类似<code># -*- coding: utf-8 -*-</code>)这种</td>
+</tr>
+<tr>
+<td style="text-align:center">unicode</td>
+<td style="text-align:left">unicode类型字符串<br> 直接<code>u&#39;abc&#39;</code>或者<code>unicode()</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>python3.x</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">关键字</th>
+<th style="text-align:left">含义及说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">bytes</td>
+<td style="text-align:left">某种编码类型编码后的字符串<br>UTF-8、GBK等 <br><code>b&#39;abc&#39;</code><br>例如中文<code>你</code> utf8编码后的<code>b&#39;\xe4\xbd\xa0&#39;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">str</td>
+<td style="text-align:left">unicode类型字符串<br> 直接<code>&#39;&#39;</code>就是unicode类型字符串</td>
+</tr>
+</tbody>
+</table>
+<p>我们来做一个分析：<br>发现不同版本都有2个类型，一个是<code>unicode</code>类型字符串，一个是<code>用某种编码编码后的字符串</code>，而2.x和3.x同样是<code>str</code>却代表了不同的含义，这使得在版本迁移的时候，如果不看文档，很容易误以为是一样的。</p>
+<p><code>unicode</code>字符串是一个基准，它用2字节来存储字符串每个字符的<code>unicode码值</code>，这样在不同环境中迁移时才能保持一致。<code>某种编码类型编码后的字符串</code>是使用编码方式之后的存储方式。两者类似<code>unicode码</code>和<code>utf-8</code>值一样。</p>
+<p><strong>python2.x</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>type(<span class="string">'abc'</span>)</div><div class="line">&lt;type <span class="string">'str'</span>&gt;</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>type(<span class="string">u'abc'</span>)</div><div class="line">&lt;type <span class="string">'unicode'</span>&gt;</div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'str'</span>.decode(<span class="string">'utf-8'</span>)</div><div class="line"><span class="string">u'str'</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> <span class="string">'\xe4\xbd\xa0'</span></div><div class="line">你</div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> <span class="string">u'\xe4\xbd\xa0'</span></div><div class="line">ä½</div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'\xe4\xbd\xa0'</span>.decode(<span class="string">'utf-8'</span>)</div><div class="line"><span class="string">u'\u4f60'</span></div></pre></td></tr></table></figure>
+<p><strong>python3.x</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; type('你')</div><div class="line">&lt;class 'str'&gt;</div><div class="line">&gt;&gt;&gt; type(u'你')</div><div class="line">&lt;class 'str'&gt;</div><div class="line">&gt;&gt;&gt; '你'.encode('utf-8')</div><div class="line">b'\xe4\xbd\xa0'</div><div class="line">&gt;&gt;&gt; b'\xe4\xbd\xa0'.decode('utf-8')</div><div class="line">'你'</div><div class="line">&gt;&gt;&gt; '你'.encode('gbk')</div><div class="line">b'\xc4\xe3'</div><div class="line"></div><div class="line">&gt;&gt;&gt; '你'.encode('ascii')</div><div class="line">Traceback (most recent call last):</div><div class="line">  File "&lt;stdin&gt;", line 1, in &lt;module&gt;</div><div class="line">UnicodeEncodeError: 'ascii' codec can't encode character '\u4f60' in position 0: ordinal not in range(128)</div></pre></td></tr></table></figure>
+<p>我相信上面的讲解和例子足以让你完全弄明白字符串的编解码。<br>在<code>python3.x</code>中，还有一个<code>bytearray</code>，如字面意思，byte数组:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>a = bytearray(<span class="string">b'\xe4\xbd\xa0'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a</div><div class="line">bytearray(<span class="string">b'\xe4\xbd\xa0'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">0</span>]</div><div class="line"><span class="number">228</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">1</span>]</div><div class="line"><span class="number">189</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a = bytearray(<span class="string">'好'</span>,encoding=<span class="string">'utf-8'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a</div><div class="line">bytearray(<span class="string">b'\xe5\xa5\xbd'</span>)</div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a = bytearray(<span class="string">'好'</span>)</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">TypeError: string argument without an encoding</div></pre></td></tr></table></figure>
+<p>我相信你能够很容易理解它。</p>
+<h4 id="16进制数转换"><a href="#16进制数转换" class="headerlink" title="16进制数转换"></a>16进制数转换</h4><p>经常遇见16进制原始字符串或者16进制数表示一个字符串的情况，其实就是字符串bytes格式去掉相关的<code>\x</code>等内容。</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="string">'你好abc'</span></div><div class="line">E4BDA0E5A5BD616263</div><div class="line"><span class="number">0xE4BDA0E5A5BD616263</span></div><div class="line"><span class="string">'E4BDA0E5A5BD616263'</span></div></pre></td></tr></table></figure>
+<p>在某些语言中可以使用这种16进制数或字符串来表示一个字符串，在python中，相关的转换可以使用<code>binascii</code>模块或者<code>hex 编码来实现</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> binascii</div><div class="line"><span class="meta">&gt;&gt;&gt; </span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.b2a_hex(<span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>))</div><div class="line"><span class="string">b'e4bda0e5a5bd616263313233'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.hexlify(<span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>))</div><div class="line"><span class="string">b'e4bda0e5a5bd616263313233'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.b2a_hex(<span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>)).upper()</div><div class="line"><span class="string">b'E4BDA0E5A5BD616263313233'</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>).hex()</div><div class="line"><span class="string">'e4bda0e5a5bd616263313233'</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.a2b_hex(<span class="string">b'e4bda0e5a5bd616263'</span>)</div><div class="line"><span class="string">b'\xe4\xbd\xa0\xe5\xa5\xbdabc'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.unhexlify(<span class="string">b'e4bda0e5a5bd616263'</span>)</div><div class="line"><span class="string">b'\xe4\xbd\xa0\xe5\xa5\xbdabc'</span></div></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/coding/" title="编码相关内容详解">http://yoursite.com/blog/coding/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/coding/" rel="tag"><i class="fa fa-tag"></i> coding</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/jarvisoj-writeup/" rel="next" title="Jarvisoj writeup">
+                <i class="fa fa-chevron-left"></i> Jarvisoj writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/owsap-2017-top10/" rel="prev" title="OWASP TOP10 2017">
+                OWASP TOP10 2017 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Unicode码-与-通用字符集"><span class="nav-number">1.</span> <span class="nav-text">Unicode码 与 通用字符集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UTF-Unicode-Transformation-Format"><span class="nav-number">2.</span> <span class="nav-text">UTF (Unicode Transformation Format)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UTF-8"><span class="nav-number">3.</span> <span class="nav-text">UTF-8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UTF-7"><span class="nav-number">4.</span> <span class="nav-text">UTF-7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UTF-16"><span class="nav-number">5.</span> <span class="nav-text">UTF-16</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ASCII"><span class="nav-number">6.</span> <span class="nav-text">ASCII</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GBK"><span class="nav-number">7.</span> <span class="nav-text">GBK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#烫烫烫-屯屯屯-锟斤拷"><span class="nav-number">8.</span> <span class="nav-text">烫烫烫 屯屯屯 锟斤拷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#str、bytes、unicode字符串、16进制数、16进制字符串等相互转换"><span class="nav-number">9.</span> <span class="nav-text">str、bytes、unicode字符串、16进制数、16进制字符串等相互转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符编码"><span class="nav-number">9.1.</span> <span class="nav-text">字符编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#16进制数转换"><span class="nav-number">9.2.</span> <span class="nav-text">16进制数转换</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

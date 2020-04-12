@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="jpeg,png,gif,image,image format,jpeg文件格式,png文件格式,gif文件格式,图片文件格式" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="1. JPEG JPEG(jay-peg)是一种针对照片视频而广泛使用的一种有损压缩标准方法，其本身只有描述如何将一个视频转换为字节的数据流。但并没有说明这些字节如何在任何特定的存储媒体上被封存起来。JPEG的压缩方式通常是破坏性数据压缩，意即在压缩过程中图像的质量会遭受到可见的破坏，有一种以JPEG为基础的标准Lossless JPEG是采用无损的压缩方式，但Lossless JPEG并没有受到">
+<meta name="keywords" content="jpeg,png,gif,image,image format,jpeg文件格式,png文件格式,gif文件格式,图片文件格式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="image文件格式解析">
+<meta property="og:url" content="http://yoursite.com/blog/image/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="1. JPEG JPEG(jay-peg)是一种针对照片视频而广泛使用的一种有损压缩标准方法，其本身只有描述如何将一个视频转换为字节的数据流。但并没有说明这些字节如何在任何特定的存储媒体上被封存起来。JPEG的压缩方式通常是破坏性数据压缩，意即在压缩过程中图像的质量会遭受到可见的破坏，有一种以JPEG为基础的标准Lossless JPEG是采用无损的压缩方式，但Lossless JPEG并没有受到">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/image/jpeg-1.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/png-1.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/png-3.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/png-2.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-format.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-1.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-2.gif">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-logical.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-4.gif">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-5.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-app.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-gra.gif">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-7.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-8.gif">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-9.png">
+<meta property="og:image" content="http://yoursite.com/blog/image/gif-lzw.gif">
+<meta property="og:updated_time" content="2017-10-10T11:41:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="image文件格式解析">
+<meta name="twitter:description" content="1. JPEG JPEG(jay-peg)是一种针对照片视频而广泛使用的一种有损压缩标准方法，其本身只有描述如何将一个视频转换为字节的数据流。但并没有说明这些字节如何在任何特定的存储媒体上被封存起来。JPEG的压缩方式通常是破坏性数据压缩，意即在压缩过程中图像的质量会遭受到可见的破坏，有一种以JPEG为基础的标准Lossless JPEG是采用无损的压缩方式，但Lossless JPEG并没有受到">
+<meta name="twitter:image" content="http://yoursite.com/blog/image/jpeg-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/image/"/>
+
+
+
+
+
+  <title>image文件格式解析 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/image/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">image文件格式解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-05T11:08:28+08:00">
+                2017-10-05
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-10T19:41:51+08:00">
+                2017-10-10
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/image/" itemprop="url" rel="index">
+                    <span itemprop="name">image</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="1-JPEG"><a href="#1-JPEG" class="headerlink" title="1. JPEG"></a>1. JPEG</h3><blockquote>
+<p><strong>JPEG(jay-peg)</strong>是一种针对照片视频而广泛使用的一种有损压缩标准方法，其本身只有描述如何将一个视频转换为字节的数据流。但并没有说明这些字节如何在任何特定的存储媒体上被封存起来。JPEG的压缩方式通常是<strong>破坏性数据压缩</strong>，意即在压缩过程中图像的质量会遭受到可见的破坏，有一种以JPEG为基础的标准Lossless JPEG是采用无损的压缩方式，但Lossless JPEG并没有受到广泛的支持。</p>
+<p>一个由C-Cube Microsystems等公司所创建的额外标准，称为<strong>JFIF</strong>（JPEG File Interchange Format，JPEG文件交换格式）详细说明如何从一个JPEG流，产出一个适合于电脑存储和传输（像是在互联网上）的文件。</p>
+<p>JPEG/JFIF是万维网（World Wide Web）上最普遍的被用来存储和传输照片的格式。它并不适合于线条绘图（drawing）和其他文字或图标（iconic）的图形，因为它的压缩方法用在这些类型的图形上，得到的结果并不好（PNG和GIF格式通常是用来存储这类的图形；GIF每个像素只有8比特，并不很适合于存储彩色照片，PNG可以无损地存储照片，但是文件太大的缺点让它不太适合在网络上传输）。</p>
+</blockquote>
+<p>简单概括下jpeg文件格式：</p>
+<ul>
+<li>整个内容由标记信息和数据组成，标记信息包括标记代码和具体字段组成，记录了图片的某些属性，数据为图像的具体数据。</li>
+<li><code>FF</code>为特殊值，如果后边跟的是<code>00</code>,即<code>FF 00</code>表示图像数据内容中的<code>FF</code>值，若后边不为0，类似<code>FF D8</code>为某个具体标记码的值，代表标记信息的开始。</li>
+<li>常用的标记有<code>SOI、APP0、DQT、SOF0、DHT、DRI、SOS、EOI</code>。</li>
+</ul>
+<a id="more"></a>
+<p><a href="http://blog.csdn.net/lpt19832003/article/details/1713718" target="_blank" rel="external">JFIF文件格式</a>这里推荐一篇文章，讲得比较详细，在这里就不再赘述了。</p>
+<p>这里推荐打开一张图片，然后对照着去看每一个标记代码和字段，会理解的更好一些，放上我对照的图片。</p>
+<img src="/blog/image/jpeg-1.png" alt="xdd-jpeg" title="xdd-jpeg">  
+<p>下面列出了一些常见标记内容。</p>
+<h4 id="SOI-Start-of-Image-图像开始"><a href="#SOI-Start-of-Image-图像开始" class="headerlink" title="SOI, Start of Image,图像开始"></a>SOI, Start of Image,图像开始</h4><p><strong>标记代码</strong>　　　2字节　　　固定值<code>0xFFD8</code></p>
+<h4 id="APP0-Application-应用程序保留标记0"><a href="#APP0-Application-应用程序保留标记0" class="headerlink" title="APP0, Application, 应用程序保留标记0"></a>APP0, Application, 应用程序保留标记0</h4><p><strong>标记代码</strong>　　　2字节　　　固定值<code>0xFFE0</code><br>包含9个字段：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段名称</th>
+<th style="text-align:center">字段长度</th>
+<th style="text-align:left">字段含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">数据长度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">①~⑨ 9个字段的总长度，即不包括标记代码，但包括本字段</td>
+</tr>
+<tr>
+<td style="text-align:center">标识符</td>
+<td style="text-align:center">5字节</td>
+<td style="text-align:left">固定值<code>0x 4A46 4946 00</code>，即字符串<code>JFIF0</code></td>
+</tr>
+<tr>
+<td style="text-align:center">版本号</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">一般是<code>0x0102</code>，表示JFIF的版本号<code>1.2</code>，可能会有其他数值代表其他版本</td>
+</tr>
+<tr>
+<td style="text-align:center">X和Y的密度单位</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">0：无单位；1：点数/英寸；2：点数/厘米</td>
+</tr>
+<tr>
+<td style="text-align:center">X方向像素密度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">取值范围未知</td>
+</tr>
+<tr>
+<td style="text-align:center">Y方向像素密度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">取值范围未知</td>
+</tr>
+<tr>
+<td style="text-align:center">缩略图水平像素数目</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">取值范围未知</td>
+</tr>
+<tr>
+<td style="text-align:center">缩略图垂直像素数目</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">取值范围未知</td>
+</tr>
+<tr>
+<td style="text-align:center">缩略图RGB位图</td>
+<td style="text-align:center">长度可能是3的倍数</td>
+<td style="text-align:left">缩略图RGB位图数据</td>
+</tr>
+</tbody>
+</table>
+<p>本标记段可以包含图像的一个微缩版本，存为24位的RGB像素。如果没有微缩图像（这种情况更常见），则字段<code>缩略图水平像素数目</code>和字段<code>缩略图垂直像素数目</code>的值均为0。</p>
+<h4 id="APPn，Application，应用程序保留标记n，其中n-1～15-任选"><a href="#APPn，Application，应用程序保留标记n，其中n-1～15-任选" class="headerlink" title="APPn，Application，应用程序保留标记n，其中n=1～15(任选)"></a>APPn，Application，应用程序保留标记n，其中n=1～15(任选)</h4><p><strong>标记代码</strong>　　　2字节　　　固定值<code>0xFFE1~0xFFEF</code><br>包含2个字段：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段名称</th>
+<th style="text-align:center">字段长度</th>
+<th style="text-align:left">字段含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">数据长度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">所有字段的总长度，即不包括标记代码，但包括本字段</td>
+</tr>
+<tr>
+<td style="text-align:center">详细信息</td>
+<td style="text-align:center">5字节</td>
+<td style="text-align:left">内容不定</td>
+</tr>
+</tbody>
+</table>
+<p>Adobe Photoshop生成的JPEG图像中就用了APP1和APP13两个标记段分别存储了一幅图像的副本。</p>
+<h4 id="DQT，Define-Quantization-Table，定义量化表"><a href="#DQT，Define-Quantization-Table，定义量化表" class="headerlink" title="DQT，Define Quantization Table，定义量化表"></a>DQT，Define Quantization Table，定义量化表</h4><p><strong>标记代码</strong>　　　2字节　　　固定值<code>0xFFDB</code><br>包含2个具体字段：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段名称</th>
+<th style="text-align:center">字段长度</th>
+<th style="text-align:left">字段含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">数据长度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">所有字段的总长度，即不包括标记代码，但包括本字段</td>
+</tr>
+<tr>
+<td style="text-align:center">量化表</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">精度及量化表ID</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">高4位：精度，只有两个可选值：<br> 0：8位；<br>1：16位,低4位：量化表ID，取值范围为0～3</td>
+</tr>
+<tr>
+<td style="text-align:center">表项</td>
+<td style="text-align:center">(64×(精度+1))字节</td>
+<td style="text-align:left">例如8位精度的量化表,其表项长度为64×（0+1）=64字节</td>
+</tr>
+</tbody>
+</table>
+<p>本标记段中，字段②可以重复出现，表示多个量化表，但最多只能出现4次。</p>
+<h4 id="SOF0，Start-of-Frame，帧图像开始"><a href="#SOF0，Start-of-Frame，帧图像开始" class="headerlink" title="SOF0，Start of Frame，帧图像开始"></a>SOF0，Start of Frame，帧图像开始</h4><p><strong>标记代码</strong>　　　2字节　　　固定值<code>0xFFC0</code><br>包含9个具体字段：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段名称</th>
+<th style="text-align:center">字段长度</th>
+<th style="text-align:left">字段含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">数据长度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">①~⑨ 9个字段的总长度，即不包括标记代码，但包括本字段</td>
+</tr>
+<tr>
+<td style="text-align:center">图像高度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">图像高度（单位：像素），如果不支持 DNL 就必须 &gt;0</td>
+</tr>
+<tr>
+<td style="text-align:center">图像宽度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">图像宽度（单位：像素），如果不支持 DNL 就必须 &gt;0</td>
+</tr>
+<tr>
+<td style="text-align:center">颜色分量数</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">只有3个数值可选 <br>1：灰度图；<br>3：YCrCb或YIQ；<br>4：CMYK,而JFIF中使用YCrCb，故这里颜色分量数恒为3</td>
+</tr>
+<tr>
+<td style="text-align:center">颜色分量信息</td>
+<td style="text-align:center"></td>
+<td style="text-align:left">颜色分量数×3字节（通常为9字节)</td>
+</tr>
+<tr>
+<td style="text-align:center">颜色分量ID</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">取值范围未知</td>
+</tr>
+<tr>
+<td style="text-align:center">水平/垂直采样因子</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">高4位：水平采样因子 低4位：垂直采样因子</td>
+</tr>
+<tr>
+<td style="text-align:center">量化表</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">当前分量使用的量化表的ID</td>
+</tr>
+</tbody>
+</table>
+<p>本标记段中，字段⑥应该重复出现，有多少个颜色分量，就出现多少次（一般为3次）。</p>
+<h4 id="DHT，Difine-Huffman-Table，定义哈夫曼表"><a href="#DHT，Difine-Huffman-Table，定义哈夫曼表" class="headerlink" title="DHT，Difine Huffman Table，定义哈夫曼表"></a>DHT，Difine Huffman Table，定义哈夫曼表</h4><p><strong>标记代码</strong>　　　2字节　　　固定值<code>0xFFC4</code><br>包含2个具体字段：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段名称</th>
+<th style="text-align:center">字段长度</th>
+<th style="text-align:left">字段含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">数据长度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">所有字段的总长度，即不包括标记代码，但包括本字段</td>
+</tr>
+<tr>
+<td style="text-align:center">哈夫曼表</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">表ID和表类型</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">高4位：类型，只有两个值可选 <br>0：DC直流；<br>1：AC交流 低4位：哈夫曼表ID，注意，DC表和AC表分开编码</td>
+</tr>
+<tr>
+<td style="text-align:center">不同位数的码字数量</td>
+<td style="text-align:center">16字节</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">编码内容</td>
+<td style="text-align:center"></td>
+<td style="text-align:left">16个不同位数的码字数量之和（字节）</td>
+</tr>
+</tbody>
+</table>
+<p>本标记段中，字段②可以重复出现（一般4次），也可以致出现1次。例如，Adobe Photoshop 生成的JPEG图片文件中只有1个DHT标记段，里边包含了4个哈夫曼表；而Macromedia Fireworks生成的JPEG图片文件则有4个DHT标记段，每个DHT标记段只有一个哈夫曼表。</p>
+<h4 id="DRI，Define-Restart-Interval，定义差分编码累计复位的间隔"><a href="#DRI，Define-Restart-Interval，定义差分编码累计复位的间隔" class="headerlink" title="DRI，Define Restart Interval，定义差分编码累计复位的间隔"></a>DRI，Define Restart Interval，定义差分编码累计复位的间隔</h4><p><strong>标记代码</strong>　　　2字节　　　固定值<code>0xFFDD</code><br>包含2个具体字段：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段名称</th>
+<th style="text-align:center">字段长度</th>
+<th style="text-align:left">字段含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">数据长度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">所有字段的总长度，即不包括标记代码，但包括本字段</td>
+</tr>
+<tr>
+<td style="text-align:center">MCU块的单元中的重新开始间隔</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">设其值为n，则表示每n个MCU块就有一个RSTn标记。第一个标记是RST0，第二个是 RST1等，RST7后再从RST0重复</td>
+</tr>
+</tbody>
+</table>
+<p>如果没有本标记段，或间隔值为0时，就表示不存在重开始间隔和标记RST</p>
+<h4 id="SOS，Start-of-Scan，扫描开始-12字节"><a href="#SOS，Start-of-Scan，扫描开始-12字节" class="headerlink" title="SOS，Start of Scan，扫描开始 12字节"></a>SOS，Start of Scan，扫描开始 12字节</h4><p><strong>标记代码</strong>　　　2字节　　　固定值<code>0xFFDA</code><br>包含2个具体字段：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段名称</th>
+<th style="text-align:center">字段长度</th>
+<th style="text-align:left">字段含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">数据长度</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">所有字段的总长度，即不包括标记代码，但包括本字段</td>
+</tr>
+<tr>
+<td style="text-align:center">颜色分量数</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">应该和SOF中的字段⑤的值相同，即：<br>1：灰度图是；<br>3： YCrCb或YIQ；<br>4：CMYK,而JFIF中使用YCrCb，故这里颜色分量数恒为3</td>
+</tr>
+<tr>
+<td style="text-align:center">颜色分量信息</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">颜色分量ID</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">直流/交流系数表号</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">高4位：直流分量使用的哈夫曼树编号<br>低4位：交流分量使用的哈夫曼树编号</td>
+</tr>
+<tr>
+<td style="text-align:center">压缩图像数据</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">谱选择开始</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">固定值<code>0x00</code></td>
+</tr>
+<tr>
+<td style="text-align:center">谱选择结束</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">固定值<code>0x3F</code></td>
+</tr>
+<tr>
+<td style="text-align:center">谱选择</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">在基本JPEG中总为<code>00</code></td>
+</tr>
+</tbody>
+</table>
+<p>本标记段中，字段③应该重复出现，有多少个颜色分量（字段②），就出现多少次（一般为3次）。本段结束后，紧接着就是真正的图像信息了。图像信息直至遇到一个标记代码就自动结束，一般就是以EOI标记表示结束。</p>
+<h4 id="EOI，End-of-Image，图像结束-2字节"><a href="#EOI，End-of-Image，图像结束-2字节" class="headerlink" title="EOI，End of Image，图像结束 2字节"></a>EOI，End of Image，图像结束 2字节</h4><p><strong>标记代码</strong>　　　2字节　　　固定值<code>0xFFD9</code></p>
+<h3 id="2-PNG"><a href="#2-PNG" class="headerlink" title="2. PNG"></a>2. PNG</h3><blockquote>
+<p>便携式网络图形（Portable Network Graphics，PNG）是一种<strong>无损压缩</strong>的位图图形格式，支持索引、灰度、RGB三种颜色方案以及Alpha通道等特性。PNG的开发目标是改善并取代GIF作为适合网络传输的格式而不需专利许可，所以被广泛应用于互联网及其他方面上。</p>
+</blockquote>
+<p>PNG图像格式文件由一个8字节的PNG文件标识（file signature）域和3个以上的后续数据块（IHDR、IDAT、IEND）组成。PNG文件包括8字节文件署名（<code>89 50 4E 47 0D 0A 1A 0A</code>，十六进制），用来识别PNG格式。</p>
+<img src="/blog/image/png-1.png" alt="xdd-png" title="xdd-png">  
+<p>PNG定义了两种类型的数据块：一种是PNG文件必须包含、读写软件也都必须要支持的关键块（critical chunk）；另一种叫做辅助块（ancillary chunks），PNG允许软件忽略它不认识的附加块。这种基于数据块的设计，允许PNG格式在扩展时仍能保持与旧版本兼容。</p>
+<img src="/blog/image/png-3.png" alt="常见数据块内容" title="常见数据块内容">  
+<p>关键数据块中有4个标准数据块：</p>
+<ul>
+<li>文件头数据块IHDR（header chunk）：包含有图像基本信息，作为第一个数据块出现并只出现一次。</li>
+<li>调色板数据块PLTE（palette chunk）：必须放在图像数据块之前。</li>
+<li>图像数据块IDAT（image data chunk）：存储实际图像数据。PNG数据允许包含多个连续的图像数据块。</li>
+<li>图像结束数据IEND（image trailer chunk）：放在文件尾部，表示PNG数据流结束。</li>
+</ul>
+<p>每个数据块的结构都是一定的：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">字节数</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Length (长度)</td>
+<td style="text-align:center">4字节</td>
+<td style="text-align:left">指定数据块中数据域的长度，其长度不超过(231－1)字节</td>
+</tr>
+<tr>
+<td style="text-align:center">Chunk Type Code (数据块类型码)</td>
+<td style="text-align:center">4字节</td>
+<td style="text-align:left">数据块类型码由ASCII字母(A-Z和a-z)组成</td>
+</tr>
+<tr>
+<td style="text-align:center">Chunk Data (数据块数据)</td>
+<td style="text-align:center">可变长度</td>
+<td style="text-align:left">存储按照Chunk Type Code指定的数据</td>
+</tr>
+<tr>
+<td style="text-align:center">CRC (循环冗余检测)</td>
+<td style="text-align:center">4字节</td>
+<td style="text-align:left">存储用来检测是否有错误的循环冗余码</td>
+</tr>
+</tbody>
+</table>
+<p><code>CRC(cyclic redundancy check)</code>域中的值是对<code>Chunk Type Code</code>域和<code>Chunk Data</code>域中的数据进行计算得到的。CRC具体算法定义在ISO 3309和ITU-T V.42中，其值按下面的CRC码生成多项式进行计算：<br><code>x32+x26+x23+x22+x16+x12+x11+x10+x8+x7+x5+x4+x2+x+1</code></p>
+<p>下面是常见数据块种类，有可能没有，灰色为关键数据块。所以整个PNG文件的格式为<code>8950 4E47 0D0A 1A0A</code>+<code>数据块</code>+<code>数据块</code>+<code>数据块</code>+······</p>
+<p>同样以实际例子来看一下各个字段：</p>
+<img src="/blog/image/png-2.png" alt="xdd-png" title="xdd-png">  
+<h4 id="IHDR-文件头数据块IHDR-header-chunk"><a href="#IHDR-文件头数据块IHDR-header-chunk" class="headerlink" title="IHDR 文件头数据块IHDR(header chunk)"></a>IHDR 文件头数据块IHDR(header chunk)</h4><p>它包含有PNG文件中存储的图像数据的基本信息，并要作为第一个数据块出现在PNG数据流中，而且一个PNG数据流中只能有一个文件头数据块。文件头数据块由13字节组成，它的格式如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">域的名称</th>
+<th style="text-align:center">字节数</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Width</td>
+<td style="text-align:center">4字节</td>
+<td style="text-align:left">图像宽度，以像素为单位</td>
+</tr>
+<tr>
+<td style="text-align:center">Height</td>
+<td style="text-align:center">4字节</td>
+<td style="text-align:left">图像高度，以像素为单位</td>
+</tr>
+<tr>
+<td style="text-align:center">Bit depth</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">图像深度：<br> 索引彩色图像：1，2，4或8 <br>灰度图像：1，2，4，8或16 真彩色图像：8或16</td>
+</tr>
+<tr>
+<td style="text-align:center">ColorType</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">颜色类型：<br>0：灰度图像, 1，2，4，8或16<br>2：真彩色图像，8或16 <br>3：索引彩色图像，1，2，4或8 <br>4：带α通道数据的灰度图像，8或16 6：带α通道数据的真彩色图像，8或16</td>
+</tr>
+</tbody>
+</table>
+<h4 id="PLTE-调色板数据块PLTE-palette-chunk"><a href="#PLTE-调色板数据块PLTE-palette-chunk" class="headerlink" title="PLTE 调色板数据块PLTE(palette chunk)"></a>PLTE 调色板数据块PLTE(palette chunk)</h4><p>它包含有与索引彩色图像(indexed-color image)相关的彩色变换数据，它仅与索引彩色图像有关，而且要放在图像数据块(image data chunk)之前。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">颜色</th>
+<th style="text-align:center">字节</th>
+<th style="text-align:center">意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">RED</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:center">0 = 黑色, 255 = 红</td>
+</tr>
+<tr>
+<td style="text-align:center">Green</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:center">0 = 黑色, 255 = 绿色</td>
+</tr>
+<tr>
+<td style="text-align:center">Blue</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:center">0 = 黑色, 255 = 蓝色</td>
+</tr>
+</tbody>
+</table>
+<p>因此，调色板的长度应该是3的倍数，否则，这将是一个非法的调色板。<br>对于索引图像，调色板信息是必须的，调色板的颜色索引从0开始编号，然后是1、2……，调色板的颜色数不能超过色深中规定的颜色数（如图像色深为4的时候，调色板中的颜色数不可以超过2^4=16），否则，这将导致PNG图像不合法。<br>真彩色图像和带α通道数据的真彩色图像也可以有调色板数据块，目的是便于非真彩色显示程序用它来量化图像数据，从而显示该图像。</p>
+<h4 id="IDAT图像数据块IDAT-image-data-chunk"><a href="#IDAT图像数据块IDAT-image-data-chunk" class="headerlink" title="IDAT图像数据块IDAT(image data chunk)"></a>IDAT图像数据块IDAT(image data chunk)</h4><p>它存储实际的数据，在数据流中可包含多个连续顺序的图像数据块。<br>格式如同块格式，注意的是<strong>一般前一个IDAT写满后再回另开一个IDAT，所以如果发现一个IDAT长度不对就开始一个新的IDAT，很有可能是在IDAT中进行隐写</strong></p>
+<h4 id="IEND-图像结束数据IEND-image-trailer-chunk"><a href="#IEND-图像结束数据IEND-image-trailer-chunk" class="headerlink" title="IEND 图像结束数据IEND(image trailer chunk)"></a>IEND 图像结束数据IEND(image trailer chunk)</h4><p>它用来标记PNG文件或者数据流已经结束，并且必须要放在文件的尾部。<code>00 00 00 00 49 45 4E 44 AE 42 60 82</code>,<br>IEND数据块的长度总是<code>0000 0000</code>，数据标识总是IEND<code>4945 4E44</code>，因此，CRC码也总是<code>AE42 6082</code></p>
+<h3 id="3-GIF"><a href="#3-GIF" class="headerlink" title="3. GIF"></a>3. GIF</h3><blockquote>
+<p>图像互换格式（GIF，Graphics Interchange Format）是一种位图图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。它是目前万维网广泛应用的网络传输图像格式之一。只要图像不多于256色，则可既减少文件的大小，又保持成像的质量。一方面，在高彩图片上有着不俗表现的JPG格式却在简单的折线上效果不如人意。因此图像互换格式格式普遍适用于图表，按钮等等只需少量颜色的图像（如黑白照片）。<br>1989年，CompuServe发布了一个名为89a的增强版本，在这个版本中，为图像互换格式文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。现在我们一般所说的GIF动画都是指89a的格式。</p>
+</blockquote>
+<p>GIF文件格式如下，中间的部分可以无限重复，下面分别介绍每一个块。<br><img src="/blog/image/gif-format.png" alt="gif format" title="gif format">  </p>
+<h4 id="文件头-Header"><a href="#文件头-Header" class="headerlink" title="文件头 Header"></a>文件头 Header</h4><p>文件头一般为<code>6字节</code>，由GIF署名(Signature)和版本号(version)组成，如下图选中部分：  </p>
+<img src="/blog/image/gif-1.png" alt="gif header" title="gif header">  
+<p>开头必须为<code>GIF</code>三个字符，一般版本号为<code>87a</code>或者<code>89a</code></p>
+<h4 id="逻辑屏幕标识符-Logical-Screen-Descriptor"><a href="#逻辑屏幕标识符-Logical-Screen-Descriptor" class="headerlink" title="逻辑屏幕标识符 Logical Screen Descriptor"></a>逻辑屏幕标识符 Logical Screen Descriptor</h4><p>紧跟在文件头后面，这个块告诉decoder（解码器）图片需要占用的空间，固定为<code>7字节</code>，内容如下：</p>
+<img src="/blog/image/gif-2.gif" alt="gif logical screen descriptor" title="gif logical screen descriptor">  
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">字节数</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Canvas Width (画布宽度)</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">图像宽度</td>
+</tr>
+<tr>
+<td style="text-align:center">Canvas height (画布高度)</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">图像高度</td>
+</tr>
+<tr>
+<td style="text-align:center">Global Color Table Flag (全局颜色列表标志)</td>
+<td style="text-align:center">1bit</td>
+<td style="text-align:left">当置位时表示有全局颜色列表，<code>pixel</code>值有意义</td>
+</tr>
+<tr>
+<td style="text-align:center">Color resolution (颜色分辨率)</td>
+<td style="text-align:center">3bit</td>
+<td style="text-align:left">cr+1的值为图像颜色的分辨率</td>
+</tr>
+<tr>
+<td style="text-align:center">Sort flag（排序标志）</td>
+<td style="text-align:center">1bit</td>
+<td style="text-align:left">如果为1，global color table中的颜色以“重要性降低”（decreasing importance）来排序，通常也就是“频率降低”方式。这个标志可能会对decoder有所帮助，不过并不是必要的，因此这里的例子将它简单地设置为0。这个标志是历史遗留产物。</td>
+</tr>
+<tr>
+<td style="text-align:center">pixel（全局颜色列表大小）</td>
+<td style="text-align:center">3bit</td>
+<td style="text-align:left">索引数<code>2^(pixel+1)</code></td>
+</tr>
+<tr>
+<td style="text-align:center">背景颜色索引（background color index）</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">仅当global color table flag为1才有意义，此时这个标志应该设为0。在之前的“picture wall”模式中，我们说到GIF会有一个virtual canvas画布，因此理所当然会存在一个背景色，而我们这个标志就是指出这个背景颜色。同样，在现代引擎中它也随着“picture wall模式”一起被弃用了。</td>
+</tr>
+<tr>
+<td style="text-align:center">pixel aspect ratio（像素高宽比）</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">全局像素宽高比，GIF标准没有给出它存在的理由，不过目前对它的处理方式只是读取其值并保存下来。所有此值不为0的比例都是用<code>(N+15)/64</code></td>
+</tr>
+</tbody>
+</table>
+<p>注意，GIF格式多字节内容为<strong>小端模式，与<code>PNG,GIF</code>不同</strong>，即我们在实际图片中看到的宽度字节流<code>40 01</code>，其实值为<code>0140</code>即<code>宽度为320像素</code></p>
+<img src="/blog/image/gif-logical.png" alt="gif Logical Screen Descriptor" title="gif Logical Screen Descriptor">  
+<blockquote>
+<p>现代的处理引擎一般会忽略掉canvas width和canvas height，因为GIF最初被设计为一种类似picture wall（照片墙）的东西，思路是讲图片在一个virtual canvas（虚拟画布）中显示；现在GIF通常是作为用来保存动画中的帧的图片库，相当于是一个图片集合，由GIF处理引擎来在自己的canvas（画布）中处理图片，因此现在GIF格式中保存的信息显得没太大作用了。所以，现在canvas width和canvas height基本上就是个摆设了。</p>
+</blockquote>
+<h4 id="全局颜色列表-Global-Color-Table"><a href="#全局颜色列表-Global-Color-Table" class="headerlink" title="全局颜色列表 Global Color Table"></a>全局颜色列表 Global Color Table</h4><p>紧跟于逻辑屏幕标识符，GIF格式可以拥有global color table，或用于针对每个子图片集，提供local color table。每个color table由一个RGB（就像通常我们见到的（255，0，0）红色 那种）列表组成。由于之前表长度为<code>2^(N+1)</code>,对于每个RGB值，则此表总共占用<code>3*2^(N+1)</code>个字节。</p>
+<img src="/blog/image/gif-4.gif" alt="gif Global Color Table" title="gif Global Color Table">  
+<p>如下图，本例中由于<code>piexl</code>值为<code>101</code>则全局颜色列表大小为<code>3*2^(5+1)=192字节</code>，内容如下：</p>
+<img src="/blog/image/gif-5.png" alt="color table" title="color table">  
+<h4 id="应用程序扩展-Application-Extension"><a href="#应用程序扩展-Application-Extension" class="headerlink" title="应用程序扩展 Application Extension"></a>应用程序扩展 Application Extension</h4><p>GIF中扩展块都以<code>0x21</code>开始，后一个字节是扩展标签，标识扩展用途。应用程序扩展的标签是<code>0xFF</code>，它包含有应用程序的标识信息和应用程序数据。其中 <code>Netscape</code> 应用程序扩展常用于控制GIF的动画循环次数。<code>Netscape</code> 扩展长<code>19个字节</code>，前14个是应用程序的ACSII信息，后四个是数据子块，用于指定GIF的循环次数, 按unsigned整型存储，0表示无限循环。<br>以本图为例：<br><img src="/blog/image/gif-app.png" alt="Application Extension" title="Application Extension">  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">字节数</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">扩展块标识</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">固定值<code>0x21</code></td>
+</tr>
+<tr>
+<td style="text-align:center">扩展类型标识</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">应用程序扩展 固定值为<code>0xFF</code></td>
+</tr>
+<tr>
+<td style="text-align:center">应用程序信息大小</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">此例为<code>0x0B</code></td>
+</tr>
+<tr>
+<td style="text-align:center">应用程序信息</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"><code>NETSCAPE2.0</code>或其他值</td>
+</tr>
+<tr>
+<td style="text-align:center">应用程序数据大小</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left"><code>0x03</code></td>
+</tr>
+<tr>
+<td style="text-align:center">索引</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left"><code>0x01</code></td>
+</tr>
+<tr>
+<td style="text-align:center">数据</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">unsigned整数，<code>0x00 00</code>标识无限循环</td>
+</tr>
+<tr>
+<td style="text-align:center">结束符</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">固定值<code>0x00</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="图像控制扩展-Graphics-Control-Extension"><a href="#图像控制扩展-Graphics-Control-Extension" class="headerlink" title="图像控制扩展 Graphics Control Extension"></a>图像控制扩展 Graphics Control Extension</h4><p>用来控制跟在他后面图像的显示。前三字节<code>0x21 F9 04（这4字节不包括最终结束字节00）</code>同应用程序扩展的前三字节，均为固定值。</p>
+<img src="/blog/image/gif-gra.gif" alt="Graphics Control Extension" title="Graphics Control Extension">  
+  
+<p>对其字段进行剖析：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">字节数</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">扩展块标识</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">固定值<code>0x21</code></td>
+</tr>
+<tr>
+<td style="text-align:center">扩展类型标识</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">应用程序扩展 固定值为<code>0xF9</code></td>
+</tr>
+<tr>
+<td style="text-align:center">应用程序信息大小</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">固定值<code>0x04</code></td>
+</tr>
+<tr>
+<td style="text-align:center">保留位</td>
+<td style="text-align:center">3bit</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">disposal method（处理方法）</td>
+<td style="text-align:center">3bit</td>
+<td style="text-align:left">处置图形的方法：<br>0 - 表示不处置<br>1 - 不处置图形，把图形从当前位置移去<br>2 - 回复到背景色<br>3 - 回复到先前状态<br>4-7 自定义</td>
+</tr>
+<tr>
+<td style="text-align:center">Use Input Flag（用户输入标志）</td>
+<td style="text-align:center">1bit</td>
+<td style="text-align:left">指出是否期待用户有输入之后才继续进行下去，置位表示期待，值否表示不期待。用户输入可以是按回车键、鼠标点击等，可以和延迟时间一起使用，在设置的延迟时间内用户有输入则马上继续进行，或者没有输入直到延迟时间到达而继续</td>
+</tr>
+<tr>
+<td style="text-align:center">Transparent Color Flag（透明颜色标志）</td>
+<td style="text-align:center">1bit</td>
+<td style="text-align:left">置位表示使用透明颜色</td>
+</tr>
+<tr>
+<td style="text-align:center">Delay time（延时）</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">单位为<code>1/100秒</code>,暂停规定时间后再继续往下处理数据流</td>
+</tr>
+<tr>
+<td style="text-align:center">Transparent Color Index（透明色索引）</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">透明色索引值</td>
+</tr>
+<tr>
+<td style="text-align:center">结束符</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left">固定值<code>0x00</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="图像标识符-Image-Descriptor"><a href="#图像标识符-Image-Descriptor" class="headerlink" title="图像标识符 Image Descriptor"></a>图像标识符 Image Descriptor</h4><p>固定长度　　　<code>10字节</code></p>
+<img src="/blog/image/gif-7.png" alt="gif image descriptor" title="gif image descriptor">  
+<img src="/blog/image/gif-8.gif" alt="gif image descriptor" title="gif image descriptor"> 
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">字节数</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">image separator（图像分隔符）</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">固定值<code>0x2C</code></td>
+</tr>
+<tr>
+<td style="text-align:center">image left(X方向偏移量)</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">image top(Y方向偏移量)</td>
+<td style="text-align:center">1字节</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">image width(图片宽度)</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">图片宽度</td>
+</tr>
+<tr>
+<td style="text-align:center">image height(图片高度)</td>
+<td style="text-align:center">2字节</td>
+<td style="text-align:left">图片高度</td>
+</tr>
+<tr>
+<td style="text-align:center">local color table flag(局部颜色表标记)</td>
+<td style="text-align:center">1bit</td>
+<td style="text-align:left">置位时标识紧接在图象标识符之后有一个局部颜色列表，供紧跟在它之后的一幅图象使用；值否时使用全局颜色列表，忽略pixel值。</td>
+</tr>
+<tr>
+<td style="text-align:center">interlace flag（隔行扫描标志）</td>
+<td style="text-align:center">1bit</td>
+<td style="text-align:left">隔行扫描方式会改变图像渲染到屏幕上的方式，从而减少烦人的视觉闪烁（类似垂直同步）。隔行扫描在显示器上的效果是，第一轮扫描先立即模糊地显示图像，随后再一轮将其填充锐化。这种方式会让人们感觉更舒服，因为它可以让人们模糊地意识到即将显示的东西是什么，而不是等待像素点被一行一行地填充绘制。要支持这种显示方式，图片的扫描行需要以一种特定的顺序来存储，需要分为4个部分，每个部分都是一个完整的模糊显示，通过4次显示加成使得图片越来越清晰，最终完全呈现。<br>否则使用顺序排列。</td>
+</tr>
+<tr>
+<td style="text-align:center">sort flag(分类标志)</td>
+<td style="text-align:center">1bit</td>
+<td style="text-align:left">如果置位表示紧跟着的局部颜色列表分类排列</td>
+</tr>
+<tr>
+<td style="text-align:center">保留位</td>
+<td style="text-align:center">2bit</td>
+<td style="text-align:left">必须初始化为0</td>
+</tr>
+<tr>
+<td style="text-align:center">pixel</td>
+<td style="text-align:center">3bit</td>
+<td style="text-align:left">局部颜色表大小，<code>2^(pixel+1)</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="局部颜色表-Local-Color-Table"><a href="#局部颜色表-Local-Color-Table" class="headerlink" title="局部颜色表 Local Color Table"></a>局部颜色表 Local Color Table</h4><p>如果<code>local color table flag</code>置位，则有这个内容，格式同全局，仅供此幅图像使用。</p>
+<h4 id="图像数据-Image-data"><a href="#图像数据-Image-data" class="headerlink" title="图像数据 Image data"></a>图像数据 Image data</h4><p>这里就是真正的图像信息，第一个字节是<code>LZW minimum code size</code>,这个值用来解码这个经过压缩的输出编码。之后为数据子块，子块第<code>1个字节</code>告诉后面图像数据有多少字节，范围为<code>0-255</code>,子块可以有多个，不断重复，直到一个子块告诉你后面内容为<code>0字节</code>，即表示图像结束。</p>
+<img src="/blog/image/gif-9.png" alt="Image data" title="Image data"> 
+ 
+<h4 id="尾部标志-Trailer"><a href="#尾部标志-Trailer" class="headerlink" title="尾部标志 Trailer"></a>尾部标志 Trailer</h4><p>固定值<code>0x3B</code> 表示文件结束</p>
+<h4 id="LZW-编码"><a href="#LZW-编码" class="headerlink" title="LZW 编码"></a>LZW 编码</h4><blockquote>
+<p>与Huffman编码相比，LZW编码法被视作将不同长度字符串以固定长的码编辑（霍夫曼编码将固定长度字符用不同长度的码编辑）。其优点在于此方法只需存储一个相当小的表格，即可存储数据还原时相对应的值，所以所需成本相对地低；然而，这种算法的设计着重在实现的速度，由于它并没有对数据做任何分析，所以并不一定是最好的算法</p>
+</blockquote>
+<p>LZW算法将每个第一次出现的串放在一个串表中，用一个数字来表示串，压缩文件只存贮数字，而不存贮串，从而使图像文件的压缩效率得到较大的提高。<br>LZW算法首先建立一个字符串表，把每一个第一次出现的字符串放入串表中，并用一个数字来表示，这个数字与此字符串在串表中的位置有关，并将这个数字存入压缩文件中，如果这个字符串再次出现时，即可用表示它的数字来代替，并将这个数字存入文件中。如<code>AB</code>字符串，如果在压缩时用<code>258</code>表示，只要再次出现，均用<code>258</code>表示，并将<code>AB</code>字符串存入串表中，在图像解码时遇到数字<code>258</code>，即可从串表中查出<code>258</code>所代表的字符串<code>AB</code>。</p>
+<p>假设我们要压缩<code>ABCDAABBCCDABCD</code>这一串，这四个字符可以用<code>2bit</code>来表示（<code>0-A 1-B 2-C 3-D</code>)。<strong>GIF规定的清除标志<code>CLEAR</code>的数值是原始数据字长表示的最大值加1</strong>,这时候就要用3位来表示了，即<code>4-CLEAR</code>,<strong>GIF还规定了一个结束标志END，它的值是清除标志CLEAR再加1</strong>,即<code>5-END</code>，之后的<code>AB</code>可能被记为<code>6</code>，<code>BC</code>记为<code>7</code>等等，这就是生成的串表，最后压缩的结果可能是<code>0123236398145</code>(不是这个字串的最终答案，只是一个格式参考)这样的形式</p>
+<blockquote>
+<p>随着新的串(string)不断被发现，标号也会不断地增长，如果原数据过大，生成的标号集（string table)会越来越大，这时候操作这个集合就会产生效率问题。如何避免这个问题呢?Gif在采用lzw算法的做法是当标号集足够大的时候，就不能增大了，干脆从头开始再来，在这个位置要插入一个标号，就是清除标志CLEAR，表示从这里我重新开始构造字典，以前的所有标记作废，开始使用新的标记。<br>这时候又有一个问题出现，足够大是多大？这个标号集的大小为比较合适呢？理论上是标号集大小越大，则压缩比率就越高，但开销也越高。 一般根据处理速度和内存空间连个因素来选定。GIF规范规定的是12位，超过12位的表达范围就推倒重来，并且GIF为了提高压缩率，采用的是变长的字长。比如说原始数据是8位，那么一开始，先加上一位再说，开始的字长就成了9位，然后开始加标号，当标号加到512时，也就是超过9为所能表达的最大数据时，也就意味着后面的标号要用10位字长才能表示了，那么从这里开始，后面的字长就是10位了。依此类推，到了2^12也就是4096时，在这里插一个清除标志，从后面开始，从9位再来。</p>
+</blockquote>
+<p>这里给一个例子，看懂这个例子，基本就明白了。</p>
+<img src="/blog/image/gif-lzw.gif" alt="LZW example" title="LZW example"> 
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/image/" title="image文件格式解析">http://yoursite.com/blog/image/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/image/" rel="tag"><i class="fa fa-tag"></i> image</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/xss-bypass-tricks/" rel="next" title="XSS利用与防御">
+                <i class="fa fa-chevron-left"></i> XSS利用与防御
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/archives/" rel="prev" title="ZIP格式解析">
+                ZIP格式解析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-JPEG"><span class="nav-number">1.</span> <span class="nav-text">1. JPEG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SOI-Start-of-Image-图像开始"><span class="nav-number">1.1.</span> <span class="nav-text">SOI, Start of Image,图像开始</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP0-Application-应用程序保留标记0"><span class="nav-number">1.2.</span> <span class="nav-text">APP0, Application, 应用程序保留标记0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APPn，Application，应用程序保留标记n，其中n-1～15-任选"><span class="nav-number">1.3.</span> <span class="nav-text">APPn，Application，应用程序保留标记n，其中n=1～15(任选)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DQT，Define-Quantization-Table，定义量化表"><span class="nav-number">1.4.</span> <span class="nav-text">DQT，Define Quantization Table，定义量化表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SOF0，Start-of-Frame，帧图像开始"><span class="nav-number">1.5.</span> <span class="nav-text">SOF0，Start of Frame，帧图像开始</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DHT，Difine-Huffman-Table，定义哈夫曼表"><span class="nav-number">1.6.</span> <span class="nav-text">DHT，Difine Huffman Table，定义哈夫曼表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DRI，Define-Restart-Interval，定义差分编码累计复位的间隔"><span class="nav-number">1.7.</span> <span class="nav-text">DRI，Define Restart Interval，定义差分编码累计复位的间隔</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SOS，Start-of-Scan，扫描开始-12字节"><span class="nav-number">1.8.</span> <span class="nav-text">SOS，Start of Scan，扫描开始 12字节</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EOI，End-of-Image，图像结束-2字节"><span class="nav-number">1.9.</span> <span class="nav-text">EOI，End of Image，图像结束 2字节</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-PNG"><span class="nav-number">2.</span> <span class="nav-text">2. PNG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IHDR-文件头数据块IHDR-header-chunk"><span class="nav-number">2.1.</span> <span class="nav-text">IHDR 文件头数据块IHDR(header chunk)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PLTE-调色板数据块PLTE-palette-chunk"><span class="nav-number">2.2.</span> <span class="nav-text">PLTE 调色板数据块PLTE(palette chunk)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IDAT图像数据块IDAT-image-data-chunk"><span class="nav-number">2.3.</span> <span class="nav-text">IDAT图像数据块IDAT(image data chunk)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IEND-图像结束数据IEND-image-trailer-chunk"><span class="nav-number">2.4.</span> <span class="nav-text">IEND 图像结束数据IEND(image trailer chunk)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-GIF"><span class="nav-number">3.</span> <span class="nav-text">3. GIF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件头-Header"><span class="nav-number">3.1.</span> <span class="nav-text">文件头 Header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑屏幕标识符-Logical-Screen-Descriptor"><span class="nav-number">3.2.</span> <span class="nav-text">逻辑屏幕标识符 Logical Screen Descriptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#全局颜色列表-Global-Color-Table"><span class="nav-number">3.3.</span> <span class="nav-text">全局颜色列表 Global Color Table</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用程序扩展-Application-Extension"><span class="nav-number">3.4.</span> <span class="nav-text">应用程序扩展 Application Extension</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#图像控制扩展-Graphics-Control-Extension"><span class="nav-number">3.5.</span> <span class="nav-text">图像控制扩展 Graphics Control Extension</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#图像标识符-Image-Descriptor"><span class="nav-number">3.6.</span> <span class="nav-text">图像标识符 Image Descriptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#局部颜色表-Local-Color-Table"><span class="nav-number">3.7.</span> <span class="nav-text">局部颜色表 Local Color Table</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#图像数据-Image-data"><span class="nav-number">3.8.</span> <span class="nav-text">图像数据 Image data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#尾部标志-Trailer"><span class="nav-number">3.9.</span> <span class="nav-text">尾部标志 Trailer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LZW-编码"><span class="nav-number">3.10.</span> <span class="nav-text">LZW 编码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

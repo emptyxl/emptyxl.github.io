@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="zip,zip 文件格式,archives format" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。目前，ZIP格式属于几种主流的压缩格式之一，其竞争者包括RAR格式以及开放源码的7z格式。  ZIP官方文档中对ZIP文件格式作了总结： 1234567891011">
+<meta name="keywords" content="zip,zip 文件格式,archives format">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZIP格式解析">
+<meta property="og:url" content="http://yoursite.com/blog/archives/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。目前，ZIP格式属于几种主流的压缩格式之一，其竞争者包括RAR格式以及开放源码的7z格式。  ZIP官方文档中对ZIP文件格式作了总结： 1234567891011">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/archives/zip-1.png">
+<meta property="og:image" content="http://yoursite.com/blog/archives/zip-2.png">
+<meta property="og:image" content="http://yoursite.com/blog/archives/zip-3.png">
+<meta property="og:updated_time" content="2017-10-11T07:15:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ZIP格式解析">
+<meta name="twitter:description" content="ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。目前，ZIP格式属于几种主流的压缩格式之一，其竞争者包括RAR格式以及开放源码的7z格式。  ZIP官方文档中对ZIP文件格式作了总结： 1234567891011">
+<meta name="twitter:image" content="http://yoursite.com/blog/archives/zip-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/archives/"/>
+
+
+
+
+
+  <title>ZIP格式解析 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/archives/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ZIP格式解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-11T10:31:09+08:00">
+                2017-10-11
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-11T15:15:27+08:00">
+                2017-10-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/archives/" itemprop="url" rel="index">
+                    <span itemprop="name">archives</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。目前，ZIP格式属于几种主流的压缩格式之一，其竞争者包括RAR格式以及开放源码的7z格式。</p>
+</blockquote>
+<p>ZIP官方文档中对ZIP文件格式作了总结：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">Overall .ZIP <span class="built_in">file</span> format:</div><div class="line"></div><div class="line">  [<span class="keyword">local</span> <span class="built_in">file</span> header <span class="number">1</span>]</div><div class="line">  [<span class="built_in">file</span> data <span class="number">1</span>]</div><div class="line">  [data descriptor <span class="number">1</span>]</div><div class="line">  . </div><div class="line">  .</div><div class="line">  .</div><div class="line">  [<span class="keyword">local</span> <span class="built_in">file</span> header n]</div><div class="line">  [<span class="built_in">file</span> data n]</div><div class="line">  [data descriptor n]</div><div class="line">  [archive decryption header] (EFS)</div><div class="line">  [archive extra data <span class="built_in">record</span>] (EFS)</div><div class="line">  [central directory]</div><div class="line">  [zip64 <span class="keyword">end</span> <span class="keyword">of</span> central directory <span class="built_in">record</span>]</div><div class="line">  [zip64 <span class="keyword">end</span> <span class="keyword">of</span> central directory locator] </div><div class="line">  [<span class="keyword">end</span> <span class="keyword">of</span> central directory <span class="built_in">record</span>]</div></pre></td></tr></table></figure>
+<p>即zip主要由三部分组成：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">压缩源文件数据区</th>
+<th style="text-align:center">核心目录</th>
+<th style="text-align:center">目录结束</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">local file header + file data + data descriptor</td>
+<td style="text-align:center">central directory</td>
+<td style="text-align:center">end of central directory record</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<p>我创建了一个压缩包，结构如下：</p>
+<blockquote>
+<p>这里</p>
+<blockquote>
+<p>NewFile.txt<br>hellp</p>
+<blockquote>
+<p>abc.sh</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h4 id="文件头-local-file-header"><a href="#文件头-local-file-header" class="headerlink" title="文件头 local file header"></a>文件头 local file header</h4><p>格式如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Offset</th>
+<th style="text-align:center">Bytes</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:left">译</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">Local file header signature = <code>0x04034b50</code> (read as a little-endian number)</td>
+<td style="text-align:left">文件头标识，值固定<code>0x 504B0304</code> 小端模式</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Version needed to extract (minimum)</td>
+<td style="text-align:left">解压文件所需 pkware最低版本</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">General purpose bit flag</td>
+<td style="text-align:left">通用比特标志位</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Compression method</td>
+<td style="text-align:left">压缩方式</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">File last modification time</td>
+<td style="text-align:left">文件最后修改时间</td>
+</tr>
+<tr>
+<td style="text-align:center">12</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">File last modification date</td>
+<td style="text-align:left">文件最后修改日期</td>
+</tr>
+<tr>
+<td style="text-align:center">14</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">CRC-32</td>
+<td style="text-align:left">CRC-32校验码</td>
+</tr>
+<tr>
+<td style="text-align:center">18</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">Compressed size</td>
+<td style="text-align:left">压缩后的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">22</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">Uncompressed size</td>
+<td style="text-align:left">未压缩的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">26</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">File name length (n)</td>
+<td style="text-align:left">文件名长度</td>
+</tr>
+<tr>
+<td style="text-align:center">28</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Extra field length (m)</td>
+<td style="text-align:left">扩展区长度</td>
+</tr>
+<tr>
+<td style="text-align:center">30</td>
+<td style="text-align:center">n</td>
+<td style="text-align:center">File name</td>
+<td style="text-align:left">文件名</td>
+</tr>
+<tr>
+<td style="text-align:center">30+n</td>
+<td style="text-align:center">m</td>
+<td style="text-align:center">Extra field</td>
+<td style="text-align:left">扩展区</td>
+</tr>
+</tbody>
+</table>
+<img src="/blog/archives/zip-1.png" alt="zip local file header" title="zip local file header">  
+<p>可以看到选中的部分为文件名字段，选中了<code>7字节</code>，对应前面文件名长度的<code>0x 0700</code>，16进制转字符串之后就是<code>这里/</code>.</p>
+<h4 id="文件数据-file-data"><a href="#文件数据-file-data" class="headerlink" title="文件数据 file data"></a>文件数据 file data</h4><p><code>这里</code>是我们文件夹的名字，跟在其后面的又是一个新的块。</p>
+<img src="/blog/archives/zip-2.png" alt="zip file data" title="zip file data"> 
+<p>这里在压缩是选择加密，可以发现，内容都变为了密文</p>
+<img src="/blog/archives/zip-3.png" alt="zip file data encrypted" title="zip file data encrypted"> 
+<h4 id="数据描述-data-descriptor"><a href="#数据描述-data-descriptor" class="headerlink" title="数据描述 data descriptor"></a>数据描述 data descriptor</h4><p>数据描述符用于标识该文件压缩结束，该结构只有在相应的<code>local file header</code>中通用标记字段的第<code>３bit</code>设为<code>１</code>时才会出现，紧接在压缩文件源数据后。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Offset</th>
+<th style="text-align:center">Bytes</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:left">译</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center"></td>
+<td style="text-align:left">固定值<code>0x 504b0708</code> 作为数据描述符开头，可以没有</td>
+</tr>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">crc-32</td>
+<td style="text-align:left">CRC-32校验码</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">compressed size</td>
+<td style="text-align:left">压缩后的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">uncompressed size</td>
+<td style="text-align:left">未压缩的大小</td>
+</tr>
+</tbody>
+</table>
+<p>这个字段出现的原因是：为了让应用程序生成压缩包时更灵活,可以在压缩的同时写入文件,因为在某些情况下可能要文件压缩和写入完成后才能获取具体的大小。</p>
+<h4 id="核心目录-Central-directory"><a href="#核心目录-Central-directory" class="headerlink" title="核心目录 Central directory"></a>核心目录 Central directory</h4><p>记录了压缩文件的目录信息，在这个数据区中每一条纪录对应在压缩源文件数据区中的一条数据。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Offset</th>
+<th style="text-align:center">Bytes</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:left">译</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">Central directory file header signature</td>
+<td style="text-align:left">核心目录文件header标识<code>0x 504B0102</code></td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Version made by</td>
+<td style="text-align:left">压缩所用的pkware版本</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Version needed to extract (minimum)</td>
+<td style="text-align:left">解压所需pkware的最低版本</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">General purpose bit flag</td>
+<td style="text-align:left">通用位标记</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Compression method</td>
+<td style="text-align:left">压缩方法</td>
+</tr>
+<tr>
+<td style="text-align:center">12</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">File last modification time</td>
+<td style="text-align:left">文件最后修改时间</td>
+</tr>
+<tr>
+<td style="text-align:center">14</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">File last modification date</td>
+<td style="text-align:left">文件最后修改日期</td>
+</tr>
+<tr>
+<td style="text-align:center">16</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">CRC-32    CRC-32校验码</td>
+</tr>
+<tr>
+<td style="text-align:center">20</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">Compressed size</td>
+<td style="text-align:left">压缩后的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">24</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">Uncompressed size</td>
+<td style="text-align:left">未压缩的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">28</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">File name length (n)</td>
+<td style="text-align:left">文件名长度</td>
+</tr>
+<tr>
+<td style="text-align:center">30</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Extra field length (m)</td>
+<td style="text-align:left">扩展域长度</td>
+</tr>
+<tr>
+<td style="text-align:center">32</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">File comment length (k)</td>
+<td style="text-align:left">文件注释长度</td>
+</tr>
+<tr>
+<td style="text-align:center">34</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Disk number where file starts</td>
+<td style="text-align:left">文件开始位置的磁盘编号</td>
+</tr>
+<tr>
+<td style="text-align:center">36</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Internal file attributes</td>
+<td style="text-align:left">内部文件属性</td>
+</tr>
+<tr>
+<td style="text-align:center">38</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">External file attributes</td>
+<td style="text-align:left">外部文件属性</td>
+</tr>
+<tr>
+<td style="text-align:center">42</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">relative offset of local header</td>
+<td style="text-align:left">本地文件头的相对位移</td>
+</tr>
+<tr>
+<td style="text-align:center">46</td>
+<td style="text-align:center">n</td>
+<td style="text-align:center">File name</td>
+<td style="text-align:left">目录文件名</td>
+</tr>
+<tr>
+<td style="text-align:center">46+n</td>
+<td style="text-align:center">m</td>
+<td style="text-align:center">Extra field</td>
+<td style="text-align:left">扩展域</td>
+</tr>
+<tr>
+<td style="text-align:center">46+n+m</td>
+<td style="text-align:center">k</td>
+<td style="text-align:center">File comment</td>
+<td style="text-align:left">文件注释内容</td>
+</tr>
+</tbody>
+</table>
+<h4 id="目录结束标识-End-of-central-directory-record"><a href="#目录结束标识-End-of-central-directory-record" class="headerlink" title="目录结束标识 End of central directory record"></a>目录结束标识 End of central directory record</h4><p>目录结束标识存在于整个归档包的结尾，用于标记压缩的目录数据的结束。每个压缩文件必须有且只有一个EOCD记录。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Offset</th>
+<th style="text-align:center">Bytes</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:left">译</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">End of central directory signature</td>
+<td style="text-align:left">核心目录结束标记<code>504B0506</code></td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Number of this disk</td>
+<td style="text-align:left">当前磁盘编号</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">number of the disk with the start of the central directory</td>
+<td style="text-align:left">核心目录开始位置的磁盘编号</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">total number of entries in the central directory on this disk</td>
+<td style="text-align:left">该磁盘上所记录的核心目录数量</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">total number of entries in the central directory</td>
+<td style="text-align:left">核心目录结构总数</td>
+</tr>
+<tr>
+<td style="text-align:center">12</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Size of central directory (bytes)</td>
+<td style="text-align:left">核心目录的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">16</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">offset of start of central directory with respect to the starting disk number</td>
+<td style="text-align:left">核心目录开始位置相对于archive开始的位移</td>
+</tr>
+<tr>
+<td style="text-align:center">20</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">.ZIP file comment length(n)</td>
+<td style="text-align:left">注释长度</td>
+</tr>
+<tr>
+<td style="text-align:center">22</td>
+<td style="text-align:center">n</td>
+<td style="text-align:center">.ZIP Comment</td>
+<td style="text-align:left">注释内容</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/archives/" title="ZIP格式解析">http://yoursite.com/blog/archives/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/zip/" rel="tag"><i class="fa fa-tag"></i> zip</a>
+          
+            <a href="/tags/archives/" rel="tag"><i class="fa fa-tag"></i> archives</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/image/" rel="next" title="image文件格式解析">
+                <i class="fa fa-chevron-left"></i> image文件格式解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/sqli-labs/" rel="prev" title="sqli-labs writeup">
+                sqli-labs writeup <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件头-local-file-header"><span class="nav-number">1.</span> <span class="nav-text">文件头 local file header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件数据-file-data"><span class="nav-number">2.</span> <span class="nav-text">文件数据 file data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据描述-data-descriptor"><span class="nav-number">3.</span> <span class="nav-text">数据描述 data descriptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#核心目录-Central-directory"><span class="nav-number">4.</span> <span class="nav-text">核心目录 Central directory</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#目录结束标识-End-of-central-directory-record"><span class="nav-number">5.</span> <span class="nav-text">目录结束标识 End of central directory record</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

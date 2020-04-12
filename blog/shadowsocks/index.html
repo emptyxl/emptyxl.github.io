@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ss,shadowsocks,科学上网,VPS,代理,翻墙" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Github、Google、StackOverflow访问慢还怎么干活😞  概述  本文首先简短的介绍了”墙”是什么以及shadowsocks的工作原理，让读者对于为什么翻墙以及如何翻墙有个基础的了解。之后对于shadowsocks(之后简称ss)的服务器端与客户端的配置提供了较为详细的配置步骤。在VPS(虚拟专用服务器)的选择上，这里采用了AWS(Amazon Web Services)，对">
+<meta name="keywords" content="ss,shadowsocks,科学上网,VPS,代理,翻墙">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用shadowsocks搭建个人代理实现科学上网">
+<meta property="og:url" content="http://yoursite.com/blog/shadowsocks/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="Github、Google、StackOverflow访问慢还怎么干活😞  概述  本文首先简短的介绍了”墙”是什么以及shadowsocks的工作原理，让读者对于为什么翻墙以及如何翻墙有个基础的了解。之后对于shadowsocks(之后简称ss)的服务器端与客户端的配置提供了较为详细的配置步骤。在VPS(虚拟专用服务器)的选择上，这里采用了AWS(Amazon Web Services)，对">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/blog/shadowsocks/GFW.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/shadowsocks/GFW-ss.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/shadowsocks/main.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/shadowsocks/amazon-linux.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/shadowsocks/pem.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/shadowsocks/putty.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/shadowsocks/client.png">
+<meta property="og:updated_time" content="2017-08-20T16:00:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用shadowsocks搭建个人代理实现科学上网">
+<meta name="twitter:description" content="Github、Google、StackOverflow访问慢还怎么干活😞  概述  本文首先简短的介绍了”墙”是什么以及shadowsocks的工作原理，让读者对于为什么翻墙以及如何翻墙有个基础的了解。之后对于shadowsocks(之后简称ss)的服务器端与客户端的配置提供了较为详细的配置步骤。在VPS(虚拟专用服务器)的选择上，这里采用了AWS(Amazon Web Services)，对">
+<meta name="twitter:image" content="http://yoursite.com/blog/shadowsocks/GFW.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/shadowsocks/"/>
+
+
+
+
+
+  <title>使用shadowsocks搭建个人代理实现科学上网 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/shadowsocks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用shadowsocks搭建个人代理实现科学上网</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-17T00:00:00+08:00">
+                2017-01-17
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-08-21T00:00:00+08:00">
+                2017-08-21
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SS-VPS/" itemprop="url" rel="index">
+                    <span itemprop="name">SS/VPS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>Github、Google、StackOverflow访问慢还怎么干活😞</p>
+</blockquote>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述  "></a>概述 <span id="introduction"> </span></h2><p>本文首先简短的介绍了”墙”是什么以及shadowsocks的工作原理，让读者对于为什么翻墙以及如何翻墙有个基础的了解。之后对于shadowsocks(之后简称ss)的服务器端与客户端的配置提供了较为详细的配置步骤。在VPS(虚拟专用服务器)的选择上，这里采用了<a href="https://aws.amazon.com" target="_blank" rel="external">AWS</a>(Amazon Web Services)，对于新用户可以免费使用一年，网速经测试youtube720p没有问题，对于网速及机房位置要求较高的用户可使用AWS付费服务器或者推荐两个VPS提供商:<a href="https://www.vultr.com/" target="_blank" rel="external">Vultr</a>、<a href="https://bwh1.net/" target="_blank" rel="external">BandwagonHost</a>(其官网G20期间被墙了，提供一个官网备份网址)。</p>
+<h2 id="GFW"><a href="#GFW" class="headerlink" title="GFW  "></a>GFW <span id="GFW"> </span></h2><p>GFW(防火长城)也称中国国家防火墙,就是我们俗称的”墙”。<a href="https://zh.wikipedia.org/wiki/防火长城" target="_blank" rel="external">GFW</a>的作用主要是政府爸爸用于监管不当言论以及防止网络危害，以达到自我审查、全面监控的作用。GFW封锁网络常见的几种方法:  </p>
+<ul>
+<li><p><strong>DNS劫持</strong><br>当你访问不被允许的域名时，你ISP(互联网服务供应商)提供的DNS服务器将返回一个不正确的IP地址或不返回。</p>
+</li>
+<li><p><strong>DNS污染</strong><br>由于DNS劫持可以通过修改域名解析服务器的方式解决，所以系统需要使用DNS污染来封锁一些域名，在直接访问国外DNS服务器的时候，也会被GFW实施DNS污染。</p>
+</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li><p><strong>IP封锁</strong><br>IP封锁指的是国内把国外服务器的IP加入了系统的黑名单，导致大部分地区甚至全国无法直接访问服务器。由于系统是分布式的，所以有可能出现部分地区可以访问，部分地区不能访问的情况。这也是为什么我们通过修改<strong>hosts</strong>文件可以翻墙但经过一段时间之后又无效的原因。</p>
+</li>
+<li><p><strong>服务器防火墙IP过滤和服务器宕机</strong><br>这两种情况的对外表现是一样的，IP封锁的最后一个可达IP是中国的，而服务器防火墙IP过滤和服务器当机时的最后一个可达IP却是国外的。</p>
+</li>
+<li><p><strong>基于关键词的TCP连接重置</strong><br>由于http协议是明文，我们通过http协议访问国外网站时都会有记录，如果出现某些敏感关键词时，便会强制断开TCP连接。</p>
+</li>
+<li><p>无状态的TCP连接重置、SSL证书过滤、SSL劫持、HTTP会话劫持等在此不再赘述，有兴趣的自行google。</p>
+</li>
+</ul>
+<img src="/blog/shadowsocks/GFW.jpg" alt="GFW示意图" title="GFW示意图">
+<h2 id="shadowsocks"><a href="#shadowsocks" class="headerlink" title="shadowsocks   "></a>shadowsocks  <span id="shadowsocks"> </span></h2><p>由于我们可以通过境外代理的方式绕过GFW的过滤，通过加密数据使得GFW无法进行内容解析，从而避免被屏蔽的问题。shadowsocks将SSH创建的Sock5协议拆成server和client两个端，shadowsocks-local一般由本机或者路由器，不经过GFW，所以避免了GFW通过特征分析进行干扰。  </p>
+<img src="/blog/shadowsocks/GFW-ss.jpg" alt="shadowsocks原理图" title="shadowsocks原理图">
+<p>shadowsocks的客户端可以在这里下载，根据自己系统自行选择：<a href="https://portal.shadowsocks.com/downloads.php" target="_blank" rel="external">下载地址</a>  </p>
+<h2 id="shadowsocks-server配置"><a href="#shadowsocks-server配置" class="headerlink" title="shadowsocks server配置   "></a>shadowsocks server配置  <span id="AWS"> </span></h2><h3 id="1-创建"><a href="#1-创建" class="headerlink" title="1.创建   "></a>1.创建  <span id="AWS创建"> </span></h3><p>在服务器选择上，这里选择了AWS(Amazon Web Services)，其提供一年免费使用时间，可供小白进行实验，配置成功后在使用过程中对硬件与网速不满意的可在自行根据需求购买，推荐两个VPS：<a href="https://www.vultr.com/" target="_blank" rel="external">Vultr</a>、<a href="https://bwh1.net/" target="_blank" rel="external">BandwagonHost</a>。<br>AWS注册在这里不在详述(你要连注册都不会就真的没救了)。注册过程中绑定信用卡/借记卡时可能会扣1-2美元的预授费。<br>注册成功进入之后，在顶部栏服务中选择<a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html" target="_blank" rel="external">EC2</a>,右边的机房地址自行选择，这里国内用的话推荐东京，速度还不错，100ping左右。  </p>
+<img src="/blog/shadowsocks/main.jpg" alt="主界面" title="主界面">
+<p>依次选择: 启动实例———&gt;Amazon-linux-AMI——&gt;实例类型选择默认免费套餐——&gt;审核和启动  </p>
+<img src="/blog/shadowsocks/amazon-linux.jpg" alt="Amazon-linux-AMI" title="Amazon-linux-AMI">
+<p>核查实例启动这里直接点启动，安全组配置之后在设置。启动时，会让选择现有密钥对或创建新密钥对，这里由于第一次，选择创建新的，名称自己填，然后点下载，会下载<code>your_name.pem</code>的一个文件，记得存好。之后点启动。  </p>
+<img src="/blog/shadowsocks/pem.jpg" alt="pem" title="pem">
+<h3 id="2-连接"><a href="#2-连接" class="headerlink" title="2.连接   "></a>2.连接  <span id="AWS连接"> </span></h3><p>由于chrome已弃用 NPAPI 无法从浏览器直接连到SSH客户端，所以需要使用独立SSH客户端，这里使用<a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html" target="_blank" rel="external">PuTTY</a>进行连接，下载页面已给。由于PuTTY无法识别私钥<code>.pem</code>格式，所以首先需使用PuTTYgen进行转换格式，并使用PuTTY进行连接，具体的文档可以参考<a href="https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/UserGuide/putty.html?icmpid=docs_ec2_console" target="_blank" rel="external">这里</a>，说的很详细，不再啰嗦。配置好之后记得save下，以便下次快速使用。连接成功后如下图。  </p>
+<img src="/blog/shadowsocks/putty.jpg" alt="connected" title="connected">
+<h3 id="3-配置"><a href="#3-配置" class="headerlink" title="3.配置  "></a>3.配置 <span id="ss-config"> </span></h3><p>首先是ss的安装，可直接使用pip安装<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip <span class="keyword">install</span> shadowsocks</div></pre></td></tr></table></figure></p>
+<p>使用<code>vim</code>编辑ss配置文件。<code>vim</code>基本操作如下：  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>Esc</code></td>
+<td style="text-align:center">进入命令模式</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>:wq</code></td>
+<td style="text-align:center">保存并退出</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>:wq test.txt</code></td>
+<td style="text-align:center">保存并退出，文件名为test.txt</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>:q!</code></td>
+<td style="text-align:center">强制退出</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>i</code>/<code>Ins</code></td>
+<td style="text-align:center">进入编辑模式</td>
+</tr>
+</tbody>
+</table>
+<p>使用<code>vim</code>编辑文档后，输入以下内容，并保存为json格式文件<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">          "server":"VPS的IP地址", #注意这里填私有IP地址，因为其系统并不能够识别到自身的公网IP地址</div><div class="line">          "server_port":8388,      #服务器端口，最好大于5000，如何在启动服务时发现address can not access，可能是端口已被使用的原因</div><div class="line">          "local_port":1080,</div><div class="line">          "password":"1234567890", #认证密码</div><div class="line">          "timeout":300,           </div><div class="line">          "method":"aes-256-cfb"   #加密方式，推荐使用aes-256-cfb</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里我将配置保存为<code>ss-config-tokyo.json</code>,然后根据配置文件启动ss：<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssserver -c ss-<span class="built_in">config</span>-tokyo.<span class="keyword">json </span>-d start</div></pre></td></tr></table></figure></p>
+<p>这样会在后台启动运行shadowsocks,若需要停止，可以输入<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssserver -d <span class="built_in">stop</span></div></pre></td></tr></table></figure></p>
+<p>server的log日志在<code>/var/log/shadowsocks.log</code>中，可以使用<code>cat</code>进行查看，若想在前台运行并观察实时日志，可以使用:<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssserver -c ss-<span class="built_in">config</span>-tokyo.json</div></pre></td></tr></table></figure></p>
+<p>由于AWS默认只允许20端口的SSH协议访问，所以还需修改其安全组策略，允许Sock5(TCP)协议的访问。若想ping通服务器查看延时，还需添加ICMP的权限。<br>在其实例的安全组入站规则中，添加如下规则：  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">协议</th>
+<th style="text-align:center">端口范围</th>
+<th style="text-align:center">来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">自定义TCP规则</td>
+<td style="text-align:center">TCP</td>
+<td style="text-align:center">8388</td>
+<td style="text-align:center">0.0.0.0/0</td>
+</tr>
+<tr>
+<td style="text-align:center">所有ICMP</td>
+<td style="text-align:center">ICMP</td>
+<td style="text-align:center">0-65535</td>
+<td style="text-align:center">0.0.0.0/0</td>
+</tr>
+</tbody>
+</table>
+<p>ICMP规则建议在测试完<code>ping</code>之后就删除掉。</p>
+<h2 id="Shadowsocks-Client-配置"><a href="#Shadowsocks-Client-配置" class="headerlink" title="Shadowsocks Client 配置  "></a>Shadowsocks Client 配置 <span id="client"> </span></h2><p>打开软件并如下配置,服务器IP填服务器的公网IP地址:  </p>
+<img src="/blog/shadowsocks/client.png" alt="client" title="client">
+<p>右键小图标可以看到其提供的内容，如下图。PAC指根据规则表中的内容，值为1的进行代理，表中没有的则不进行代理。全局模式是所有访问的网址均需要代理。服务器里可以根据不同的服务器地址进行切换，我们可以在不同地域的实例创建多个服务器，以供选择。  </p>
+
+<h2 id="浏览器配置"><a href="#浏览器配置" class="headerlink" title="浏览器配置  "></a>浏览器配置 <span id="browser"> </span></h2><p>Chrome等浏览器需使用插件使其指向本地代理即可完成翻墙。chrome下推荐<code>SwitchyOmega</code> 插件，<a href="https://portal.shadowsocks.com/downloads.php?action=displaycat&amp;catid=2" target="_blank" rel="external">这里</a>可以下载。下载安装后将其选为系统代理即可。</p>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/shadowsocks/" title="使用shadowsocks搭建个人代理实现科学上网">http://yoursite.com/blog/shadowsocks/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/shadowsocks/" rel="tag"><i class="fa fa-tag"></i> shadowsocks</a>
+          
+            <a href="/tags/proxy/" rel="tag"><i class="fa fa-tag"></i> proxy</a>
+          
+            <a href="/tags/AWS/" rel="tag"><i class="fa fa-tag"></i> AWS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/Happy-New-Year/" rel="next" title="Happy New Year , 2017">
+                <i class="fa fa-chevron-left"></i> Happy New Year , 2017
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/pages-blog/" rel="prev" title="Hexo+Pages搭建个人博客及相关配置">
+                Hexo+Pages搭建个人博客及相关配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述  </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GFW"><span class="nav-number">2.</span> <span class="nav-text">GFW  </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shadowsocks"><span class="nav-number">3.</span> <span class="nav-text">shadowsocks   </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shadowsocks-server配置"><span class="nav-number">4.</span> <span class="nav-text">shadowsocks server配置   </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建"><span class="nav-number">4.1.</span> <span class="nav-text">1.创建   </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-连接"><span class="nav-number">4.2.</span> <span class="nav-text">2.连接   </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-配置"><span class="nav-number">4.3.</span> <span class="nav-text">3.配置  </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shadowsocks-Client-配置"><span class="nav-number">5.</span> <span class="nav-text">Shadowsocks Client 配置  </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器配置"><span class="nav-number">6.</span> <span class="nav-text">浏览器配置  </span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

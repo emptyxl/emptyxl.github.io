@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="web security" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="同源策略同源策略(Same Origin Policy, SOP)是Web应用程序的一种安全模型，它控制了网页中DOM之间的访问。同源三要素：主机、协议、端口 同源策略作用浏览器的同源策略会导致跨域，这里同源策略又分为以下两种：  DOM同源策略：禁止对不同源页面DOM进行操作。这里主要场景是iframe跨域的情况，不同域名的iframe是限制互相访问的。 XmlHttpRequest同源策略：禁">
+<meta name="keywords" content="web security">
+<meta property="og:type" content="article">
+<meta property="og:title" content="同源策略">
+<meta property="og:url" content="http://yoursite.com/blog/same-origin-policy/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="同源策略同源策略(Same Origin Policy, SOP)是Web应用程序的一种安全模型，它控制了网页中DOM之间的访问。同源三要素：主机、协议、端口 同源策略作用浏览器的同源策略会导致跨域，这里同源策略又分为以下两种：  DOM同源策略：禁止对不同源页面DOM进行操作。这里主要场景是iframe跨域的情况，不同域名的iframe是限制互相访问的。 XmlHttpRequest同源策略：禁">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-05T13:42:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="同源策略">
+<meta name="twitter:description" content="同源策略同源策略(Same Origin Policy, SOP)是Web应用程序的一种安全模型，它控制了网页中DOM之间的访问。同源三要素：主机、协议、端口 同源策略作用浏览器的同源策略会导致跨域，这里同源策略又分为以下两种：  DOM同源策略：禁止对不同源页面DOM进行操作。这里主要场景是iframe跨域的情况，不同域名的iframe是限制互相访问的。 XmlHttpRequest同源策略：禁">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'emptyxl.github.io',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/same-origin-policy/"/>
+
+
+
+
+
+  <title>同源策略 | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello World！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/same-origin-policy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">同源策略</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T23:52:18+08:00">
+                2017-09-28
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-05T21:42:18+08:00">
+                2018-02-05
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h3><p>同源策略(Same Origin Policy, SOP)是<strong>Web应用程序的一种安全模型</strong>，它控制了网页中DOM之间的访问。<br><strong>同源三要素：<code>主机</code>、<code>协议</code>、<code>端口</code></strong></p>
+<h4 id="同源策略作用"><a href="#同源策略作用" class="headerlink" title="同源策略作用"></a>同源策略作用</h4><p>浏览器的同源策略会导致跨域，这里同源策略又分为以下两种：</p>
+<ul>
+<li>DOM同源策略：禁止对不同源页面DOM进行操作。这里主要场景是<code>iframe</code>跨域的情况，不同域名的<code>iframe</code>是限制互相访问的。</li>
+<li><code>XmlHttpRequest</code>同源策略：禁止使用XHR对象向不同源的服务器地址发起HTTP请求。</li>
+</ul>
+<p>同源策略没有禁止脚本的执行，而是<strong>禁止读取HTTP回复</strong>。  </p>
+<p>我们会发现，<code>SOP</code>其实在防止<code>CSRF</code>上作用非常有限，<code>CSRF</code>的请求往往在发送出去的那一瞬间就已经达到了攻击的目的，比如发送了一段敏感数据，或请求了一个具体的功能，是否能读取回复并不那么重要（唯一的作用是可以防止CSRF请求读取异源的授权Token）。 另外，一般静态资源通常不受同源策略限制，如<code>js/css/jpg/png</code>等。</p>
+<p>要注意，这里的<code>CSRF</code>攻击指的是通过链接或者脚本去访问恶意网站的情况，而不是通过<code>ajax</code>访问的情况，ajax的同源策略正是为了防止<code>CSRF</code>攻击。</p>
+<a id="more"></a>
+<h4 id="跨源访问"><a href="#跨源访问" class="headerlink" title="跨源访问"></a>跨源访问</h4><p>同源策略控制了不同源之间的交互，例如在使用<code>XMLHttpRequest</code> 或 <code>&lt;img&gt;</code> 标签时则会受到同源策略的约束。交互通常分为三类：</p>
+<ul>
+<li><code>跨域写</code>（Cross-origin writes）:通常被允许，例如链接，重定向和表单提交，一些不常见的<code>HTTP</code>请求方法例如<code>PUT,DELETE</code>等需要先发送预请求（preflight），例如发送<code>OPTIONS</code>来查询可用的方法。</li>
+<li><code>跨域嵌入</code>（Cross-origin embedding）:通常被允许</li>
+<li><code>跨域读</code>:通常被禁止，然而，我们可以用其他方法达到读取的效果。</li>
+</ul>
+<p>以下是一些跨域请求的例子：</p>
+<ul>
+<li><code>&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;</code>标签嵌入跨域脚本。语法错误信息只能在同源脚本中捕捉到。</li>
+<li><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;...&quot;&gt;</code>标签嵌入CSS。由于CSS的松散的语法规则，CSS的跨域需要一个设置正确的<code>Content-Type</code>消息头。不同浏览器有不同的限制： IE, Firefox, Chrome, Safari (跳至CVE-2010-0051)部分 和 Opera。</li>
+<li><code>&lt;img&gt;</code>嵌入图片。支持的图片格式包括PNG,JPEG,GIF,BMP,SVG,…</li>
+<li><code>&lt;video&gt;</code> 和 <code>&lt;audio&gt;</code>嵌入多媒体资源。</li>
+<li><code>&lt;object&gt;</code>, <code>&lt;embed&gt;</code> 和 <code>&lt;applet&gt;</code>的插件。</li>
+<li><code>@font-face</code>引入的字体。一些浏览器允许跨域字体（ cross-origin fonts），一些需要同源字体（same-origin fonts）。</li>
+<li><code>&lt;frame&gt;</code> 和 <code>&lt;iframe&gt;</code>载入的任何资源。站点可以使用<code>X-Frame-Options</code>消息头来阻止这种形式的跨域交互。</li>
+</ul>
+<p>一个经久不衰的BUG<br>早在2011年，一个用户在Mozilla的Bug追踪系统中就提交了一个issue，声称他可以判定某个网站的访客是否登录了gmail,facebook等等。</p>
+<p>嵌入iframe来获取一个访问网站的用户是否登陆了gmail:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="selector-tag">img</span> style=<span class="string">"display:none;"</span>  </div><div class="line"> onload=<span class="string">"logged_in_to_gmail()"</span></div><div class="line"> onerror=<span class="string">"not_logged_in_to_gmail()"</span></div><div class="line"> src=<span class="string">"https://mail.google.com/mail/photos/img/photos/public/AIbEiAIAAABDCKa_hYq24u2WUyILdmNhcmRfcGhvdG8qKDI1ODFkOGViM2I5ZjUwZmZlYjE3MzQ2YmQyMjAzMjFlZTU3NjEzOTYwAZwSCm_MMUDjh599IgoA2muEmEZD"</span></div><div class="line">/&gt;</div></pre></td></tr></table></figure>
+<p>src的代码试图访问一张gmail中攻击者上传的图片，如果用户没有登陆gmail，就无法成功加载。从而达到判断用户是否登陆gmail的效果。这种方法可以推广到任何对不应跨源访问的资源没有正确设置同源策略的网站。</p>
+<h4 id="跨域的解决方案"><a href="#跨域的解决方案" class="headerlink" title="跨域的解决方案"></a>跨域的解决方案</h4><h5 id="document-domain跨子域"><a href="#document-domain跨子域" class="headerlink" title="document.domain跨子域"></a>document.domain跨子域</h5><p>常见于不同子域共享数据</p>
+<p>如果两个<code>window</code>或者<code>frames</code>包含的脚本可以把<code>domain</code>设置成一样的值，那么就可以规避同源策略，每个<code>window</code>之间可以互相沟通。例如，<code>orders.example.com</code>下页面的脚本和<code>catalog.example.com</code>下页面的脚本可以设置他们的<code>document.domain</code>属性为<code>example.com</code>，从而让这两个站点下面的文档看起来像在同源下，然后就可以让每个文档读取另一个文档的属性。</p>
+<p>这种方式也不是一直都有用，因为端口号是在内部保存的，有可能被保存成null。换句话说，<code>example.com</code>的端口号<code>80</code>，在我们更新<code>document.domain</code>属性的时候可能会变成<code>null</code>。为<code>null</code>的端口可能不被认为是<code>80</code>，这主要依赖浏览器实现。</p>
+<h5 id="CORS-跨域资源共享"><a href="#CORS-跨域资源共享" class="headerlink" title="# CORS 跨域资源共享"></a># CORS 跨域资源共享</h5><p>CORS是一个W3C标准，全称是”跨域资源共享”（Cross-origin resource sharing）</p>
+<p>这种方式使用了一个新的<code>Origin</code>请求头和一个新的<code>Access-Control-Allow-Origin</code>响应头扩展了<code>HTTP</code>。允许服务端设置<code>Access-Control-Allow-Origin</code>头标识哪些站点可以请求文件，或者设置<code>Access-Control-Allow-Origin</code>头为<code>*</code>，允许任意站点访问文件。浏览器，例如Firefox3.5，Safari4，IE10使用这个头允许跨域HTTP请求。</p>
+<h5 id="jsonp"><a href="#jsonp" class="headerlink" title="# jsonp"></a># jsonp</h5><p><a href="https://hellohxk.com/blog/jsonp/" target="_blank" rel="external">详见JSONP利用与防御文章</a></p>
+<h5 id="服务器代理"><a href="#服务器代理" class="headerlink" title="# 服务器代理"></a># 服务器代理</h5><p>代理是万能的，什么都不影响了</p>
+<h5 id="使用postMessage实现页面之间通信"><a href="#使用postMessage实现页面之间通信" class="headerlink" title="# 使用postMessage实现页面之间通信"></a># 使用postMessage实现页面之间通信</h5><p>信息传递除了客户端与服务器之前的传递，还存在以下几个问题：</p>
+<ul>
+<li>页面和新开的窗口的数据交互。</li>
+<li>多窗口之间的数据交互。</li>
+<li>页面与所嵌套的<code>iframe</code>之间的信息传递。</li>
+</ul>
+<p><code>window.postMessage</code>是一个HTML5的api，允许两个窗口之间进行跨域发送消息。这个应该就是以后解决dom跨域通用方法了，具体可以参照MDN。</p>
+<h5 id="WebSocket"><a href="#WebSocket" class="headerlink" title="#WebSocket"></a>#WebSocket</h5><p>现代浏览器允许脚本直连一个<code>WebSocket地址</code>而不管同源策略。然而，使用<code>WebSocket URI</code>的时候，在请求中插入<code>Origin</code>头就可以标识脚本请求的源。为了确保跨站安全，<code>WebSocket</code>服务器必须根据允许接受请求的白名单中的源列表比较头数据。</p>
+<h3 id="对同源策略的利用"><a href="#对同源策略的利用" class="headerlink" title="对同源策略的利用"></a>对同源策略的利用</h3><h4 id="URI解析"><a href="#URI解析" class="headerlink" title="URI解析"></a>URI解析</h4><p><code>IP</code>是<code>URI</code>的重要组成部分，如果留心了RFC的人就会知道，IP不止有一种格式。下面的标注形式其实都代表了同一个IP：<code>216.58.209.68</code>。</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="number">216.58</span><span class="number">.53572</span></div><div class="line"><span class="number">0xD8</span><span class="number">.072</span><span class="number">.53572</span></div><div class="line"><span class="number">3627733316</span></div><div class="line"><span class="number">0330.3854660</span></div></pre></td></tr></table></figure>
+<p>当然，不同浏览器对<code>URI</code>的解析方式是不一样的，可能并不能正确跳转的<code>google</code>的页面，但当浏览器<code>URI</code>解析存在漏洞时，就会有作用。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">当某些浏览器对URI的解释存在漏洞的时候，就可以构造出有趣的攻击链来绕过SOP。 比如CVE-<span class="number">2015</span>-<span class="number">7188</span>火狐浏览器SOP绕过中。攻击者构造了特殊的URL，并在攻击者自己控制的来自<span class="number">37.187</span>.<span class="number">18.85</span>的网页中发起跨域请求</div><div class="line"></div><div class="line">http:<span class="comment">//37.187.18.85BuFF20translate.google.com/fx_sop_bypass/FlashTest.swf?url=http://translate.google.com/manager/website/    </span></div><div class="line"></div><div class="line">先通过B让Firefox认为这个请求是请求<span class="number">37.187</span>.<span class="number">18.85</span>本身的内容，再通过类似@字符的Unicode字符＠(uFF20)让浏览器认为@之前的字符都是translate<span class="selector-class">.google</span><span class="selector-class">.com</span>的账号和密码，从而返回translate<span class="selector-class">.google</span><span class="selector-class">.com</span>的网页内容，实现绕过SOP。</div></pre></td></tr></table></figure>
+<h4 id="设计缺陷导致SOP绕过"><a href="#设计缺陷导致SOP绕过" class="headerlink" title="设计缺陷导致SOP绕过"></a>设计缺陷导致SOP绕过</h4><p>在Java6，7中，如果两个域名解析到相同的IP，则会认为他们同源。假设我们有attacker.com和victim.com,两者都共享主机123.123.123.123。攻击者attacker.com可以在自己控制的域名下上传一个jar文件来访问victim.com的内容。</p>
+<h4 id="访问本地文件的同源策略"><a href="#访问本地文件的同源策略" class="headerlink" title="访问本地文件的同源策略"></a>访问本地文件的同源策略</h4><p>不同的浏览器使用不同的浏览器引擎，而不同的引擎对于同源策略的处理也并非完全一致。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 文件路径：/home/user/1.html --&gt;</span>  </div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span>  </div><div class="line"><span class="tag">&lt;<span class="name">frameset</span> <span class="attr">cols</span>=<span class="string">"50%,*"</span>&gt;</span>  </div><div class="line">  <span class="tag">&lt;<span class="name">frame</span> <span class="attr">src</span>=<span class="string">"/home/user/dir/2.html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">frame</span> <span class="attr">src</span>=<span class="string">"..."</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">frameset</span>&gt;</span>  </div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>文件1与2在不同的浏览器引擎中可能认为是同源/非同源</p>
+<h4 id="IE的特别之处"><a href="#IE的特别之处" class="headerlink" title="IE的特别之处"></a>IE的特别之处</h4><blockquote>
+<p>TrustZones（信任域）：当一个URI被加入到了IE的信任网站区域中时，浏览器会无视同源策略。  </p>
+<p>IE在考虑同源策略时不包括端口， 这意味着不同端口上的应用程序可以读取到比如用户的登陆账户密码/cookie等。</p>
+</blockquote>
+<p>通过变更自身的源绕过同源策略:<br>IE 6，7版中网页可以通过<code>document.domain</code>设置自身的来源为任意其他来源。如今网页仍然可以更改源，但是有一些限制。</p>
+<p>网页可以变更自身的源为父级域名。</p>
+<p>例如<code>http://malicious.eth.space/1.html</code>可以通过执行</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">document.domain = <span class="string">"eth.space"</span><span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>来绕过同源策略的限制，从而可以读取<code>http://eth.space/login.html</code>上的内容。这其中的应用大家可以自己去想。</p>
+<h3 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h3><h4 id="CORS-cross-origin-sharing-stander-跨源资源共享机制"><a href="#CORS-cross-origin-sharing-stander-跨源资源共享机制" class="headerlink" title="CORS cross-origin sharing stander 跨源资源共享机制"></a>CORS cross-origin sharing stander 跨源资源共享机制</h4><p>使用<code>windows.postMessage</code><br>使用<code>JSONP</code></p>
+<h4 id="CSP-内容安全策略"><a href="#CSP-内容安全策略" class="headerlink" title="CSP 内容安全策略"></a>CSP 内容安全策略</h4><h4 id="禁止（你的资源被）跨源访问"><a href="#禁止（你的资源被）跨源访问" class="headerlink" title="禁止（你的资源被）跨源访问"></a>禁止（你的资源被）跨源访问</h4><p>为了禁止跨域写，我们需要引入<code>CSRF令牌</code>，然而我们需要正确的配置同源策略，否则CSRF令牌本身也将被恶意网页读取。</p>
+<p>为了禁止跨域读，我们可以通过设置<code>X-Frame-Options</code>头来禁止该页面被嵌入到恶意页面中，就如同在“经久不衰的BUG”中一样。</p>
+<p>为了禁止跨域嵌入，确保你的资源本身无法嵌入到各种跨域访问方式中，比如<code>&lt;script data-original=&gt;&lt;/script&gt; &lt;img data-original=x&gt;&lt;/img&gt;，&lt;svg onload=&gt;</code>，各种字体加载等等。同时，使用CSRF令牌也可以有效避免被跨域嵌入。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/blog/same-origin-policy/" title="同源策略">http://yoursite.com/blog/same-origin-policy/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/same-origin/" rel="tag"><i class="fa fa-tag"></i> same origin</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/sql-injection/" rel="next" title="SQL Injection 利用与防御">
+                <i class="fa fa-chevron-left"></i> SQL Injection 利用与防御
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/xss-bypass-tricks/" rel="prev" title="XSS利用与防御">
+                XSS利用与防御 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">hello world!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#同源策略"><span class="nav-number">1.</span> <span class="nav-text">同源策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#同源策略作用"><span class="nav-number">1.1.</span> <span class="nav-text">同源策略作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨源访问"><span class="nav-number">1.2.</span> <span class="nav-text">跨源访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨域的解决方案"><span class="nav-number">1.3.</span> <span class="nav-text">跨域的解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#document-domain跨子域"><span class="nav-number">1.3.1.</span> <span class="nav-text">document.domain跨子域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CORS-跨域资源共享"><span class="nav-number">1.3.2.</span> <span class="nav-text"># CORS 跨域资源共享</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#jsonp"><span class="nav-number">1.3.3.</span> <span class="nav-text"># jsonp</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务器代理"><span class="nav-number">1.3.4.</span> <span class="nav-text"># 服务器代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用postMessage实现页面之间通信"><span class="nav-number">1.3.5.</span> <span class="nav-text"># 使用postMessage实现页面之间通信</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#WebSocket"><span class="nav-number">1.3.6.</span> <span class="nav-text">#WebSocket</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对同源策略的利用"><span class="nav-number">2.</span> <span class="nav-text">对同源策略的利用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#URI解析"><span class="nav-number">2.1.</span> <span class="nav-text">URI解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设计缺陷导致SOP绕过"><span class="nav-number">2.2.</span> <span class="nav-text">设计缺陷导致SOP绕过</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问本地文件的同源策略"><span class="nav-number">2.3.</span> <span class="nav-text">访问本地文件的同源策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IE的特别之处"><span class="nav-number">2.4.</span> <span class="nav-text">IE的特别之处</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防御"><span class="nav-number">3.</span> <span class="nav-text">防御</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CORS-cross-origin-sharing-stander-跨源资源共享机制"><span class="nav-number">3.1.</span> <span class="nav-text">CORS cross-origin sharing stander 跨源资源共享机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CSP-内容安全策略"><span class="nav-number">3.2.</span> <span class="nav-text">CSP 内容安全策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#禁止（你的资源被）跨源访问"><span class="nav-number">3.3.</span> <span class="nav-text">禁止（你的资源被）跨源访问</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
