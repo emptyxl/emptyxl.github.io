@@ -3,41 +3,22 @@
 
 
     
-  <url>
-    <loc>http://yoursite.com/blog/machine-learning-for-security/</loc>
-    <lastmod>2018-12-25T01:40:46.000Z</lastmod>
-    <data>
-        <display>
-        <title>安全机器学习入门</title>
-        <pubTime>2018-12-25T01:12:42.000Z</pubTime>
-        
-        <tag>security</tag>
-         
-        <tag>machine learning</tag>
-         
-         
-           
-             
-              <breadCrumb title="security" url="http://yoursite.com/categories/security/"/>
-          
-             
-              <breadCrumb title="machine learning" url="http://yoursite.com/categories/security/machine-learning/"/>
-          
-        </display>
-    </data>
-    </url>
-
     
   <url>
-    <loc>http://yoursite.com/blog/PEfile/</loc>
-    <lastmod>2018-12-25T01:13:33.000Z</lastmod>
+    <loc>http://yoursite.com/blog/hello-2017/</loc>
+    <lastmod>2020-10-22T15:14:15.350Z</lastmod>
     <data>
         <display>
-        <title>PEfile</title>
-        <pubTime>2018-12-25T01:13:33.000Z</pubTime>
+        <title>Welcome to Empty_xL Blog</title>
+        <pubTime>2016-12-31T16:00:00.000Z</pubTime>
         
+        <tag>life</tag>
+         
          
            
+             
+              <breadCrumb title="life" url="http://yoursite.com/categories/life/"/>
+          
         </display>
     </data>
     </url>
@@ -1199,7 +1180,6 @@
     
     
     
-    
   <url>
     <loc>http://yoursite.com/blog/Happy-New-Year/</loc>
     <lastmod>2017-08-20T09:01:08.000Z</lastmod>
@@ -1207,26 +1187,6 @@
         <display>
         <title>Happy New Year , 2017</title>
         <pubTime>2017-01-16T12:11:28.000Z</pubTime>
-        
-        <tag>life</tag>
-         
-         
-           
-             
-              <breadCrumb title="life" url="http://yoursite.com/categories/life/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/blog/hello-2017/</loc>
-    <lastmod>2017-08-19T15:26:39.000Z</lastmod>
-    <data>
-        <display>
-        <title>Welcome to Empty_xL Blog</title>
-        <pubTime>2016-12-31T16:00:00.000Z</pubTime>
         
         <tag>life</tag>
          

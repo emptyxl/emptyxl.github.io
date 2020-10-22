@@ -1,5 +1,3 @@
-http://yoursite.com/blog/PEfile/
-http://yoursite.com/blog/machine-learning-for-security/
 http://yoursite.com/blog/exploit-exercises-vulnhub-01/
 http://yoursite.com/blog/exploit-exercises-nebula/
 http://yoursite.com/blog/weblogic/
