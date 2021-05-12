@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next mist use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -103,7 +103,7 @@
 <meta property="og:url" content="http://yoursite.com/blog/prompt-1-writeup/index.html">
 <meta property="og:site_name" content="empty_xl Blog">
 <meta property="og:description" content="prompt(1) to win XSS在线练习题，每一道都非常有趣，题目都有典型性。官方wiki题解在这里 0x0012345function escape(input) &amp;#123;    // warm up    // script should be executed without user interaction    return &apos;&amp;lt;input type=&quot;text&quot; va">
-<meta property="og:locale" content="zh-Hans">
+<meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2017-10-01T14:16:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="prompt(1)-writeup">
@@ -122,7 +122,7 @@
     motion: true,
     duoshuo: {
       userId: '0',
-      author: '博主'
+      author: 'Author'
     },
     algolia: {
       applicationID: 'QT63IJTEZX',
@@ -179,7 +179,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
 
   
   
@@ -202,7 +202,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">Hello World！</p>
+        <p class="site-subtitle">Hacked By_ emm myself?</p>
       
   </div>
 
@@ -227,7 +227,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            首页
+            Home
           </a>
         </li>
       
@@ -237,7 +237,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            分类
+            Categories
           </a>
         </li>
       
@@ -247,7 +247,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
-            关于
+            About
           </a>
         </li>
       
@@ -257,7 +257,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            归档
+            Archives
           </a>
         </li>
       
@@ -267,7 +267,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
-            标签
+            Tags
           </a>
         </li>
       
@@ -280,7 +280,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            搜索
+            Search
           </a>
         </li>
       
@@ -300,7 +300,7 @@
     </span>
     <div class="local-search-input-wrapper">
       <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
+             placeholder="Searching..." spellcheck="false"
              type="text" id="local-search-input">
     </div>
   </div>
@@ -365,9 +365,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T10:19:18+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-13T10:19:18+08:00">
                 2017-09-13
               </time>
             
@@ -381,9 +381,9 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               
-                <span class="post-meta-item-text">更新于</span>
+                <span class="post-meta-item-text">Post modified</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2017-10-01T22:16:42+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2017-10-01T22:16:42+08:00">
                 2017-10-01
               </time>
             
@@ -398,7 +398,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -409,7 +409,7 @@
 
                 
                 
-                  ， 
+                  , 
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -492,7 +492,7 @@
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">p'rompt(<span class="number">1</span>)</div></pre></td></tr></table></figure>
 <h3 id="0x0B"><a href="#0x0B" class="headerlink" title="0x0B"></a>0x0B</h3><figure class="highlight scilab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span><span class="params">(input)</span> &#123;</span></div><div class="line">    <span class="comment">// name should not contain special characters</span></div><div class="line">    var memberName = input.replace(/[[|\s+*/\\&lt;&gt;&amp;^:;=~!%-]/g, <span class="string">''</span>);</div><div class="line"></div><div class="line">    <span class="comment">// data to be parsed as JSON</span></div><div class="line">    var dataString = <span class="string">'&#123;"</span>action<span class="string">":"</span>login<span class="string">","</span>message<span class="string">":"</span>Welcome back, <span class="string">' + memberName + '</span>.<span class="string">"&#125;'</span>;</div><div class="line"></div><div class="line">    <span class="comment">// directly "parse" data in script context</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'                                \n\</span></div><div class="line">&lt;script&gt;                                    \n\</div><div class="line">    var data = ' + dataString + <span class="string">';          \n\</span></div><div class="line">    if (data.action === "login<span class="string">")            \n\</span></div><div class="line">        document.write(data.message)        \n\</div><div class="line">&lt;/script&gt; ';</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>有一个知识点,在脚本环境中，<code>&quot;string&quot;(alert(1))</code> 不会报错，且会正确执行，而为了使语法正确，使用<code>in</code>关键字，结果如下:</p>
-<figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"(prompt(1))in"</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"(prompt(1))in"</span></div></pre></td></tr></table></figure>
 <h3 id="0x0C"><a href="#0x0C" class="headerlink" title="0x0C"></a>0x0C</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">input</span>) </span>&#123;</div><div class="line">    <span class="comment">// in Soviet Russia...</span></div><div class="line">    input = <span class="built_in">encodeURIComponent</span>(input).replace(<span class="regexp">/'/g</span>, <span class="string">''</span>);</div><div class="line">    <span class="comment">// table flips you!</span></div><div class="line">    input = input.replace(<span class="regexp">/prompt/g</span>, <span class="string">'alert'</span>);</div><div class="line"></div><div class="line">    <span class="comment">// ノ┬─┬ノ ︵ ( \o°o)\</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'&lt;script&gt;'</span> + input + <span class="string">'&lt;/script&gt; '</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>对于<code>encodeURIComponent</code>，其不会编码 <code>.()</code> 可以通过 <code>toString()</code> 构造payload  </p>
 <p><code>toString(radix)</code>中<code>radix</code> 为 2-36 可以选36使其作为一个进制，将字符包含起来<br>使用<code>parseInt(str, radix)</code> 将字符转为数字之后使用<code>(number).toString(radix)</code> 然后用eval进行调用 注意number有括号，<code>(number).toString(radix)</code>  可简写为 <code>（numbrer..toString(radix)</code> ，字符之间用<code>concat()</code>连接  </p>
@@ -558,16 +558,16 @@
       <div>
         <ul class="post-copyright">
   <li class="post-copyright-author">
-    <strong>本文作者：</strong>
+    <strong>Post author:</strong>
     empty_xl
   </li>
   <li class="post-copyright-link">
-    <strong>本文链接：</strong>
+    <strong>Post link:</strong>
     <a href="http://yoursite.com/blog/prompt-1-writeup/" title="prompt(1)-writeup">http://yoursite.com/blog/prompt-1-writeup/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>版权声明： </strong>
-    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> unless stating additionally.
   </li>
 </ul>
 
@@ -677,10 +677,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
+            Overview
           </li>
         </ul>
       
@@ -692,7 +692,7 @@
                alt="empty_xl" />
           <p class="site-author-name" itemprop="name">empty_xl</p>
            
-              <p class="site-description motion-element" itemprop="description">hello world!</p>
+              <p class="site-description motion-element" itemprop="description">Hacked By_ EmPTy_xL../ security blog </p>
           
         </div>
         <nav class="site-state motion-element">
@@ -700,8 +700,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">49</span>
-                <span class="site-state-item-name">日志</span>
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">posts</span>
               </a>
             </div>
           
@@ -712,7 +712,7 @@
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
                 <span class="site-state-item-count">33</span>
-                <span class="site-state-item-name">分类</span>
+                <span class="site-state-item-name">categories</span>
               </a>
             </div>
           
@@ -723,7 +723,7 @@
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
                 <span class="site-state-item-count">76</span>
-                <span class="site-state-item-name">标签</span>
+                <span class="site-state-item-name">tags</span>
               </a>
             </div>
           
@@ -810,7 +810,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     
     &emsp;&emsp;|&emsp;

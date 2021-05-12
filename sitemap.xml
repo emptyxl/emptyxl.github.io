@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/blog/cangpo_encrypted_test/</loc>
+    
+    <lastmod>2021-05-12T14:23:26.669Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/about/index.html</loc>
     
-    <lastmod>2020-10-22T15:22:05.402Z</lastmod>
+    <lastmod>2021-05-12T14:17:49.097Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/404.html</loc>
+    
+    <lastmod>2021-05-12T14:03:51.708Z</lastmod>
     
   </url>
   
@@ -348,13 +362,6 @@
     <loc>http://yoursite.com/categories/index.html</loc>
     
     <lastmod>2017-08-20T12:41:23.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/404.html</loc>
-    
-    <lastmod>2017-08-20T12:40:30.000Z</lastmod>
     
   </url>
   

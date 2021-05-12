@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next mist use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -103,7 +103,7 @@
 <meta property="og:url" content="http://yoursite.com/blog/file-inclusion/index.html">
 <meta property="og:site_name" content="empty_xl Blog">
 <meta property="og:description" content="代码注入的典型代码就是文件包含(File Inclusion)，在PHP中，用于文件包含的函数有4个:  1.require require_once include include_once  include和require区别主要是: include在包含的过程中如果出现错误，会抛出一个警告，程序继续正常运行；而require函数出现错误的时候，会直接报错并退出程序的执行。*_once()表示">
-<meta property="og:locale" content="zh-Hans">
+<meta property="og:locale" content="en">
 <meta property="og:image" content="http://yoursite.com/blog/file-inclusion/file-inclusion.jpg">
 <meta property="og:image" content="http://yoursite.com/blog/file-inclusion/environ.jpg">
 <meta property="og:updated_time" content="2018-08-15T10:46:09.000Z">
@@ -125,7 +125,7 @@
     motion: true,
     duoshuo: {
       userId: '0',
-      author: '博主'
+      author: 'Author'
     },
     algolia: {
       applicationID: 'QT63IJTEZX',
@@ -182,7 +182,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
 
   
   
@@ -205,7 +205,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">Hello World！</p>
+        <p class="site-subtitle">Hacked By_ emm myself?</p>
       
   </div>
 
@@ -230,7 +230,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            首页
+            Home
           </a>
         </li>
       
@@ -240,7 +240,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            分类
+            Categories
           </a>
         </li>
       
@@ -250,7 +250,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
-            关于
+            About
           </a>
         </li>
       
@@ -260,7 +260,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            归档
+            Archives
           </a>
         </li>
       
@@ -270,7 +270,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
-            标签
+            Tags
           </a>
         </li>
       
@@ -283,7 +283,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            搜索
+            Search
           </a>
         </li>
       
@@ -303,7 +303,7 @@
     </span>
     <div class="local-search-input-wrapper">
       <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
+             placeholder="Searching..." spellcheck="false"
              type="text" id="local-search-input">
     </div>
   </div>
@@ -368,9 +368,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-10T10:10:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-10T10:10:23+08:00">
                 2018-01-10
               </time>
             
@@ -384,9 +384,9 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               
-                <span class="post-meta-item-text">更新于</span>
+                <span class="post-meta-item-text">Post modified</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-15T18:46:09+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2018-08-15T18:46:09+08:00">
                 2018-08-15
               </time>
             
@@ -401,7 +401,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -480,7 +480,7 @@
 <p>很多时候，web服务器会将请求写入到日志文件中，比如说<code>apache</code>。在用户发起请求时，会将请求写入<code>access.log</code>，当发生错误时将错误写入<code>error.log</code>。默认情况下，日志保存路径在 <code>/var/log/apache2/</code></p>
 <p>思路是去请求一个构造的异常URL，由于会记录日志，在包含日志的时候从而发挥作用。</p>
 <p>比如我们去请求<code>target.com/&lt;?php phpinfo();?&gt;</code>这个地址，将会在<code>access.log</code>中添加一条记录：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[10/01/2018:12:23:45 +0800] GET /<span class="php"><span class="meta">&lt;?php</span> phpinfo();<span class="meta">?&gt;</span></span> HTTP/1.1 ......</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="number">10</span>/<span class="number">01</span>/<span class="number">2018</span>:<span class="number">12</span>:<span class="number">23</span>:<span class="number">45</span> +<span class="number">0800</span>] GET /<span class="xml"><span class="php"><span class="meta">&lt;?php</span> phpinfo();<span class="meta">?&gt;</span></span> HTTP/1.1 ......</span></div></pre></td></tr></table></figure>
 <h4 id="SSH-log"><a href="#SSH-log" class="headerlink" title="SSH log"></a>SSH log</h4><p>原理同包含日志，利用的是用SSH登陆时会在<code>/var/log/auth.log</code>中记录是否成功:</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh '<span class="php"><span class="meta">&lt;?php</span> phpinfo(); <span class="meta">?&gt;</span></span>'@remotehost</div></pre></td></tr></table></figure>
 <h4 id="包含临时文件"><a href="#包含临时文件" class="headerlink" title="包含临时文件"></a>包含临时文件</h4><p><a href="https://chybeta.github.io/2017/10/08/php文件包含漏洞/" target="_blank" rel="external">文章来源于这里</a></p>
@@ -574,16 +574,16 @@
       <div>
         <ul class="post-copyright">
   <li class="post-copyright-author">
-    <strong>本文作者：</strong>
+    <strong>Post author:</strong>
     empty_xl
   </li>
   <li class="post-copyright-link">
-    <strong>本文链接：</strong>
+    <strong>Post link:</strong>
     <a href="http://yoursite.com/blog/file-inclusion/" title="文件包含漏洞利用与防御">http://yoursite.com/blog/file-inclusion/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>版权声明： </strong>
-    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> unless stating additionally.
   </li>
 </ul>
 
@@ -691,10 +691,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
+            Overview
           </li>
         </ul>
       
@@ -706,7 +706,7 @@
                alt="empty_xl" />
           <p class="site-author-name" itemprop="name">empty_xl</p>
            
-              <p class="site-description motion-element" itemprop="description">hello world!</p>
+              <p class="site-description motion-element" itemprop="description">Hacked By_ EmPTy_xL../ security blog </p>
           
         </div>
         <nav class="site-state motion-element">
@@ -714,8 +714,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">49</span>
-                <span class="site-state-item-name">日志</span>
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">posts</span>
               </a>
             </div>
           
@@ -726,7 +726,7 @@
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
                 <span class="site-state-item-count">33</span>
-                <span class="site-state-item-name">分类</span>
+                <span class="site-state-item-name">categories</span>
               </a>
             </div>
           
@@ -737,7 +737,7 @@
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
                 <span class="site-state-item-count">76</span>
-                <span class="site-state-item-name">标签</span>
+                <span class="site-state-item-name">tags</span>
               </a>
             </div>
           
@@ -824,7 +824,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     
     &emsp;&emsp;|&emsp;

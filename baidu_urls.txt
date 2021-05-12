@@ -1,3 +1,4 @@
+http://yoursite.com/blog/cangpo_encrypted_test/
 http://yoursite.com/blog/exploit-exercises-vulnhub-01/
 http://yoursite.com/blog/exploit-exercises-nebula/
 http://yoursite.com/blog/weblogic/
