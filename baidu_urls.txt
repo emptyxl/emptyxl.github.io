@@ -1,4 +1,4 @@
-http://yoursite.com/blog/cangpo_encrypted_test/
+http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/
 http://yoursite.com/blog/exploit-exercises-vulnhub-01/
 http://yoursite.com/blog/exploit-exercises-nebula/
 http://yoursite.com/blog/weblogic/

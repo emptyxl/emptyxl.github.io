@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="v_OkIhl-1XjKYm3MZSJoivLgfqE3N9Snb2bj2c9YDrw" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="search-engine,shodan,zoomeye,fofa,reconnaissance,gather information" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="The precise reconnaissance is the critical step of the whole ATT&amp;amp;CK flow and seriously impacts the output ratio in the remaining stages. Using the third-party search engines for the Internet-conne">
+<meta name="keywords" content="search-engine,shodan,zoomeye,fofa,reconnaissance,gather information">
+<meta property="og:type" content="article">
+<meta property="og:title" content="some analysis of the Internet spatial search engine">
+<meta property="og:url" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/index.html">
+<meta property="og:site_name" content="empty_xl Blog">
+<meta property="og:description" content="The precise reconnaissance is the critical step of the whole ATT&amp;amp;CK flow and seriously impacts the output ratio in the remaining stages. Using the third-party search engines for the Internet-conne">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/syn_cookie.png">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/shodan_scan.png">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/initiative_scan.png">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/maybe_shodan.png">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/scan_80.png">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/passively_scan.png">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/asn.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/asn_search.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/mmh3.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/nmap.jpg">
+<meta property="og:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/shodan_filter.png">
+<meta property="og:updated_time" content="2021-06-14T09:25:13.118Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="some analysis of the Internet spatial search engine">
+<meta name="twitter:description" content="The precise reconnaissance is the critical step of the whole ATT&amp;amp;CK flow and seriously impacts the output ratio in the remaining stages. Using the third-party search engines for the Internet-conne">
+<meta name="twitter:image" content="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/syn_cookie.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: 'QT63IJTEZX',
+      apiKey: '39726b4e0e80a502f3d0a45f494af02f',
+      indexName: 'blog.nyrae.icu',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/"/>
+
+
+
+
+
+  <title>some analysis of the Internet spatial search engine | empty_xl Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90390918-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?edc3c09a0382806fc3a47d6c11483da0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">empty_xl Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hacked By_ emm myself?</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">some analysis of the Internet spatial search engine</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-05-19T19:38:43+08:00">
+                2021-05-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2021-06-14T17:25:13+08:00">
+                2021-06-14
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Reconnaissance/" itemprop="url" rel="index">
+                    <span itemprop="name">Reconnaissance</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>The precise reconnaissance is the critical step of the whole <code>ATT&amp;CK</code> flow and seriously impacts the output ratio in the remaining stages. Using the third-party search engines for the Internet-connected devices such as <code>Shodan</code>, <code>Fofa</code>, <code>Zoomeye</code>, etc., to discover and sniff the target’s opened services is a effective measure to avoid the detection of the defense team, especially during the offensive and defense confrontation period. In this period, the defense team usually deploys strict strategies and various honeypots to find out the attackers as early as possible. Therefore, any abnormal scanning behavior may expose the entire attack plan, and the appropriate use of these platforms can allow us to obtain the intelligence information more quickly and safely.</p>
+<a id="more"></a>
+<p>So, what is the core effect of these tools? According to my experience, I divide it into four parts.</p>
+<ul>
+<li>Asset discovery and statistics</li>
+<li>Vulnerabilities exploitation based on the version of the services  </li>
+<li>Weakness information discovery through the banner (default passwords or hacked machines)</li>
+<li>0-day vulnerabilities impact assessment</li>
+</ul>
+<p>In this article, we mainly focus on the principles and mechanisms of these search engines and try to confirm our speculations. In addition, we will record some exciting content. As for usage, we put it in the appendix, and you can use it as a cheat sheet.</p>
+<h3 id="Port-Scan"><a href="#Port-Scan" class="headerlink" title="Port Scan"></a>Port Scan</h3><p>Most search engines claim that the whole network data is collected in their database, and according to the experience, the new data will be updated within one day. So, how do they scan the entire network? The most common way is to use <code>zmap</code>, <code>masscan</code> and other tools to perform a quick port scan and then use nmap to perform a version detection on opened ports.</p>
+<blockquote>
+<p>Zmap and masscan are well-known port scanning tools, which claim to scan the entire network ports within 45 minutes. The reason why the speed is so fast is that it uses a stateless scanning method.<br>As you know, the theoretical basis of port scanning is that the server returns different data for TCP packets with different flags.The client sends an SYN packet with the special seq number value. After receiving this packet, the opened server responds to the SYN+ACK packet and sets the ack number to seq+1. In the end, the client responds to an ACK packet to complete the connection establishment. This process is also the familiar TCP Three-way Handshake.<br>Note here that the value of the ack field in the response data packet response by the server can be predicted, so the process of sending SYN packet and receiving SYN+ACK packet can be separated by two programs to improve the efficiency of the scanning, and we could set a special sequence number value to indicate different scanned targets.The figure below is the implementation in masscan.</p>
+</blockquote>
+<img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/syn_cookie.png" alt="syn_cookie" title="syn_cookie">
+<p>To test our hypothesis, we deployed several honeypots in the public cloud to capture the behavior of the scan.We opened the top 1000 ports and excluded 80, 443, 3306, and other common service ports to eliminate the interference of worms and irrelevant scanners.In addition to passive waiting for search engines to scan our server, we used the <a href="https://help.shodan.io/the-basics/on-demand-scanning" target="_blank" rel="external"><code>Shodan On-demand Scaning</code></a> service to initiate an active scan request.</p>
+<p>According to the results of the detection, we can get some interesting conclusions.First, let’s look at the result of active scanning.(I don’t know why I always get this message, even when all the ports are opened…if you know, please told me. thx. )</p>
+<img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/shodan_scan.png" alt="shodan_scan" title="shodan_scan">
+<img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/initiative_scan.png" alt="active_scan" title="active_scan">
+<img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/maybe_shodan.png" alt="maybe it's the shodan scanner's IP" title="maybe it's the shodan scanner's IP">
+<p>After we submitted the scan task to shodan, we captured the data packet shown above on our server. According to the IP information, it can be basically determined that the IP starting with 64 is the scan source IP of the <code>Shodan</code>.Our server received about 500 packets in total. If we exclude the banner scan packets, there are about 300+ packets left. It shows that <code>Shodan</code> may not scan all ports. It just scans the top 300 or top 1000 ports. From the data packet, it can be seen that Shodan does use a scanning method similar to zmap and masscan, using the syn packet to detect whether the port is open.The difference is that <code>Shodan</code> filled the <code>ip_id</code> and <code>window_size</code> fields with random values, and <code>zmap</code> set <code>ip_id</code> to 54321 and set <code>window_size</code> to 65535. In addition, it used the same source IP to scan different ports in this active task.</p>
+<img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/scan_80.png" alt="scan the 80 port" title="scan the 80 port">
+<p>When a certain port is opened, it will perform service detection according to the built-in strategy. For instance, it would gather main page information, robots access rules, sitemap document, icon, etc. Note that the value of <code>window_size</code> was set to 64240 rather than a random value, which may be caused by different program functions.</p>
+<img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/passively_scan.png" alt="passive_scan" title="passive_scan">
+<p>As for the result of the passive scanning, we reversely determined the specific scan data package based on the included results. Different from the active scanning task, the passive scan does not show that the same source IP scans a large number of different ports . We opened all ports, and only a few port information was included in one day.</p>
+<p>We speculate that the main reason is to avoid detection and decrease the possibility of being intercepted by security products. The entire scanning task will be separated into many sub-items, and each scan source IP will only get one task to scan a certain fixed port of several different segments of IPs within a period of time.</p>
+<h3 id="Version-Detection"><a href="#Version-Detection" class="headerlink" title="Version Detection"></a>Version Detection</h3><p>Similar to <code>Nmap</code>, <code>Shodan</code> maintains many version detection strategies. According to public information, its detection protocol supports more than 200 types. The service and version information is obtained by sending data packets of different protocols and different contents and then analyzing the information returned by the server. In this article, we do not care about the implementation of it. However, if you are interested, you can check the Nmap manual.</p>
+<p>From this page <a href="http://plcscan.org/blog/2020/11/research-report-of-renowned-internet-census-organization-shodan/" target="_blank" rel="external">plcscan.org</a>, you can see they list the most common protocols that shodan use, including some industrial control protocols.</p>
+<h3 id="Some-Special-Fields"><a href="#Some-Special-Fields" class="headerlink" title="Some Special Fields"></a>Some Special Fields</h3><h4 id="ASN"><a href="#ASN" class="headerlink" title="ASN"></a>ASN</h4><p>When your evaluation object is a large enterprise, the search method based on IP and IP segment may become inadequate. Maybe the <code>ASN</code> field can help us quickly locate assets.</p>
+<blockquote>
+<p>An autonomous system (AS) is a collection of connected Internet Protocol (IP) routing prefixes under the control of one or more network operators on behalf of a single administrative entity or domain that presents a common, clearly defined routing policy to the Internet.</p>
+<p>A regional Internet registry (RIR) is an organization that manages the allocation and registration of Internet number resources within a region of the world. Internet number resources include IP addresses and autonomous system (AS)) numbers.</p>
+</blockquote>
+<p>You can simply understand that 5 RIRs manage IP addresses around the world. When qualified large-scale enterprises and organizations need to apply for IP, they apply to these institutions to obtain IP address segments. Enterprises and organizations have the right to speak for the IP segments applied for. These IP segments constitute an autonomous system, and the id of the autonomous system becomes the <code>asn</code> number.</p>
+<p>When IPs in different ASN areas need to communicate, they will often communicate through the shortest and best quality line, which is the function of the BGP protocol.</p>
+<p>In common, the ASN owned by a large enterprise or organization is limited so that you can search their assets through the <code>asn</code> number. Here we recommend a website for querying <code>asn</code> information, <a href="https://hackertarget.com/as-ip-lookup/" target="_blank" rel="external">hackertarget</a>. If you want to know how many ports are exposed to the public in Tencent, you could use this website to obtain the whole ASN number of Tencent and search the result on search engines.</p>
+<img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/asn.jpg" alt="search result" title="search result">
+<img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/asn_search.jpg" alt="search via ASN" title="search via ASN">
+<p>Compared with <code>org</code>, <code>isp</code>, <code>ip</code> and other fields, the query method of <code>asn</code> can get the data we need more accurately.</p>
+<h4 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h4><p>In the manual of these search engines, you can know an interesting trick: they do a hash calculation of the banner data and icon data and represent it as <code>hash</code> or http.favicon.hash. The hash value is a string of numbers rather than fixed-length characters, and you must be curious about its principle. It’s called <code>mmh3</code> hash algorithm.</p>
+<img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/mmh3.jpg" alt="mmh3" title="mmh3">
+<h3 id="spoof-the-result-of-the-search-engines"><a href="#spoof-the-result-of-the-search-engines" class="headerlink" title="spoof the result of the search engines"></a>spoof the result of the search engines</h3><p>Let’s think of a different perspective. If you are the person in charge of a large enterprise, what is the value of search engines to you? Maybe as you think, you don’t want your assets to be included in third-party search engines. The easiest way is close all ports to the public network, which is obviously impossible to achieve. Therefore, port scanning spoofing may become an effective way to increase the cost of attackers. It means that through certain technical methods, search engines or attackers think that many ports are open. So, the question is, how to spoof?</p>
+<p>As we mentioned before, the port scan judgment stage uses the return data of the three-way handshake to determine whether it is open. As we all know, the closed port will return a <code>reset</code> packet when a client starts a connection. If we construct a corresponding <code>syn+ack</code> packet based on the content of the <code>syn</code> packet and arrive at the client earlier than the <code>reset</code> packet, the client program will think that the service port is open.</p>
+<p>Let’s do a proof of concept. We have deployed a set of programs in an environment that the public network can access. The program mainly consists of two parts, using iptables for traffic forwarding and monitoring <code>syn</code> packets from the network card and returning fake <code>syn+ack</code> packets. Of course, you can also use the open-source program(<a href="https://github.com/drk1wi/portspoof" target="_blank" rel="external">portspoof</a>).</p>
+<p>After all of the steps, we did a port scan through nmap、zmap, and masscan. As shown in the figure, everything is as we expected.</p>
+<img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/nmap.jpg" alt="nmap_scan_result" title="nmap_scan_result">
+<p>Now there is one last question, is this method effective for search engines? The conclusion here is affirmative, but different search engines have some different nuances and banner scanning features, such as confirmation methods, banner scanning features, <code>win_size</code>, etc.</p>
+<h3 id="Appendix-Usage"><a href="#Appendix-Usage" class="headerlink" title="Appendix(Usage)"></a>Appendix(Usage)</h3><h4 id="Shodan"><a href="#Shodan" class="headerlink" title="Shodan"></a>Shodan</h4><img src="/blog/some-analysis-of-the-Internet-spatial-search-engine/shodan_filter.png" alt="shodan filter fields" title="shodan filter fields">
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Example</div><div class="line"><span class="symbol"></span></div><div class="line">port:<span class="number">22</span>,<span class="number">80</span>,<span class="number">8080</span>,<span class="number">443</span> <span class="string">country:</span>CN,JP -<span class="string">hash:</span><span class="number">-0</span></div><div class="line"></div><div class="line">ssl.<span class="string">version:</span>tlsv1<span class="number">.3</span> HTTP -<span class="string">port:</span><span class="number">443</span></div><div class="line"><span class="symbol"></span></div><div class="line">port:<span class="number">80</span> <span class="string">country:</span>CN http.<span class="string">title:</span><span class="string">"Apache2 Ubuntu Default Page"</span></div><div class="line"><span class="symbol"></span></div><div class="line">port:<span class="number">8080</span> <span class="string">country:</span>CN http.<span class="string">title:</span><span class="string">"Apache Tomcat/"</span> http.favicon.<span class="string">hash:</span><span class="number">-297069493</span></div></pre></td></tr></table></figure>
+<h4 id="Fofa"><a href="#Fofa" class="headerlink" title="Fofa"></a>Fofa</h4><ul>
+<li>title=”beijing”</li>
+<li>header=”abc”</li>
+<li>body=”abc”</li>
+<li>domain=”qq.com”</li>
+<li>host=”.gov.cn”</li>
+<li>icp=”京ICP证030173号”</li>
+<li>js_name=”js/jquery.js”</li>
+<li>js_md5=”82ac3f14327a8b7ba49baa208d4eaa15”</li>
+<li>icon_hash=”-247388890”</li>
+<li>port=”443”</li>
+<li>ip=”1.1.1.1”</li>
+<li>ip=”220.181.111.1/24”</li>
+<li>status_code=”402”</li>
+<li>protocol=”https”</li>
+<li>city=”Hangzhou”</li>
+<li>region=”Zhejiang”</li>
+<li>country=”CN”</li>
+<li>cert=”google”</li>
+<li>cert.subject=”Oracle Corporation”</li>
+<li>cert.issuer=”DigiCert”</li>
+<li>cert.is_valid=true</li>
+<li>banner=users &amp;&amp; protocol=ftp</li>
+<li>is_fraud=false</li>
+<li>is_honeypot=false</li>
+<li>type=service</li>
+<li>os=windows</li>
+<li>server==”Microsoft-IIS/7.5”</li>
+<li>app=”Apache”</li>
+<li>after=”2017” &amp;&amp; before=”2017-10-01”</li>
+<li>asn=”19551”</li>
+<li>org=”Amazon.com, Inc.”</li>
+<li>base_protocol=”udp”</li>
+<li>is_ipv6=true</li>
+<li>is_domain=true</li>
+<li>ip_ports=”80,443” 或者 ports=”80,443”</li>
+<li>ip_country=”CN”</li>
+<li>ip_region=”Zhejiang”</li>
+<li>ip_city=”Hangzhou”</li>
+<li>ip_after=”2019-01-01”</li>
+<li>ip_before=”2019-01-01”</li>
+<li>port_size=”6”</li>
+<li>port_size_gt=”6”</li>
+<li>port_size_lt=”12”</li>
+<li>ip_ports=”80,161”</li>
+</ul>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">title</span>=<span class="string">"powered by"</span> &amp;&amp; <span class="built_in">title</span>!=<span class="string">"discuz"</span></div><div class="line">body=<span class="string">"content=WordPress"</span> || (<span class="built_in">header</span>=<span class="string">"X-Pingback"</span> &amp;&amp; <span class="built_in">header</span>=<span class="string">"/xmlrpc.php"</span> &amp;&amp; body=<span class="string">"/wp-includes/"</span>) &amp;&amp; host=<span class="string">"gov.cn"</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    empty_xl
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/" title="some analysis of the Internet spatial search engine">http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Reconnaissance/" rel="tag"><i class="fa fa-tag"></i> Reconnaissance</a>
+          
+            <a href="/tags/Search-Engine/" rel="tag"><i class="fa fa-tag"></i> Search-Engine</a>
+          
+            <a href="/tags/Shodan/" rel="tag"><i class="fa fa-tag"></i> Shodan</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/exploit-exercises-vulnhub-01/" rel="next" title="vulnhub 渗透测试练习 lampiao & FristiLeaks">
+                <i class="fa fa-chevron-left"></i> vulnhub 渗透测试练习 lampiao & FristiLeaks
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+    var gitment = new Gitment({
+      // 根据文章标题设置唯一评论id
+    // id: '', // optional
+    owner: 'emptyxl',
+    repo: 'emptyxl.github.io',
+    oauth: {
+      client_id: 'fa7413e3c0207a96ae03',
+      client_secret: 'a599fef18d25ba5c813d2e437260892e146462a2',
+      }
+    })
+    gitment.render('comments')
+    </script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="empty_xl" />
+          <p class="site-author-name" itemprop="name">empty_xl</p>
+           
+              <p class="site-description motion-element" itemprop="description">Hacked By_ EmPTy_xL../ security blog </p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/emptyxl" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/mail/index.html" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-nd.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Port-Scan"><span class="nav-number">1.</span> <span class="nav-text">Port Scan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Version-Detection"><span class="nav-number">2.</span> <span class="nav-text">Version Detection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Some-Special-Fields"><span class="nav-number">3.</span> <span class="nav-text">Some Special Fields</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ASN"><span class="nav-number">3.1.</span> <span class="nav-text">ASN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hash"><span class="nav-number">3.2.</span> <span class="nav-text">hash</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spoof-the-result-of-the-search-engines"><span class="nav-number">4.</span> <span class="nav-text">spoof the result of the search engines</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Appendix-Usage"><span class="nav-number">5.</span> <span class="nav-text">Appendix(Usage)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Shodan"><span class="nav-number">5.1.</span> <span class="nav-text">Shodan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fofa"><span class="nav-number">5.2.</span> <span class="nav-text">Fofa</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    
+    &emsp;&emsp;|&emsp;
+  </span>
+  <span class="author" itemprop="copyrightHolder">empty_xl</span>
+</div>
+
+
+<div class="powered-by">
+  
+  Power &mdash; Hexo
+</div>
+
+<div class="theme-info">
+  
+  Theme &mdash; NexT.Mist
+</div>
+<div>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
