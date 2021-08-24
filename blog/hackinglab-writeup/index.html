@@ -119,7 +119,7 @@
 <meta property="og:image" content="http://yoursite.com/blog/hackinglab-writeup/3-53.png">
 <meta property="og:image" content="http://yoursite.com/blog/hackinglab-writeup/4-5.png">
 <meta property="og:image" content="http://yoursite.com/blog/hackinglab-writeup/4-5-2.png">
-<meta property="og:updated_time" content="2017-10-24T11:20:00.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:33:01.597Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HackingLab writeup">
 <meta name="twitter:description" content="HackingLab 题目比较基础，非常适合入门。 选择题都比较基础，很简单，略过。 基础关1.key在哪里？直接看源码 2.再加密一次你就得到key啦~ 加密之后的数据为xrlvf23xfqwsxsqf  这里的知识点是ROT-13，密文加密后会得到明文，找个解密网站，得到key。">
@@ -399,8 +399,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2017-10-24T19:20:00+08:00">
-                2017-10-24
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:33:01+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -418,18 +418,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index">
-                    <span itemprop="name">CTF</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/writeup/" itemprop="url" rel="index">
+                  <a href="/categories/writeup/" itemprop="url" rel="index">
                     <span itemprop="name">writeup</span>
                   </a>
                 </span>
@@ -487,11 +476,11 @@
 </blockquote>
 <p>直接找个在线md5解密<a href="http://www.cmd5.com/" target="_blank" rel="external">cmd5</a>。<br><br></p>
 <h4 id="5-种族歧视"><a href="#5-种族歧视" class="headerlink" title="5.种族歧视"></a>5.种族歧视</h4><blockquote>
-<p>小明同学今天访问了一个网站，竟然不允许中国人访问！太坑了，于是小明同学决心一定要进去一探究竟！ </p>
+<p>小明同学今天访问了一个网站，竟然不允许中国人访问！太坑了，于是小明同学决心一定要进去一探究竟！</p>
 </blockquote>
 <p>跟国籍有关的只有<code>Accept-Language</code>,改成英文就可以:<br><img src="/blog/hackinglab-writeup/2-5.png" alt="Accept-Language: en-US" title="Accept-Language: en-US"><br><br></p>
 <h4 id="6-HAHA浏览器"><a href="#6-HAHA浏览器" class="headerlink" title="6.HAHA浏览器"></a>6.HAHA浏览器</h4><blockquote>
-<p>据说信息安全小组最近出了一款新的浏览器，叫HAHA浏览器，有些题目必须通过HAHA浏览器才能答对。小明同学坚决不要装HAHA浏览器，怕有后门，但是如何才能过这个需要安装HAHA浏览器才能过的题目呢？ </p>
+<p>据说信息安全小组最近出了一款新的浏览器，叫HAHA浏览器，有些题目必须通过HAHA浏览器才能答对。小明同学坚决不要装HAHA浏览器，怕有后门，但是如何才能过这个需要安装HAHA浏览器才能过的题目呢？</p>
 </blockquote>
 <p><code>User-Agent</code>字段代表了<code>Request</code>的浏览器类型，直接改成<code>HAHA</code>。<br><img src="/blog/hackinglab-writeup/2-6.png" alt="HAHA" title="HAHA">  </p>
 <h4 id="7-key究竟在哪里呢？"><a href="#7-key究竟在哪里呢？" class="headerlink" title="7.key究竟在哪里呢？"></a>7.key究竟在哪里呢？</h4><blockquote>
@@ -499,9 +488,9 @@
 </blockquote>
 <p>抓包分析，看到<code>Response</code>头里面有<code>key</code><br><img src="/blog/hackinglab-writeup/2-7.png" alt="web-key" title="web-key"><br><br>  </p>
 <h4 id="8-key又找不到了"><a href="#8-key又找不到了" class="headerlink" title="8.key又找不到了"></a>8.key又找不到了</h4><blockquote>
-<p>小明这次可真找不到key去哪里了，你能帮他找到key吗？ </p>
+<p>小明这次可真找不到key去哪里了，你能帮他找到key吗？</p>
 </blockquote>
-<img src="/blog/hackinglab-writeup/2-8.png" alt="302" title="302"> 
+<img src="/blog/hackinglab-writeup/2-8.png" alt="302" title="302">
 <p>抓包发现<code>302</code>重定向，直接访问<code>url</code>。</p>
 <h4 id="9-冒充登陆用户"><a href="#9-冒充登陆用户" class="headerlink" title="9.冒充登陆用户"></a>9.冒充登陆用户</h4><blockquote>
 <p>小明来到一个网站，还是想要key，但是却怎么逗登陆不了，你能帮他登陆吗？  </p>
@@ -552,7 +541,7 @@
 <h4 id="5-逗比验证码第一期"><a href="#5-逗比验证码第一期" class="headerlink" title="5.逗比验证码第一期"></a>5.逗比验证码第一期</h4><blockquote>
 <p>逗比的验证码，有没有难道不一样吗？  </p>
 </blockquote>
-<p>验证码使用后不过期，上<code>BurpSuite</code><br><img src="/blog/hackinglab-writeup/3-5.png" alt="设置pwd为需要爆破的内容" title="设置pwd为需要爆破的内容"><br>设置<code>payload</code>取值<br><img src="/blog/hackinglab-writeup/3-52.png" alt="payload取值" title="payload取值"><br>attack，根据<code>length</code>排序，发现有一个包不一致，得到key:<br><img src="/blog/hackinglab-writeup/3-53.png" alt="result" title="result"> </p>
+<p>验证码使用后不过期，上<code>BurpSuite</code><br><img src="/blog/hackinglab-writeup/3-5.png" alt="设置pwd为需要爆破的内容" title="设置pwd为需要爆破的内容"><br>设置<code>payload</code>取值<br><img src="/blog/hackinglab-writeup/3-52.png" alt="payload取值" title="payload取值"><br>attack，根据<code>length</code>排序，发现有一个包不一致，得到key:<br><img src="/blog/hackinglab-writeup/3-53.png" alt="result" title="result"></p>
 <h4 id="6-逗比验证码第二期"><a href="#6-逗比验证码第二期" class="headerlink" title="6.逗比验证码第二期"></a>6.逗比验证码第二期</h4><blockquote>
 <p>验证便失效的验证码  </p>
 </blockquote>
@@ -562,10 +551,10 @@
 </blockquote>
 <p><code>session</code>验证，把 cookies 的内容删掉就好。<br><br>  </p>
 <h4 id="8-微笑一下就能过关了"><a href="#8-微笑一下就能过关了" class="headerlink" title="8.微笑一下就能过关了"></a>8.微笑一下就能过关了</h4><blockquote>
-<p>尼玛，碰到这样的题我能笑得出来嘛… </p>
+<p>尼玛，碰到这样的题我能笑得出来嘛…</p>
 </blockquote>
 <p>看源码，发现<code>源代码</code>是一个链接，可以看到后台源码，点击看一下：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span>  </div><div class="line">    header(<span class="string">"Content-type: text/html; charset=utf-8"</span>);</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'view-source'</span>])) &#123; </div><div class="line">        show_source(<span class="keyword">__FILE__</span>); </div><div class="line">        <span class="keyword">exit</span>(); </div><div class="line">    &#125; </div><div class="line"></div><div class="line">    <span class="keyword">include</span>(<span class="string">'flag.php'</span>); </div><div class="line"></div><div class="line">    $smile = <span class="number">1</span>;  </div><div class="line"></div><div class="line">   <span class="keyword">if</span> (!<span class="keyword">isset</span> ($_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/\./'</span>, $_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/%/'</span>, $_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/[0-9]/'</span>, $_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/http/'</span>, $_GET[<span class="string">'^_^'</span>]) ) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/https/'</span>, $_GET[<span class="string">'^_^'</span>]) ) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/ftp/'</span>, $_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/telnet/'</span>, $_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/_/'</span>, $_SERVER[<span class="string">'QUERY_STRING'</span>])) $smile = <span class="number">0</span>; </div><div class="line">    <span class="keyword">if</span> ($smile) &#123; </div><div class="line">        <span class="keyword">if</span> (@file_exists ($_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    &#125;  </div><div class="line">    <span class="keyword">if</span> ($smile) &#123; </div><div class="line">        $smile = @file_get_contents ($_GET[<span class="string">'^_^'</span>]);  </div><div class="line">        <span class="keyword">if</span> ($smile === <span class="string">"(●'◡'●)"</span>) <span class="keyword">die</span>($flag);  </div><div class="line">    &#125;  </div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span>  </div><div class="line">    header(<span class="string">"Content-type: text/html; charset=utf-8"</span>);</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'view-source'</span>])) &#123;</div><div class="line">        show_source(<span class="keyword">__FILE__</span>);</div><div class="line">        <span class="keyword">exit</span>();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">include</span>(<span class="string">'flag.php'</span>);</div><div class="line"></div><div class="line">    $smile = <span class="number">1</span>;  </div><div class="line"></div><div class="line">   <span class="keyword">if</span> (!<span class="keyword">isset</span> ($_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/\./'</span>, $_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/%/'</span>, $_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/[0-9]/'</span>, $_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/http/'</span>, $_GET[<span class="string">'^_^'</span>]) ) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/https/'</span>, $_GET[<span class="string">'^_^'</span>]) ) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/ftp/'</span>, $_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/telnet/'</span>, $_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">if</span> (preg_match (<span class="string">'/_/'</span>, $_SERVER[<span class="string">'QUERY_STRING'</span>])) $smile = <span class="number">0</span>;</div><div class="line">    <span class="keyword">if</span> ($smile) &#123;</div><div class="line">        <span class="keyword">if</span> (@file_exists ($_GET[<span class="string">'^_^'</span>])) $smile = <span class="number">0</span>;  </div><div class="line">    &#125;  </div><div class="line">    <span class="keyword">if</span> ($smile) &#123;</div><div class="line">        $smile = @file_get_contents ($_GET[<span class="string">'^_^'</span>]);  </div><div class="line">        <span class="keyword">if</span> ($smile === <span class="string">"(●'◡'●)"</span>) <span class="keyword">die</span>($flag);  </div><div class="line">    &#125;  </div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
 <p>可以看到要使<code>^_^</code>字段满足所有内容才可以，算是一道<code>php</code>审计,需要知道一些知识。<br><code>$_SERVER[&#39;QUERY_STRING&#39;]</code>：QUERY_STRING就是URL后接的参数，如www.baidu.com/?a=b，a=b就是QUERY_STRING。<br>data伪协议：<code>data:[&lt;MIME-type&gt;][;charset=&lt;encoding&gt;][;base64],&lt;data&gt;</code><br><code>file_exists</code>对data指向的内容判断为不存在<br>根据以上，可以得到<code>^.^=data://text/plain;charset=unicode,(●’◡’●)</code>即可得到<code>key</code><br><br>  </p>
 <h4 id="9-逗比的手机验证码"><a href="#9-逗比的手机验证码" class="headerlink" title="9.逗比的手机验证码"></a>9.逗比的手机验证码</h4><blockquote>
 <p>你的手机号码是13388886666，验证码将会以弹窗的形式给出</p>
@@ -591,7 +580,7 @@
 <p>没什么说的,基本操作<code>&lt;img src=1 onerror=alert(HackingLab)&gt;</code><br><br></p>
 <h4 id="14-XSS基础3-检测与构造"><a href="#14-XSS基础3-检测与构造" class="headerlink" title="14.XSS基础3:检测与构造"></a>14.XSS基础3:检测与构造</h4><p><code>alert&#39; onmouseover=&quot;alert(HackingLab)&quot;</code><br><br></p>
 <h4 id="15-Principle很重要的XSS"><a href="#15-Principle很重要的XSS" class="headerlink" title="15.Principle很重要的XSS"></a>15.Principle很重要的XSS</h4><blockquote>
-<p>原理/原则/理念很重要…..不是所有的xss都叫特仑苏.. ^_^<br>Take it easy! </p>
+<p>原理/原则/理念很重要…..不是所有的xss都叫特仑苏.. ^_^<br>Take it easy!</p>
 </blockquote>
 <p>常规方法没想到，有个取巧的办法，直接拦截response包然后加上<code>&lt;script&gt;alert(HackingLab)&lt;/script&gt;</code>即可</p>
 <h3 id="注入关"><a href="#注入关" class="headerlink" title="注入关"></a>注入关</h3><h4 id="1-最简单的SQL注入"><a href="#1-最简单的SQL注入" class="headerlink" title="1.最简单的SQL注入"></a>1.最简单的SQL注入</h4><p>发现提示是<code>login as admin</code>,直接构造<code>admin&#39; or &#39;1&#39;=&#39;1</code>即可</p>
@@ -620,7 +609,7 @@
 <p>小明经过学习，终于对SQL注入有了理解，她知道原来sql注入的发生根本原因还是数据和语句不能正确分离的原因，导致数据作为sql语句执行；但是是不是只要能够控制sql语句的一部分就能够来利用获取数据呢？小明经过思考知道，where条件可控的情况下，实在是太容易了，但是如果是在limit条件呢？</p>
 </blockquote>
 <p>首先尝试正常修改<code>start</code>和<code>num</code>值，发现<code>num</code>不会改变最终结果，尝试<code>start=5 or 1=1&amp;num=5</code>时，会显示:  </p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">You have an error in your SQL syntax; <span class="keyword">check</span> the <span class="keyword">manual</span> that corresponds <span class="keyword">to</span> your MySQL <span class="keyword">server</span> <span class="keyword">version</span> <span class="keyword">for</span> the <span class="keyword">right</span> syntax <span class="keyword">to</span> <span class="keyword">use</span> near <span class="string">'or1=1,5'</span> <span class="keyword">at</span> line <span class="number">1</span> </div><div class="line"><span class="keyword">Warning</span>: mysql_fetch_row() expects parameter <span class="number">1</span> <span class="keyword">to</span> be <span class="keyword">resource</span>, <span class="built_in">boolean</span> given <span class="keyword">in</span> sqli5_5ba0bba6a6d1b30b956843f757889552/index.php <span class="keyword">on</span> line <span class="number">51</span></div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">You have an error in your SQL syntax; <span class="keyword">check</span> the <span class="keyword">manual</span> that corresponds <span class="keyword">to</span> your MySQL <span class="keyword">server</span> <span class="keyword">version</span> <span class="keyword">for</span> the <span class="keyword">right</span> syntax <span class="keyword">to</span> <span class="keyword">use</span> near <span class="string">'or1=1,5'</span> <span class="keyword">at</span> line <span class="number">1</span></div><div class="line"><span class="keyword">Warning</span>: mysql_fetch_row() expects parameter <span class="number">1</span> <span class="keyword">to</span> be <span class="keyword">resource</span>, <span class="built_in">boolean</span> given <span class="keyword">in</span> sqli5_5ba0bba6a6d1b30b956843f757889552/index.php <span class="keyword">on</span> line <span class="number">51</span></div></pre></td></tr></table></figure>
 <p>发现<code>number无效时</code>好像会显示第一个。题目提示了<code>limit</code>注入，所以SQL语句应该是这样的:</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">field</span> <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> &gt; <span class="number">0</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="keyword">id</span> <span class="keyword">LIMIT</span> <span class="keyword">start</span>,<span class="keyword">num</span>【注入点】</div></pre></td></tr></table></figure>
 <p>由于<code>union</code>无法在<code>order by</code>语句后面，通过查看select用法，可以知道后面还有<code>procedure</code>和<code>into outfile</code>,后者这里无法利用，则尝试使用<code>procedure</code> <code>MySQL</code>默认只有<code>analyse()</code>,<a href="https://dev.mysql.com/doc/refman/5.7/en/procedure-analyse.html" target="_blank" rel="external">analyse</a>的用法在这里。</p>
@@ -645,7 +634,7 @@
 <p>XPATH syntax error: ‘%id,title,contents,isread’<br>XPATH syntax error: ‘%id,username,password,lastloginI’<br>分别得到每个表的字段值</p>
 <h5 id="得到内容"><a href="#得到内容" class="headerlink" title="得到内容"></a>得到内容</h5><p>查表<code>user</code>发现有3个记录，id为1，2，12889，且12889的<code>username</code>为<code>flag</code>，尝试获取其<code>password</code>值</p>
 <figure class="highlight cal"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://lab1.xseclab.com/sqli5_5ba0bba6a6d1b30b956843f757889552/index.php?start=<span class="number">1</span> <span class="function"><span class="keyword">procedure</span> <span class="title">analyse</span><span class="params">(extractvalue(0x21,concat(0x25,(select group_concat(password)</span> <span class="title">from</span> <span class="title">user</span> <span class="title">where</span> <span class="title">id</span>=12889))),1)%23&amp;<span class="title">num</span>=1</span></div></pre></td></tr></table></figure>
-<p>XPATH syntax error: ‘%myflagishere’ </p>
+<p>XPATH syntax error: ‘%myflagishere’</p>
 <h4 id="5-邂逅"><a href="#5-邂逅" class="headerlink" title="5.邂逅"></a>5.邂逅</h4><blockquote>
 <p>小明今天出门看见了一个漂亮的帅哥和漂亮的美女，于是他写到了他的日记本里。</p>
 </blockquote>
@@ -762,8 +751,6 @@
         <div class="post-tags">
           
             <a href="/tags/writeup/" rel="tag"><i class="fa fa-tag"></i> writeup</a>
-          
-            <a href="/tags/security/" rel="tag"><i class="fa fa-tag"></i> security</a>
           
             <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
           
@@ -885,7 +872,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -896,7 +883,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -907,7 +894,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

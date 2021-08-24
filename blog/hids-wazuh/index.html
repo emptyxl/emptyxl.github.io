@@ -80,7 +80,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="web security,hids" />
+  <meta name="keywords" content="hids,wazuh" />
 
 
 
@@ -97,7 +97,7 @@
 
 
 <meta name="description" content="Wazuh，一款以ossec作为引擎的主机入侵检测系统。通过与ELK的结合，便于管理员通过日志平台查看系统日志信息、告警信息、规则配置信息等。其采用C/S的模式，客户端通过agent收集数据发送给wazuh server，然后进行分析处理结果。  与ossec类似，我们通过介绍他的主要功能更好的了解系统的原理。主要分了以下几个部分：  日志分析 文件完整性检验 异常和恶意软件检测 监控安全策略">
-<meta name="keywords" content="web security,hids">
+<meta name="keywords" content="hids,wazuh">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HIDS-Wazuh 功能分析">
 <meta property="og:url" content="http://yoursite.com/blog/hids-wazuh/index.html">
@@ -105,7 +105,7 @@
 <meta property="og:description" content="Wazuh，一款以ossec作为引擎的主机入侵检测系统。通过与ELK的结合，便于管理员通过日志平台查看系统日志信息、告警信息、规则配置信息等。其采用C/S的模式，客户端通过agent收集数据发送给wazuh server，然后进行分析处理结果。  与ossec类似，我们通过介绍他的主要功能更好的了解系统的原理。主要分了以下几个部分：  日志分析 文件完整性检验 异常和恶意软件检测 监控安全策略">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://yoursite.com/blog/hids-wazuh/log.png">
-<meta property="og:updated_time" content="2018-07-22T11:39:59.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:34:46.665Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HIDS-Wazuh 功能分析">
 <meta name="twitter:description" content="Wazuh，一款以ossec作为引擎的主机入侵检测系统。通过与ELK的结合，便于管理员通过日志平台查看系统日志信息、告警信息、规则配置信息等。其采用C/S的模式，客户端通过agent收集数据发送给wazuh server，然后进行分析处理结果。  与ossec类似，我们通过介绍他的主要功能更好的了解系统的原理。主要分了以下几个部分：  日志分析 文件完整性检验 异常和恶意软件检测 监控安全策略">
@@ -385,8 +385,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-07-22T19:39:59+08:00">
-                2018-07-22
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:34:46+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -404,8 +404,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web-security/" itemprop="url" rel="index">
-                    <span itemprop="name">web security</span>
+                  <a href="/categories/security-product-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">security product analysis</span>
                   </a>
                 </span>
 
@@ -459,7 +459,7 @@
 </ul>
 <a id="more"></a>
 <h3 id="日志分析"><a href="#日志分析" class="headerlink" title="日志分析"></a><a herf="#log"></a>日志分析</h3><p>获取系统日志或者设备远程系统日志进行实时分析，通过日志识别应用程序或系统错误、配置错误、入侵企图、违规操作等安全问题。  </p>
-<img src="/blog/hids-wazuh/log.png" alt="Log analysis" title="Log analysis"> 
+<img src="/blog/hids-wazuh/log.png" alt="Log analysis" title="Log analysis">
 <h4 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h4><p>日志配置如下，可以看到支持linux、windows、windows时间、windows关到:</p>
 <figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">[linux]</div><div class="line"><span class="params">&lt;localfile&gt;</span></div><div class="line"><span class="params">&lt;location&gt;</span><span class="meta-keyword">/var/</span>log/example.log<span class="params">&lt;/location&gt;</span></div><div class="line"><span class="params">&lt;log_format&gt;</span>syslog<span class="params">&lt;/log_format&gt;</span></div><div class="line"><span class="params">&lt;/localfile&gt;</span></div><div class="line"></div><div class="line">[windows event]</div><div class="line"><span class="params">&lt;localfile&gt;</span></div><div class="line"><span class="params">&lt;location&gt;</span>Security<span class="params">&lt;/location&gt;</span></div><div class="line"><span class="params">&lt;log_format&gt;</span>eventlog<span class="params">&lt;/log_format&gt;</span></div><div class="line"><span class="params">&lt;/localfile&gt;</span></div><div class="line"></div><div class="line">[windows eventchannel]</div><div class="line"><span class="params">&lt;localfile&gt;</span></div><div class="line"><span class="params">&lt;location&gt;</span>Microsoft-Windows-PrintService/Operational<span class="params">&lt;/location&gt;</span></div><div class="line"><span class="params">&lt;log_format&gt;</span>eventchannel<span class="params">&lt;/log_format&gt;</span></div><div class="line"><span class="params">&lt;/localfile&gt;</span></div><div class="line"></div><div class="line">[windows rsyslog]</div><div class="line"><span class="params">&lt;ossec_config&gt;</span></div><div class="line"><span class="params">&lt;remote&gt;</span></div><div class="line"><span class="params">&lt;connection&gt;</span>syslog<span class="params">&lt;/connection&gt;</span></div><div class="line"><span class="params">&lt;allowed-ips&gt;</span><span class="number">192.168</span><span class="number">.2</span><span class="number">.0</span>/<span class="number">24</span><span class="params">&lt;/allowed-ips&gt;</span></div><div class="line"><span class="params">&lt;/remote&gt;</span></div><div class="line"><span class="params">&lt;ossec_config&gt;</span></div></pre></td></tr></table></figure>
 <h4 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h4><p>主要分两步，解码和规则匹配。以日志记录为例：</p>
@@ -567,9 +567,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/web-security/" rel="tag"><i class="fa fa-tag"></i> web security</a>
-          
             <a href="/tags/hids/" rel="tag"><i class="fa fa-tag"></i> hids</a>
+          
+            <a href="/tags/security-product/" rel="tag"><i class="fa fa-tag"></i> security product</a>
           
         </div>
       
@@ -592,8 +592,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/WAF/" rel="prev" title="WAF 简介">
-                WAF 简介 <i class="fa fa-chevron-right"></i>
+              <a href="/blog/web-component/" rel="prev" title="web服务器、容器、中间件、反向代理、框架及相关组件介绍">
+                web服务器、容器、中间件、反向代理、框架及相关组件介绍 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -687,7 +687,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -698,7 +698,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -709,7 +709,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

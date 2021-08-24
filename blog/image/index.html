@@ -120,7 +120,7 @@
 <meta property="og:image" content="http://yoursite.com/blog/image/gif-8.gif">
 <meta property="og:image" content="http://yoursite.com/blog/image/gif-9.png">
 <meta property="og:image" content="http://yoursite.com/blog/image/gif-lzw.gif">
-<meta property="og:updated_time" content="2017-10-10T11:41:51.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:35:13.233Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="image文件格式解析">
 <meta name="twitter:description" content="1. JPEG JPEG(jay-peg)是一种针对照片视频而广泛使用的一种有损压缩标准方法，其本身只有描述如何将一个视频转换为字节的数据流。但并没有说明这些字节如何在任何特定的存储媒体上被封存起来。JPEG的压缩方式通常是破坏性数据压缩，意即在压缩过程中图像的质量会遭受到可见的破坏，有一种以JPEG为基础的标准Lossless JPEG是采用无损的压缩方式，但Lossless JPEG并没有受到">
@@ -400,8 +400,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2017-10-10T19:41:51+08:00">
-                2017-10-10
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:35:13+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -419,8 +419,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/image/" itemprop="url" rel="index">
-                    <span itemprop="name">image</span>
+                  <a href="/categories/file-format-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">file format analysis</span>
                   </a>
                 </span>
 
@@ -1060,7 +1060,7 @@
 </table>
 <h4 id="图像标识符-Image-Descriptor"><a href="#图像标识符-Image-Descriptor" class="headerlink" title="图像标识符 Image Descriptor"></a>图像标识符 Image Descriptor</h4><p>固定长度　　　<code>10字节</code></p>
 <img src="/blog/image/gif-7.png" alt="gif image descriptor" title="gif image descriptor">  
-<img src="/blog/image/gif-8.gif" alt="gif image descriptor" title="gif image descriptor"> 
+<img src="/blog/image/gif-8.gif" alt="gif image descriptor" title="gif image descriptor">
 <table>
 <thead>
 <tr>
@@ -1124,8 +1124,8 @@
 </table>
 <h4 id="局部颜色表-Local-Color-Table"><a href="#局部颜色表-Local-Color-Table" class="headerlink" title="局部颜色表 Local Color Table"></a>局部颜色表 Local Color Table</h4><p>如果<code>local color table flag</code>置位，则有这个内容，格式同全局，仅供此幅图像使用。</p>
 <h4 id="图像数据-Image-data"><a href="#图像数据-Image-data" class="headerlink" title="图像数据 Image data"></a>图像数据 Image data</h4><p>这里就是真正的图像信息，第一个字节是<code>LZW minimum code size</code>,这个值用来解码这个经过压缩的输出编码。之后为数据子块，子块第<code>1个字节</code>告诉后面图像数据有多少字节，范围为<code>0-255</code>,子块可以有多个，不断重复，直到一个子块告诉你后面内容为<code>0字节</code>，即表示图像结束。</p>
-<img src="/blog/image/gif-9.png" alt="Image data" title="Image data"> 
- 
+<img src="/blog/image/gif-9.png" alt="Image data" title="Image data">
+
 <h4 id="尾部标志-Trailer"><a href="#尾部标志-Trailer" class="headerlink" title="尾部标志 Trailer"></a>尾部标志 Trailer</h4><p>固定值<code>0x3B</code> 表示文件结束</p>
 <h4 id="LZW-编码"><a href="#LZW-编码" class="headerlink" title="LZW 编码"></a>LZW 编码</h4><blockquote>
 <p>与Huffman编码相比，LZW编码法被视作将不同长度字符串以固定长的码编辑（霍夫曼编码将固定长度字符用不同长度的码编辑）。其优点在于此方法只需存储一个相当小的表格，即可存储数据还原时相对应的值，所以所需成本相对地低；然而，这种算法的设计着重在实现的速度，由于它并没有对数据做任何分析，所以并不一定是最好的算法</p>
@@ -1136,7 +1136,8 @@
 <p>随着新的串(string)不断被发现，标号也会不断地增长，如果原数据过大，生成的标号集（string table)会越来越大，这时候操作这个集合就会产生效率问题。如何避免这个问题呢?Gif在采用lzw算法的做法是当标号集足够大的时候，就不能增大了，干脆从头开始再来，在这个位置要插入一个标号，就是清除标志CLEAR，表示从这里我重新开始构造字典，以前的所有标记作废，开始使用新的标记。<br>这时候又有一个问题出现，足够大是多大？这个标号集的大小为比较合适呢？理论上是标号集大小越大，则压缩比率就越高，但开销也越高。 一般根据处理速度和内存空间连个因素来选定。GIF规范规定的是12位，超过12位的表达范围就推倒重来，并且GIF为了提高压缩率，采用的是变长的字长。比如说原始数据是8位，那么一开始，先加上一位再说，开始的字长就成了9位，然后开始加标号，当标号加到512时，也就是超过9为所能表达的最大数据时，也就意味着后面的标号要用10位字长才能表示了，那么从这里开始，后面的字长就是10位了。依此类推，到了2^12也就是4096时，在这里插一个清除标志，从后面开始，从9位再来。</p>
 </blockquote>
 <p>这里给一个例子，看懂这个例子，基本就明白了。</p>
-<img src="/blog/image/gif-lzw.gif" alt="LZW example" title="LZW example"> 
+<img src="/blog/image/gif-lzw.gif" alt="LZW example" title="LZW example">
+
       
     </div>
     
@@ -1170,6 +1171,8 @@
     <footer class="post-footer">
       
         <div class="post-tags">
+          
+            <a href="/tags/file-format-analysis/" rel="tag"><i class="fa fa-tag"></i> file format analysis</a>
           
             <a href="/tags/image/" rel="tag"><i class="fa fa-tag"></i> image</a>
           
@@ -1289,7 +1292,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1300,7 +1303,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -1311,7 +1314,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

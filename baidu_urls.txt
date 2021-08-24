@@ -1,3 +1,14 @@
+http://yoursite.com/blog/spoof-defense/
+http://yoursite.com/blog/zero-trust/
+http://yoursite.com/blog/cobaltstrike-analysis/
+http://yoursite.com/blog/metasploit-analysis/
+http://yoursite.com/blog/intrusion-respone/
+http://yoursite.com/blog/att-ck-matrix/
+http://yoursite.com/blog/container-security/
+http://yoursite.com/blog/hids-summary/
+http://yoursite.com/blog/encrypted-traffic-analysis/
+http://yoursite.com/blog/mysql-load-local-data/
+http://yoursite.com/blog/gitlab-djvu-rce/
 http://yoursite.com/blog/some-analysis-of-the-Internet-spatial-search-engine/
 http://yoursite.com/blog/exploit-exercises-vulnhub-01/
 http://yoursite.com/blog/exploit-exercises-nebula/
@@ -13,7 +24,6 @@ http://yoursite.com/blog/memcached-ddos/
 http://yoursite.com/blog/php-deserialization/
 http://yoursite.com/blog/ubuntu-privilege-escalation/
 http://yoursite.com/blog/web-component/
-http://yoursite.com/blog/WAF/
 http://yoursite.com/blog/hids-wazuh/
 http://yoursite.com/blog/ctf-web-interesting-topics/
 http://yoursite.com/blog/scanning-principle/
@@ -30,7 +40,6 @@ http://yoursite.com/blog/file-upload/
 http://yoursite.com/blog/nmap/
 http://yoursite.com/blog/owsap-2017-top10/
 http://yoursite.com/blog/coding/
-http://yoursite.com/blog/jarvisoj-writeup/
 http://yoursite.com/blog/sqlmap/
 http://yoursite.com/blog/sqli-labs/
 http://yoursite.com/blog/archives/
@@ -43,8 +52,6 @@ http://yoursite.com/blog/alert-1-writeup/
 http://yoursite.com/blog/prompt-1-writeup/
 http://yoursite.com/blog/hackinglab-writeup/
 http://yoursite.com/blog/nginx-uwsgi-django/
-http://yoursite.com/blog/ssh/
 http://yoursite.com/blog/pages-blog/
 http://yoursite.com/blog/shadowsocks/
-http://yoursite.com/blog/Happy-New-Year/
 http://yoursite.com/blog/hello-2017/

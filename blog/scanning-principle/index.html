@@ -112,7 +112,7 @@
 <meta property="og:image" content="http://yoursite.com/blog/scanning-principle/udp.png">
 <meta property="og:image" content="http://yoursite.com/blog/scanning-principle/icmp.png">
 <meta property="og:image" content="http://yoursite.com/blog/scanning-principle/icmp-error.png">
-<meta property="og:updated_time" content="2018-03-16T12:32:08.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:40:52.470Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="扫描器原理总结">
 <meta name="twitter:description" content="我们分以下几种类型来分析扫描器原理：  端口扫描 服务检测 操作系统检测  端口扫描一般我们使用以下协议进行端口扫描：  TCP UDP ICMP">
@@ -392,8 +392,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-03-16T20:32:08+08:00">
-                2018-03-16
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:40:52+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -411,8 +411,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/penetration-testing/" itemprop="url" rel="index">
-                    <span itemprop="name">penetration testing</span>
+                  <a href="/categories/scanning/" itemprop="url" rel="index">
+                    <span itemprop="name">scanning</span>
                   </a>
                 </span>
 
@@ -506,6 +506,7 @@
 <p>每一行都是一项测试的结果，其中 <code>XXX()</code> 中的 <code>XXX</code> 是测试的名字(例如<code>SEQ</code>、<code>OPS</code>测试)。括号内以 <code>%</code> 分隔的各项是测试中的各种指标。每项指标的值都是<code>key-value</code>形式.</p>
 <p>所有的测试分成五组，</p>
 <figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">第一组测试包含 SEQ、OPS、WIN、<span class="built_in">T1</span>。这项测试会发送六个 TCP 包，然后检查响应的各种细节。</div><div class="line">第二组测试是 IE，会发送两个不同的 ICMP echo 请求，检测其响应特征。</div><div class="line">第三组测试是 U1，发送一个 UDP 包给一个关闭的端口，然后看下 ICMP 的 port unreachable 回复。</div><div class="line">第四组测试是 ECN，全称是 Explicit Congestion Notification，即“显式拥塞通知”。该测试会发送带 ECN 位的 TCP 请求，比较其响应。</div><div class="line">最后一组是发送六个不同的 TCP 包，这六个 TCP 包的响应结果将对应<span class="built_in">T2</span>到<span class="built_in">T7</span>的各项指标，其中 <span class="built_in">T2</span>-<span class="built_in">T4</span> 会发给打开的 TCP 端口，<span class="built_in">T5</span>-<span class="built_in">T7</span> 会发给关闭的 TCP 端口。</div></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -540,9 +541,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/web-security/" rel="tag"><i class="fa fa-tag"></i> web security</a>
+            <a href="/tags/scanning/" rel="tag"><i class="fa fa-tag"></i> scanning</a>
           
-            <a href="/tags/penetration-testing/" rel="tag"><i class="fa fa-tag"></i> penetration testing</a>
+            <a href="/tags/network-security/" rel="tag"><i class="fa fa-tag"></i> network security</a>
           
         </div>
       
@@ -660,7 +661,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -671,7 +672,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -682,7 +683,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

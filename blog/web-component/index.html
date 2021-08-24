@@ -106,7 +106,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://yoursite.com/blog/web-component/web-server.png">
 <meta property="og:image" content="http://yoursite.com/blog/web-component/web-container.png">
-<meta property="og:updated_time" content="2018-07-22T11:42:51.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:43:59.389Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="web服务器、容器、中间件、反向代理、框架及相关组件介绍">
 <meta name="twitter:description" content="在做web安全的过程中，经常遇到各种语言的web服务器、框架、容器、组件等等，很多时候这些东西我们都没有实际使用过(我之前基本都是[apache/nginx] + [django/flask] + python)，对于java web及相关的组件不是很了解，但java系列公司都在用且高危漏洞都很多，借此机会刚好理清楚。 本文涉及web相关组件的类别为:  web服务器 应用服务器 CGI web容">
@@ -386,8 +386,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-07-22T19:42:51+08:00">
-                2018-07-22
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:43:59+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -405,8 +405,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
+                  <a href="/categories/web-development/" itemprop="url" rel="index">
+                    <span itemprop="name">web development</span>
                   </a>
                 </span>
 
@@ -467,13 +467,13 @@
 <p>举个栗子，<code>servlet</code>可以理解服务器端处理数据的java小程序，针对不同的请求，我们有不同的<code>servlet</code>去实现相应的逻辑，而web容器就是管理所有<code>servlet</code>的东西，它帮我们定位、调用、结束需要的<code>servlet</code>。</p>
 <p>有些服务器中集成了容器：</p>
 <p>Tomcat(拥有JSP容器，servlet容器) 、 Jboss(拥有EJB容器)、 IIS(拥有ASP容器)</p>
-<p>IIS，Tomcat，WebLogic，WebSphere即是应用服务器，又拥有web服务器的功能。tomcat可以单独运行也可以被集成到Apache中，Apache处理静态文件比Tomcat快。 </p>
+<p>IIS，Tomcat，WebLogic，WebSphere即是应用服务器，又拥有web服务器的功能。tomcat可以单独运行也可以被集成到Apache中，Apache处理静态文件比Tomcat快。</p>
 <img src="/blog/web-component/web-container.png" alt="web container" title="web container">  
 <h3 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h3><blockquote>
 <p>中间件是一种独立的系统软件或服务程序，分布式应用软件借助这种软件在不同的技术之间共享资源，中间件位于客户机服务器的操作系统之上，管理计算资源和网络通信，也可以定义为网络环境下处于操作系统、数据库等系统软件和应用软件之间的一种起连接作用的分布式软件，主要解决异构网络环境下分布式应用软件的互连与互操作问题，提供标准接口、协议，屏蔽实现细节，提高应用系统易移植性。</p>
 </blockquote>
 <p>在Java web开发的演进与进化中，我们对于消息系统，数据库，服务化接口的抽象等，涉及数据分离的过程中，在分离过程中，就会涉及到分离后系统间，数据库间的交互。java中间件就是处理我们数据间交互，连接数据分离后两个系统间的通信，中间件不属于任何一个开发项目，就是让我们对应系统间或者数据库间数据流通无感知。有点像Linux下的管道。</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">上面说到<span class="keyword">java是数据间的中间件，在java </span>web开发中适用的范围主要应该是下面三个领域：</div><div class="line"></div><div class="line">远程过程调用和对象访问中间件</div><div class="line">主要解决分布式环境下应用的互相访问问题，这也是支撑应用服务化功能的基础； </div><div class="line">例如：RPC：Remote Process Call（远程过程调用中间件） </div><div class="line">消息中间件：解决应用之间的消息传递、解耦、异步的问题。 </div><div class="line">例如：ActiveMQ 是Apache出品，最流行的，能力强劲的开源消息总线。</div><div class="line">ActiveMQ 是一个完全支持<span class="keyword">JMS1.1和J2EE </span><span class="number">1</span>.<span class="number">4</span>规范的 <span class="keyword">JMS </span>Provider实现。</div><div class="line"></div><div class="line">数据访问中间件</div><div class="line">主要解决应用访问数据库的共性问题的组件 </div><div class="line">例如：数据访问中间间就是我们使用数据库指定的数据驱动，例如：ODBC <span class="keyword">JDBC，以 </span><span class="keyword">JDBC </span>为例，</div><div class="line">数据库本地维护了一个数据访问中间件，我们在访问数据库的时候，配置的地址其实是直接连接到<span class="keyword">JDBC这个数据访问中间件，</span></div><div class="line">如果我们执行查询数据，或者对数据库的操作都是通过<span class="keyword">JDBC来连接数据库，然后通过JDBC查询完成数据库以后再返回给我们应用程序。作为中间件，查询过程对于我们是不可知的。</span></div></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">上面说到<span class="keyword">java是数据间的中间件，在java </span>web开发中适用的范围主要应该是下面三个领域：</div><div class="line"></div><div class="line">远程过程调用和对象访问中间件</div><div class="line">主要解决分布式环境下应用的互相访问问题，这也是支撑应用服务化功能的基础；</div><div class="line">例如：RPC：Remote Process Call（远程过程调用中间件）</div><div class="line">消息中间件：解决应用之间的消息传递、解耦、异步的问题。</div><div class="line">例如：ActiveMQ 是Apache出品，最流行的，能力强劲的开源消息总线。</div><div class="line">ActiveMQ 是一个完全支持<span class="keyword">JMS1.1和J2EE </span><span class="number">1</span>.<span class="number">4</span>规范的 <span class="keyword">JMS </span>Provider实现。</div><div class="line"></div><div class="line">数据访问中间件</div><div class="line">主要解决应用访问数据库的共性问题的组件</div><div class="line">例如：数据访问中间间就是我们使用数据库指定的数据驱动，例如：ODBC <span class="keyword">JDBC，以 </span><span class="keyword">JDBC </span>为例，</div><div class="line">数据库本地维护了一个数据访问中间件，我们在访问数据库的时候，配置的地址其实是直接连接到<span class="keyword">JDBC这个数据访问中间件，</span></div><div class="line">如果我们执行查询数据，或者对数据库的操作都是通过<span class="keyword">JDBC来连接数据库，然后通过JDBC查询完成数据库以后再返回给我们应用程序。作为中间件，查询过程对于我们是不可知的。</span></div></pre></td></tr></table></figure>
 <h3 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h3><p>反向代理是代理服务器的一种。它根据客户端的请求，从后端的服务器（如Web服务器）上获取资源，然后再将这些资源返回给客户端。与前向代理不同，前向代理作为一个媒介将互联网上获取的资源返回给相关联的客户端，而反向代理是在服务器端（如Web服务器）作为代理使用，而不是客户端。</p>
 <figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">资源服务器(文件/web/邮件)  &lt;-------&gt;   反向代理服务器   &lt;-------&gt; Internet  &lt;--------&gt; 用户</div></pre></td></tr></table></figure>
 <h3 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h3><p>框架只是一种推荐规范的代码结构，为了方便大型项目管理与构建，当然现在的框架往往不止这些，往往都包括容器等内容，常见的框架有:</p>
@@ -538,8 +538,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/WAF/" rel="next" title="WAF 简介">
-                <i class="fa fa-chevron-left"></i> WAF 简介
+              <a href="/blog/hids-wazuh/" rel="next" title="HIDS-Wazuh 功能分析">
+                <i class="fa fa-chevron-left"></i> HIDS-Wazuh 功能分析
               </a>
             
           </div>
@@ -643,7 +643,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -654,7 +654,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -665,7 +665,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

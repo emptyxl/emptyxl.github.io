@@ -111,7 +111,7 @@
 <meta property="og:image" content="http://yoursite.com/blog/memcached-ddos/reflect.png">
 <meta property="og:image" content="http://yoursite.com/blog/memcached-ddos/send_udp.png">
 <meta property="og:image" content="http://yoursite.com/blog/memcached-ddos/receive.png">
-<meta property="og:updated_time" content="2018-07-22T11:43:08.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:37:15.652Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Memcached UDP DDoS利用复现">
 <meta name="twitter:description" content="Memcached 简介 Memcached是一种基于内存的key-value存储，用来存储小块的任意数据（字符串、对象）。这些数据可以是数据库调用、API调用或者是页面渲染的结果。它是一个简洁的key-value存储系统。一般的使用目的是，通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度、提高可扩展性。     具体的命令使用方法，可以在这里看到，非常简单，很容易学习上手。">
@@ -391,8 +391,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-07-22T19:43:08+08:00">
-                2018-07-22
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:37:15+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -410,30 +410,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Memcached/" itemprop="url" rel="index">
-                    <span itemprop="name">Memcached</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Memcached/vulnerability/" itemprop="url" rel="index">
-                    <span itemprop="name">vulnerability</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Memcached/vulnerability/DDoS/" itemprop="url" rel="index">
-                    <span itemprop="name">DDoS</span>
+                  <a href="/categories/vulnerability-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">vulnerability analysis</span>
                   </a>
                 </span>
 
@@ -503,11 +481,11 @@
 <img src="/blog/memcached-ddos/payload.png" alt="poc" title="poc">  
 <p>可以看到返回信息，说明此服务器可以利用。</p>
 <p>那攻击者就可以连接此<code>memcached</code>服务器，给一个key设置一个很大的值，然后利用其udp反射造成DDoS。</p>
-<p>给字段写入大量内容：<br><img src="/blog/memcached-ddos/evil5.png" alt="给字段写入大内容" title="给字段写入大内容"> </p>
-<p>使用UDP去请求字段,可以看到返回内容非常多:<br><img src="/blog/memcached-ddos/reflect.png" alt="udp" title="udp"> </p>
+<p>给字段写入大量内容：<br><img src="/blog/memcached-ddos/evil5.png" alt="给字段写入大内容" title="给字段写入大内容"></p>
+<p>使用UDP去请求字段,可以看到返回内容非常多:<br><img src="/blog/memcached-ddos/reflect.png" alt="udp" title="udp"></p>
 <p>构造恶意数据包，指向正常用户源:</p>
-<img src="/blog/memcached-ddos/send_udp.png" alt="send udp" title="send udp"> 
-<p>在用户端检测到了UDP反射的大量数据包，完成DDoS攻击：<br><img src="/blog/memcached-ddos/receive.png" alt="DDoS" title="DDoS"> </p>
+<img src="/blog/memcached-ddos/send_udp.png" alt="send udp" title="send udp">
+<p>在用户端检测到了UDP反射的大量数据包，完成DDoS攻击：<br><img src="/blog/memcached-ddos/receive.png" alt="DDoS" title="DDoS"></p>
 <h4 id="漏洞挖掘"><a href="#漏洞挖掘" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h4><p>使用<code>zoomeye</code>去扫描使用<code>memcached</code>组件的ip地址，然后使用poc去扫描，观察输出，如果有输出，则为可以利用的主机。</p>
 <figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo -en "<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>00<span class="symbol">\x</span>01<span class="symbol">\x</span>00<span class="symbol">\x</span>00stats<span class="symbol">\r</span><span class="symbol">\n</span>" |nc -u ipaddr 11211</div></pre></td></tr></table></figure>
 <p>附上一个自己写的从<code>zoomeye</code>获取漏洞主机的代码.</p>
@@ -555,11 +533,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/web/" rel="tag"><i class="fa fa-tag"></i> web</a>
+            <a href="/tags/vulnerability-analysis/" rel="tag"><i class="fa fa-tag"></i> vulnerability analysis</a>
           
             <a href="/tags/Memcached/" rel="tag"><i class="fa fa-tag"></i> Memcached</a>
-          
-            <a href="/tags/vulnerability/" rel="tag"><i class="fa fa-tag"></i> vulnerability</a>
           
             <a href="/tags/DDoS/" rel="tag"><i class="fa fa-tag"></i> DDoS</a>
           
@@ -679,7 +655,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -690,7 +666,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -701,7 +677,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

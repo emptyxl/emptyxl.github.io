@@ -116,7 +116,7 @@
 <meta property="og:image" content="http://yoursite.com/blog/pages-blog/url.png">
 <meta property="og:image" content="http://yoursite.com/blog/pages-blog/thumbnail.png">
 <meta property="og:image" content="http://yoursite.com/blog/pages-blog/register.png">
-<meta property="og:updated_time" content="2017-08-23T05:36:30.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:39:10.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo+Pages搭建个人博客及相关配置">
 <meta name="twitter:description" content="这里记录了通过hexo+pages服务搭建个人博客的一些常见问题和误区，都是血泪经验。 hexo环境搭建Hexo基于Node.js，可以通过npm安装，具体使用可以看官网教程，很简单。推荐使用LTS版本，Mac下V8.x的nodejs安装的hexo有时候会提示module not found,所以最好用稳定版。推荐把官方文档仔细的看一遍，你要知道你自己在做什么。hexo安装好了之后，初始化等等不在">
@@ -396,8 +396,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2017-08-23T13:36:30+08:00">
-                2017-08-23
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:39:10+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -415,8 +415,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog/" itemprop="url" rel="index">
-                    <span itemprop="name">blog</span>
+                  <a href="/categories/web-development/" itemprop="url" rel="index">
+                    <span itemprop="name">web development</span>
                   </a>
                 </span>
 
@@ -465,7 +465,7 @@
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">hellohxk</span><span class="selector-class">.com</span></div></pre></td></tr></table></figure>
 <p>为了使每次生成的内容都包含这样一个文件，可以将这个文件放到<code>/source</code>中，这样生成的内容每次都有这样一个文件。<br>然后等待一段时间，就好了。</p>
 <h3 id="Github-Coding-net-双部署"><a href="#Github-Coding-net-双部署" class="headerlink" title="Github Coding.net 双部署"></a>Github Coding.net 双部署</h3><p>由于基本都在国内，访问的人一般都是国内，github的速度还是有些慢的，尤其是如果需要加载大量图片，会一直loading。所以我这里考虑使用国内的<code>coding.net</code>作为主服务器，海外采用访问<code>Github</code>的方式。<br><a href="https://pages.coding.net/" target="_blank" rel="external">Coding.net Pages</a>和github没什么区别，很容易上手，注意，我这里采用了<code>项目Pages</code>,而没有采用<code>用户Pages</code>，具体差别如下：<br><img src="/blog/pages-blog/coding-pages.png" alt="Codig.net Pages" title="Codig.net Pages"><br>我采用了新建一个项目，然后部署其到<code>coding-pages</code>分支，具体confi如下：</p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># Deployment</span></div><div class="line"><span class="meta">## Docs: https:<span class="comment">//hexo.io/docs/deployment.html</span></span></div><div class="line"><span class="symbol">deploy:</span></div><div class="line"><span class="symbol">  type:</span> git</div><div class="line"><span class="symbol">  repo:</span> </div><div class="line"><span class="symbol">    github:</span> git@github.com:emptyxl/emptyxl.github.io.git,master</div><div class="line"><span class="symbol">    coding:</span> git@git.coding.net:empty_xl/empty_xl.git,coding-pages</div></pre></td></tr></table></figure>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># Deployment</span></div><div class="line"><span class="meta">## Docs: https:<span class="comment">//hexo.io/docs/deployment.html</span></span></div><div class="line"><span class="symbol">deploy:</span></div><div class="line"><span class="symbol">  type:</span> git</div><div class="line"><span class="symbol">  repo:</span></div><div class="line"><span class="symbol">    github:</span> git@github.com:emptyxl/emptyxl.github.io.git,master</div><div class="line"><span class="symbol">    coding:</span> git@git.coding.net:empty_xl/empty_xl.git,coding-pages</div></pre></td></tr></table></figure>
 <p>之后使用<code>hexo d</code>即可推送到<code>coding.net</code> 和 <code>github</code>两端。<br>在进入阿里云域名解析，添加一条新的<code>CNAME</code>,主机记录<code>www</code>，记录值为<code>pages.coding.me</code>，之后即可在<code>coding.net</code>pages服务上选择绑定自定义域名。最终如下：<br><img src="/blog/pages-blog/https-domain.png" alt="双线域名解析" title="双线域名解析"><br>这里发现我多了一条A记录指向<code>103.72.145.7</code>，只是由于在<code>coding.net pages</code>会自动帮你申请<code>Let&#39;s Encrypt</code>的SSL/LTS证书，有可能会出现<code>无效IP地址的情况</code>，需要添加这一条A记录，指向<code>ping pages.coding.net</code>的值。</p>
 <h3 id="使用HTTPS"><a href="#使用HTTPS" class="headerlink" title="使用HTTPS"></a>使用HTTPS</h3><blockquote>
 <p>——没有小绿锁的网站大概会有人访问？</p>
@@ -503,7 +503,7 @@
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">文件路径： /themes/next/source/css/_schemes/Mist/_posts-expanded<span class="selector-class">.styl</span></div><div class="line"></div><div class="line"><span class="selector-class">.post-body</span> <span class="selector-tag">img</span> &#123; <span class="attribute">margin</span>: <span class="number">0</span> auto; &#125;</div></pre></td></tr></table></figure>
 <h3 id="Gitment评论"><a href="#Gitment评论" class="headerlink" title="Gitment评论"></a>Gitment评论</h3><p><a href="https://github.com/imsun/gitment" target="_blank" rel="external">Gitment</a>是一个基于github issues的评论框架，最主要的支持<strong>Markdown！！</strong> 感动哭，现在写东西除了md格式基本都不会了。<br>Gitment基本思想是调用<code>github Issues</code>，每一篇文章对应一个open的<code>issue</code>,所有comments都其实是在<code>issues</code>上存储的，然后进行显示。<br>首先在 <a href="https://github.com/settings/applications/new" target="_blank" rel="external">https://github.com/settings/applications/new</a> 中注册一个<code>OAuth application</code>，会生成<code>clinent id</code>和<code>client secret</code>，之后有用。<br><img src="/blog/pages-blog/register.png" alt="注册OAuth App" title="注册OAuth App"></p>
 <p>在next文件中添加如下内容：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">文件路径: /themes/next/layout/_partials/comments.swig</div><div class="line"></div><div class="line"></div><div class="line">    &#123;# gitment #&#125;</div><div class="line">    &#123;% elseif theme.gitment %&#125;</div><div class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"https://imsun.github.io/gitment/style/default.css"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://imsun.github.io/gitment/dist/gitment.browser.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    </div><div class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="actionscript"></span></div><div class="line">    <span class="keyword">var</span> gitment = <span class="keyword">new</span> Gitment(&#123;</div><div class="line">      <span class="comment">// 根据文章标题设置唯一评论id</span></div><div class="line">    <span class="comment">// id: '&#123;&#123;page.articleID&#125;&#125;', // optional</span></div><div class="line">    owner: <span class="string">'emptyxl'</span>,</div><div class="line">    repo: <span class="string">'emptyxl.github.io'</span>,</div><div class="line">    oauth: &#123;</div><div class="line">      client_id: <span class="string">'fa7413e3c0207a96ae03'</span>,</div><div class="line">      client_secret: <span class="string">'a599fef18d25ba5c813d2e437260892e146462a2'</span>,</div><div class="line">      &#125;</div><div class="line">    &#125;)</div><div class="line">    gitment.render(<span class="string">'comments'</span>)</div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">文件路径: /themes/next/layout/_partials/comments.swig</div><div class="line"></div><div class="line"></div><div class="line">    &#123;# gitment #&#125;</div><div class="line">    &#123;% elseif theme.gitment %&#125;</div><div class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"https://imsun.github.io/gitment/style/default.css"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://imsun.github.io/gitment/dist/gitment.browser.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="actionscript"></span></div><div class="line">    <span class="keyword">var</span> gitment = <span class="keyword">new</span> Gitment(&#123;</div><div class="line">      <span class="comment">// 根据文章标题设置唯一评论id</span></div><div class="line">    <span class="comment">// id: '&#123;&#123;page.articleID&#125;&#125;', // optional</span></div><div class="line">    owner: <span class="string">'emptyxl'</span>,</div><div class="line">    repo: <span class="string">'emptyxl.github.io'</span>,</div><div class="line">    oauth: &#123;</div><div class="line">      client_id: <span class="string">'fa7413e3c0207a96ae03'</span>,</div><div class="line">      client_secret: <span class="string">'a599fef18d25ba5c813d2e437260892e146462a2'</span>,</div><div class="line">      &#125;</div><div class="line">    &#125;)</div><div class="line">    gitment.render(<span class="string">'comments'</span>)</div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>其中第3、4行是引用资源文件，直接使用官方仓库里的可以保持最新版。之后的script里的为配置内容，需要填写：</p>
 <figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">id 默认值为location.href 即链接的地址，id值即为创建的issue的名称 推荐不用写</div><div class="line">owner 仓库所有者</div><div class="line">repo 仓库名 即这些评论(也就是这些issues)放在哪个仓库下</div><div class="line">client_id 之前注册的OAuth App `client ID`</div><div class="line">cliend_secret 之前注册的OAuth App `client Secret`</div></pre></td></tr></table></figure>
 <p>部署之后，使用Owner账号登陆即可进行初始化。</p>
@@ -569,8 +569,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/ssh/" rel="prev" title="SSH协议及SSH攻击和防御">
-                SSH协议及SSH攻击和防御 <i class="fa fa-chevron-right"></i>
+              <a href="/blog/nginx-uwsgi-django/" rel="prev" title="Nginx+uwsgi+Django服务器部署">
+                Nginx+uwsgi+Django服务器部署 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -664,7 +664,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -675,7 +675,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -686,7 +686,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

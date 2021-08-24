@@ -96,18 +96,18 @@
 
 
 
-<meta name="description" content="Nmap  （网络映射器）是由 Gordon Lyon设计，用来探测计算机网络上的主机和服务的一种安全扫描器。为了绘制网络拓扑图，Nmap的发送特制的数据包到目标主机，然后对返回数据包进行分析。Nmap是一款枚举和测试网络的强大工具。  Nmap的作用:  主机探测：探测网络上的主机，例如列出响应TCP和ICMP请求、icmp请求、开放特别端口的主机。  端口扫描：探测目标主机所开放的端口。">
+<meta name="description" content="Nmap  （网络映射器）是由 Gordon Lyon设计，用来探测计算机网络上的主机和服务的一种安全扫描器。为了绘制网络拓扑图，Nmap的发送特制的数据包到目标主机，然后对返回数据包进行分析。Nmap是一款枚举和测试网络的强大工具。  Nmap的作用:  主机探测：探测网络上的主机，例如列出响应TCP和ICMP请求、icmp请求、开放特别端口的主机。 端口扫描：探测目标主机所开放的端口。 版本">
 <meta name="keywords" content="nmap,host discovery,network scanning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nmap 常用参数 &amp; 使用技巧 - from DEFCON">
 <meta property="og:url" content="http://yoursite.com/blog/nmap/index.html">
 <meta property="og:site_name" content="empty_xl Blog">
-<meta property="og:description" content="Nmap  （网络映射器）是由 Gordon Lyon设计，用来探测计算机网络上的主机和服务的一种安全扫描器。为了绘制网络拓扑图，Nmap的发送特制的数据包到目标主机，然后对返回数据包进行分析。Nmap是一款枚举和测试网络的强大工具。  Nmap的作用:  主机探测：探测网络上的主机，例如列出响应TCP和ICMP请求、icmp请求、开放特别端口的主机。  端口扫描：探测目标主机所开放的端口。">
+<meta property="og:description" content="Nmap  （网络映射器）是由 Gordon Lyon设计，用来探测计算机网络上的主机和服务的一种安全扫描器。为了绘制网络拓扑图，Nmap的发送特制的数据包到目标主机，然后对返回数据包进行分析。Nmap是一款枚举和测试网络的强大工具。  Nmap的作用:  主机探测：探测网络上的主机，例如列出响应TCP和ICMP请求、icmp请求、开放特别端口的主机。 端口扫描：探测目标主机所开放的端口。 版本">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-15T07:45:59.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:38:57.381Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nmap 常用参数 &amp; 使用技巧 - from DEFCON">
-<meta name="twitter:description" content="Nmap  （网络映射器）是由 Gordon Lyon设计，用来探测计算机网络上的主机和服务的一种安全扫描器。为了绘制网络拓扑图，Nmap的发送特制的数据包到目标主机，然后对返回数据包进行分析。Nmap是一款枚举和测试网络的强大工具。  Nmap的作用:  主机探测：探测网络上的主机，例如列出响应TCP和ICMP请求、icmp请求、开放特别端口的主机。  端口扫描：探测目标主机所开放的端口。">
+<meta name="twitter:description" content="Nmap  （网络映射器）是由 Gordon Lyon设计，用来探测计算机网络上的主机和服务的一种安全扫描器。为了绘制网络拓扑图，Nmap的发送特制的数据包到目标主机，然后对返回数据包进行分析。Nmap是一款枚举和测试网络的强大工具。  Nmap的作用:  主机探测：探测网络上的主机，例如列出响应TCP和ICMP请求、icmp请求、开放特别端口的主机。 端口扫描：探测目标主机所开放的端口。 版本">
 
 
 
@@ -383,8 +383,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-08-15T15:45:59+08:00">
-                2018-08-15
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:38:57+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -402,19 +402,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web-security/" itemprop="url" rel="index">
-                    <span itemprop="name">web security</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web-security/penetration-testing-tools/" itemprop="url" rel="index">
-                    <span itemprop="name">penetration testing tools</span>
+                  <a href="/categories/scanning/" itemprop="url" rel="index">
+                    <span itemprop="name">scanning</span>
                   </a>
                 </span>
 
@@ -455,10 +444,10 @@
 </blockquote>
 <p>Nmap的作用:</p>
 <ol>
-<li>主机探测：探测网络上的主机，例如列出响应TCP和ICMP请求、icmp请求、开放特别端口的主机。 </li>
-<li>端口扫描：探测目标主机所开放的端口。 </li>
-<li>版本检测：探测目标主机的网络服务，判断其服务名称及版本号。 </li>
-<li>系统检测：探测目标主机的操作系统及网络设备的硬件特性。 </li>
+<li>主机探测：探测网络上的主机，例如列出响应TCP和ICMP请求、icmp请求、开放特别端口的主机。</li>
+<li>端口扫描：探测目标主机所开放的端口。</li>
+<li>版本检测：探测目标主机的网络服务，判断其服务名称及版本号。</li>
+<li>系统检测：探测目标主机的操作系统及网络设备的硬件特性。</li>
 <li>防火墙检测: 探测目标主机使用什么类型的报文过滤器/防火墙</li>
 <li>支持探测脚本的编写：使用Nmap的脚本引擎（NSE）和Lua编程语言。</li>
 </ol>
@@ -524,7 +513,7 @@
 </li>
 <li><code>-sU</code> <code>UDP</code>扫描</li>
 <li><p><code>-sN;-sF;-sX</code>  <code>TCP null</code>、<code>FIN</code>、<code>Xmas</code>扫描</p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">这三种扫描类型 (甚至用下一节描述的 --scanflags 选项的更多类型) 在TCP RFC 中发掘了一个微妙的方法来区分open(开放的)和 closed(关闭的)端口。</div><div class="line"></div><div class="line">如果 [目标]端口状态是关闭的： 请求的的不含RST的报文导致一个RST响应。</div><div class="line">如果不设置SYN，RST，或者ACK位的报文发送到开放端口，理论上，这不应该发生，如果您确实收到了，丢弃该报文，返回。 </div><div class="line"></div><div class="line">那么有以下规则：</div><div class="line"></div><div class="line">如果扫描系统遵循该RFC，当端口关闭时，任何不包含SYN，RST，或者ACK位的报文会导致 一个RST返回，而当端口开放时，应该没有任何响应。只要不包含SYN，RST，或者ACK, 任何其它三种(FIN，PSH，and URG)的组合都行。Nmap有三种扫描类型利用这一点：</div><div class="line"></div><div class="line">Null扫描 (<span class="_">-s</span>N)</div><div class="line">不设置任何标志位(tcp标志头是0)</div><div class="line"></div><div class="line">FIN扫描 (<span class="_">-s</span>F)</div><div class="line">只设置TCP FIN标志位。</div><div class="line"></div><div class="line">Xmas扫描 (<span class="_">-s</span>X)</div><div class="line">设置FIN，PSH，和URG标志位，就像点亮圣诞树上所有的灯一样。</div></pre></td></tr></table></figure>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">这三种扫描类型 (甚至用下一节描述的 --scanflags 选项的更多类型) 在TCP RFC 中发掘了一个微妙的方法来区分open(开放的)和 closed(关闭的)端口。</div><div class="line"></div><div class="line">如果 [目标]端口状态是关闭的： 请求的的不含RST的报文导致一个RST响应。</div><div class="line">如果不设置SYN，RST，或者ACK位的报文发送到开放端口，理论上，这不应该发生，如果您确实收到了，丢弃该报文，返回。</div><div class="line"></div><div class="line">那么有以下规则：</div><div class="line"></div><div class="line">如果扫描系统遵循该RFC，当端口关闭时，任何不包含SYN，RST，或者ACK位的报文会导致 一个RST返回，而当端口开放时，应该没有任何响应。只要不包含SYN，RST，或者ACK, 任何其它三种(FIN，PSH，and URG)的组合都行。Nmap有三种扫描类型利用这一点：</div><div class="line"></div><div class="line">Null扫描 (<span class="_">-s</span>N)</div><div class="line">不设置任何标志位(tcp标志头是0)</div><div class="line"></div><div class="line">FIN扫描 (<span class="_">-s</span>F)</div><div class="line">只设置TCP FIN标志位。</div><div class="line"></div><div class="line">Xmas扫描 (<span class="_">-s</span>X)</div><div class="line">设置FIN，PSH，和URG标志位，就像点亮圣诞树上所有的灯一样。</div></pre></td></tr></table></figure>
 <p>  除了探测报文的标志位不同，这三种扫描在行为上完全一致。 如果收到一个<code>RST</code>报文，该端口被认为是<code>closed</code>(关闭的)，而没有响应则意味着 端口是<code>open|filtered</code>(开放或者被过滤的)。 如果收到ICMP不可到达错误(类型 3，代号 1，2，3，9，10，或者13)，该端口就被标记为<code>filtered</code>被过滤的。</p>
 </li>
 <li><p><code>-sA</code> <code>TCP ACK</code>扫描</p>
@@ -595,7 +584,7 @@
 <li><p><code>–source-port 53</code></p>
 <p>  该端口是DNS查询端口，一般的防火墙都允许来自此端口的数据包</p>
 </li>
-<li><p><code>--version-intensity 0</code> </p>
+<li><p><code>--version-intensity 0</code></p>
 <p>  轻量的版本检测会提升很大的速度</p>
 </li>
 <li><code>--top-ports &lt;number&gt;</code><br>  使用最常用的number个端口进行扫描<br>  <code>--top-ports 1000</code>能覆盖<code>93%</code>的端口<br>  <code>--top-ports 3674</code> 能覆盖<code>100%</code>的端口</li>
@@ -644,13 +633,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/security/" rel="tag"><i class="fa fa-tag"></i> security</a>
-          
             <a href="/tags/nmap/" rel="tag"><i class="fa fa-tag"></i> nmap</a>
           
-            <a href="/tags/network-scanning/" rel="tag"><i class="fa fa-tag"></i> network scanning</a>
+            <a href="/tags/scanning/" rel="tag"><i class="fa fa-tag"></i> scanning</a>
           
-            <a href="/tags/penetration-testing-tools/" rel="tag"><i class="fa fa-tag"></i> penetration testing tools</a>
+            <a href="/tags/tools/" rel="tag"><i class="fa fa-tag"></i> tools</a>
           
         </div>
       
@@ -768,7 +755,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -779,7 +766,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -790,7 +777,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

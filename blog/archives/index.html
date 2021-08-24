@@ -80,7 +80,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="zip,zip 文件格式,archives format" />
+  <meta name="keywords" content="zip,zip 文件格式分析,archives format,文件格式解析" />
 
 
 
@@ -97,7 +97,7 @@
 
 
 <meta name="description" content="ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。目前，ZIP格式属于几种主流的压缩格式之一，其竞争者包括RAR格式以及开放源码的7z格式。  ZIP官方文档中对ZIP文件格式作了总结： 1234567891011">
-<meta name="keywords" content="zip,zip 文件格式,archives format">
+<meta name="keywords" content="zip,zip 文件格式分析,archives format,文件格式解析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ZIP格式解析">
 <meta property="og:url" content="http://yoursite.com/blog/archives/index.html">
@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://yoursite.com/blog/archives/zip-1.png">
 <meta property="og:image" content="http://yoursite.com/blog/archives/zip-2.png">
 <meta property="og:image" content="http://yoursite.com/blog/archives/zip-3.png">
-<meta property="og:updated_time" content="2017-10-11T07:15:27.000Z">
+<meta property="og:updated_time" content="2021-08-24T13:23:32.392Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ZIP格式解析">
 <meta name="twitter:description" content="ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。目前，ZIP格式属于几种主流的压缩格式之一，其竞争者包括RAR格式以及开放源码的7z格式。  ZIP官方文档中对ZIP文件格式作了总结： 1234567891011">
@@ -387,8 +387,8 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2017-10-11T15:15:27+08:00">
-                2017-10-11
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:23:32+08:00">
+                2021-08-24
               </time>
             
           </span>
@@ -406,8 +406,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/archives/" itemprop="url" rel="index">
-                    <span itemprop="name">archives</span>
+                  <a href="/categories/file-format-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">file format analysis</span>
                   </a>
                 </span>
 
@@ -447,7 +447,7 @@
 <p>ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。目前，ZIP格式属于几种主流的压缩格式之一，其竞争者包括RAR格式以及开放源码的7z格式。</p>
 </blockquote>
 <p>ZIP官方文档中对ZIP文件格式作了总结：</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">Overall .ZIP <span class="built_in">file</span> format:</div><div class="line"></div><div class="line">  [<span class="keyword">local</span> <span class="built_in">file</span> header <span class="number">1</span>]</div><div class="line">  [<span class="built_in">file</span> data <span class="number">1</span>]</div><div class="line">  [data descriptor <span class="number">1</span>]</div><div class="line">  . </div><div class="line">  .</div><div class="line">  .</div><div class="line">  [<span class="keyword">local</span> <span class="built_in">file</span> header n]</div><div class="line">  [<span class="built_in">file</span> data n]</div><div class="line">  [data descriptor n]</div><div class="line">  [archive decryption header] (EFS)</div><div class="line">  [archive extra data <span class="built_in">record</span>] (EFS)</div><div class="line">  [central directory]</div><div class="line">  [zip64 <span class="keyword">end</span> <span class="keyword">of</span> central directory <span class="built_in">record</span>]</div><div class="line">  [zip64 <span class="keyword">end</span> <span class="keyword">of</span> central directory locator] </div><div class="line">  [<span class="keyword">end</span> <span class="keyword">of</span> central directory <span class="built_in">record</span>]</div></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">Overall .ZIP <span class="built_in">file</span> format:</div><div class="line"></div><div class="line">  [<span class="keyword">local</span> <span class="built_in">file</span> header <span class="number">1</span>]</div><div class="line">  [<span class="built_in">file</span> data <span class="number">1</span>]</div><div class="line">  [data descriptor <span class="number">1</span>]</div><div class="line">  .</div><div class="line">  .</div><div class="line">  .</div><div class="line">  [<span class="keyword">local</span> <span class="built_in">file</span> header n]</div><div class="line">  [<span class="built_in">file</span> data n]</div><div class="line">  [data descriptor n]</div><div class="line">  [archive decryption header] (EFS)</div><div class="line">  [archive extra data <span class="built_in">record</span>] (EFS)</div><div class="line">  [central directory]</div><div class="line">  [zip64 <span class="keyword">end</span> <span class="keyword">of</span> central directory <span class="built_in">record</span>]</div><div class="line">  [zip64 <span class="keyword">end</span> <span class="keyword">of</span> central directory locator]</div><div class="line">  [<span class="keyword">end</span> <span class="keyword">of</span> central directory <span class="built_in">record</span>]</div></pre></td></tr></table></figure>
 <p>即zip主要由三部分组成：</p>
 <table>
 <thead>
@@ -570,9 +570,9 @@
 <img src="/blog/archives/zip-1.png" alt="zip local file header" title="zip local file header">  
 <p>可以看到选中的部分为文件名字段，选中了<code>7字节</code>，对应前面文件名长度的<code>0x 0700</code>，16进制转字符串之后就是<code>这里/</code>.</p>
 <h4 id="文件数据-file-data"><a href="#文件数据-file-data" class="headerlink" title="文件数据 file data"></a>文件数据 file data</h4><p><code>这里</code>是我们文件夹的名字，跟在其后面的又是一个新的块。</p>
-<img src="/blog/archives/zip-2.png" alt="zip file data" title="zip file data"> 
+<img src="/blog/archives/zip-2.png" alt="zip file data" title="zip file data">
 <p>这里在压缩是选择加密，可以发现，内容都变为了密文</p>
-<img src="/blog/archives/zip-3.png" alt="zip file data encrypted" title="zip file data encrypted"> 
+<img src="/blog/archives/zip-3.png" alt="zip file data encrypted" title="zip file data encrypted">
 <h4 id="数据描述-data-descriptor"><a href="#数据描述-data-descriptor" class="headerlink" title="数据描述 data descriptor"></a>数据描述 data descriptor</h4><p>数据描述符用于标识该文件压缩结束，该结构只有在相应的<code>local file header</code>中通用标记字段的第<code>３bit</code>设为<code>１</code>时才会出现，紧接在压缩文件源数据后。</p>
 <table>
 <thead>
@@ -849,6 +849,8 @@
           
             <a href="/tags/archives/" rel="tag"><i class="fa fa-tag"></i> archives</a>
           
+            <a href="/tags/file-format-analysis/" rel="tag"><i class="fa fa-tag"></i> file format analysis</a>
+          
         </div>
       
 
@@ -965,7 +967,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -976,7 +978,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -987,7 +989,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
