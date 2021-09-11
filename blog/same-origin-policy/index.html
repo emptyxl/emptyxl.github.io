@@ -100,7 +100,7 @@
 <meta name="keywords" content="web security">
 <meta property="og:type" content="article">
 <meta property="og:title" content="同源策略">
-<meta property="og:url" content="http://yoursite.com/blog/same-origin-policy/index.html">
+<meta property="og:url" content="https://blog.nyrae.icu/blog/same-origin-policy/index.html">
 <meta property="og:site_name" content="empty_xl Blog">
 <meta property="og:description" content="同源策略同源策略(Same Origin Policy, SOP)是Web应用程序的一种安全模型，它控制了网页中DOM之间的访问。同源三要素：主机、协议、端口 同源策略作用浏览器的同源策略会导致跨域，这里同源策略又分为以下两种：  DOM同源策略：禁止对不同源页面DOM进行操作。这里主要场景是iframe跨域的情况，不同域名的iframe是限制互相访问的。 XmlHttpRequest同源策略：禁">
 <meta property="og:locale" content="en">
@@ -136,7 +136,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/blog/same-origin-policy/"/>
+  <link rel="canonical" href="https://blog.nyrae.icu/blog/same-origin-policy/"/>
 
 
 
@@ -338,7 +338,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/same-origin-policy/">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/same-origin-policy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="empty_xl">
@@ -499,7 +499,7 @@
 <p>通过变更自身的源绕过同源策略:<br>IE 6，7版中网页可以通过<code>document.domain</code>设置自身的来源为任意其他来源。如今网页仍然可以更改源，但是有一些限制。</p>
 <p>网页可以变更自身的源为父级域名。</p>
 <p>例如<code>http://malicious.eth.space/1.html</code>可以通过执行</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.domain = <span class="string">"eth.space"</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">document.domain = <span class="string">"eth.space"</span><span class="comment">;</span></div></pre></td></tr></table></figure>
 <p>来绕过同源策略的限制，从而可以读取<code>http://eth.space/login.html</code>上的内容。这其中的应用大家可以自己去想。</p>
 <h3 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h3><h4 id="CORS-cross-origin-sharing-stander-跨源资源共享机制"><a href="#CORS-cross-origin-sharing-stander-跨源资源共享机制" class="headerlink" title="CORS cross-origin sharing stander 跨源资源共享机制"></a>CORS cross-origin sharing stander 跨源资源共享机制</h4><p>使用<code>windows.postMessage</code><br>使用<code>JSONP</code></p>
 <h4 id="CSP-内容安全策略"><a href="#CSP-内容安全策略" class="headerlink" title="CSP 内容安全策略"></a>CSP 内容安全策略</h4><h4 id="禁止（你的资源被）跨源访问"><a href="#禁止（你的资源被）跨源访问" class="headerlink" title="禁止（你的资源被）跨源访问"></a>禁止（你的资源被）跨源访问</h4><p>为了禁止跨域写，我们需要引入<code>CSRF令牌</code>，然而我们需要正确的配置同源策略，否则CSRF令牌本身也将被恶意网页读取。</p>
@@ -525,7 +525,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://yoursite.com/blog/same-origin-policy/" title="同源策略">http://yoursite.com/blog/same-origin-policy/</a>
+    <a href="https://blog.nyrae.icu/blog/same-origin-policy/" title="同源策略">https://blog.nyrae.icu/blog/same-origin-policy/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>

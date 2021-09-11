@@ -100,17 +100,17 @@
 <meta name="keywords" content="coding,编解码,encode&amp;decode,编解码分析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="编码相关内容详解">
-<meta property="og:url" content="http://yoursite.com/blog/coding/index.html">
+<meta property="og:url" content="https://blog.nyrae.icu/blog/coding/index.html">
 <meta property="og:site_name" content="empty_xl Blog">
 <meta property="og:description" content="我们在计算机编程中，经常会遇见输出的字符串不是我们想要的，或者同样的字符串在不同环境中输出却不一致，第一部分主要是搞懂以下这些内容究竟有什么区别：    str、Unicode、通用字符集、UTF-8、GBK、烫烫烫 锟斤拷、ASCII、bytes、16进制字符串、字符串的16进制数">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://yoursite.com/blog/coding/coding-1.png">
-<meta property="og:image" content="http://yoursite.com/blog/coding/gbk-01.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/coding/coding-1.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/coding/gbk-01.png">
 <meta property="og:updated_time" content="2021-08-24T13:24:24.592Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="编码相关内容详解">
 <meta name="twitter:description" content="我们在计算机编程中，经常会遇见输出的字符串不是我们想要的，或者同样的字符串在不同环境中输出却不一致，第一部分主要是搞懂以下这些内容究竟有什么区别：    str、Unicode、通用字符集、UTF-8、GBK、烫烫烫 锟斤拷、ASCII、bytes、16进制字符串、字符串的16进制数">
-<meta name="twitter:image" content="http://yoursite.com/blog/coding/coding-1.png">
+<meta name="twitter:image" content="https://blog.nyrae.icu/blog/coding/coding-1.png">
 
 
 
@@ -139,7 +139,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/blog/coding/"/>
+  <link rel="canonical" href="https://blog.nyrae.icu/blog/coding/"/>
 
 
 
@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/coding/">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/coding/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="empty_xl">
@@ -652,7 +652,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>a = bytearray(<span class="string">b'\xe4\xbd\xa0'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a</div><div class="line">bytearray(<span class="string">b'\xe4\xbd\xa0'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">0</span>]</div><div class="line"><span class="number">228</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">1</span>]</div><div class="line"><span class="number">189</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a = bytearray(<span class="string">'好'</span>,encoding=<span class="string">'utf-8'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a</div><div class="line">bytearray(<span class="string">b'\xe5\xa5\xbd'</span>)</div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a = bytearray(<span class="string">'好'</span>)</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">TypeError: string argument without an encoding</div></pre></td></tr></table></figure>
 <p>我相信你能够很容易理解它。</p>
 <h4 id="16进制数转换"><a href="#16进制数转换" class="headerlink" title="16进制数转换"></a>16进制数转换</h4><p>经常遇见16进制原始字符串或者16进制数表示一个字符串的情况，其实就是字符串bytes格式去掉相关的<code>\x</code>等内容。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="string">'你好abc'</span></div><div class="line">E4BDA0E5A5BD616263</div><div class="line"><span class="number">0xE4BDA0E5A5BD616263</span></div><div class="line"><span class="string">'E4BDA0E5A5BD616263'</span></div></pre></td></tr></table></figure>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="string">'你好abc'</span></div><div class="line">E4BDA0E5A5BD616263</div><div class="line"><span class="number">0xE4BDA0E5A5BD616263</span></div><div class="line"><span class="string">'E4BDA0E5A5BD616263'</span></div></pre></td></tr></table></figure>
 <p>在某些语言中可以使用这种16进制数或字符串来表示一个字符串，在python中，相关的转换可以使用<code>binascii</code>模块或者<code>hex 编码来实现</code></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> binascii</div><div class="line">&gt;&gt;&gt;</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.b2a_hex(<span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>))</div><div class="line"><span class="string">b'e4bda0e5a5bd616263313233'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.hexlify(<span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>))</div><div class="line"><span class="string">b'e4bda0e5a5bd616263313233'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.b2a_hex(<span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>)).upper()</div><div class="line"><span class="string">b'E4BDA0E5A5BD616263313233'</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>).hex()</div><div class="line"><span class="string">'e4bda0e5a5bd616263313233'</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.a2b_hex(<span class="string">b'e4bda0e5a5bd616263'</span>)</div><div class="line"><span class="string">b'\xe4\xbd\xa0\xe5\xa5\xbdabc'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.unhexlify(<span class="string">b'e4bda0e5a5bd616263'</span>)</div><div class="line"><span class="string">b'\xe4\xbd\xa0\xe5\xa5\xbdabc'</span></div></pre></td></tr></table></figure>
 
@@ -675,7 +675,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://yoursite.com/blog/coding/" title="编码相关内容详解">http://yoursite.com/blog/coding/</a>
+    <a href="https://blog.nyrae.icu/blog/coding/" title="编码相关内容详解">https://blog.nyrae.icu/blog/coding/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
