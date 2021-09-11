@@ -10,6 +10,7 @@ https://blog.nyrae.icu/blog/encrypted-traffic-analysis/
 https://blog.nyrae.icu/blog/mysql-load-local-data/
 https://blog.nyrae.icu/blog/gitlab-djvu-rce/
 https://blog.nyrae.icu/blog/some-analysis-of-the-Internet-spatial-search-engine/
+https://blog.nyrae.icu/blog/zeroday-capture/
 https://blog.nyrae.icu/blog/exploit-exercises-vulnhub-01/
 https://blog.nyrae.icu/blog/exploit-exercises-nebula/
 https://blog.nyrae.icu/blog/weblogic/
