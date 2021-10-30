@@ -4,6 +4,21 @@
 
     
   <url>
+    <loc>https://blog.nyrae.icu/blog/traffic-hiding-via-cdn/</loc>
+    <lastmod>2021-10-23T13:23:35.200Z</lastmod>
+    <data>
+        <display>
+        <title>traffic-hiding-via-cdn</title>
+        <pubTime>2021-10-23T13:23:35.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://blog.nyrae.icu/blog/socks-protocol-analysis/</loc>
     <lastmod>2021-09-11T15:00:00.848Z</lastmod>
     <data>
@@ -96,9 +111,9 @@
         <title>TLS/SSL流程详解 & HTTPS中间人攻击 & 流量分析SSL题目</title>
         <pubTime>2018-05-23T07:06:43.000Z</pubTime>
         
-        <tag>network security</tag>
-         
         <tag>protocol analysis</tag>
+         
+        <tag>network security</tag>
          
         <tag>ssl/tls</tag>
          
@@ -214,9 +229,9 @@
         <title>扫描器原理总结</title>
         <pubTime>2018-02-19T03:12:45.000Z</pubTime>
         
-        <tag>network security</tag>
-         
         <tag>scanning</tag>
+         
+        <tag>network security</tag>
          
          
            
@@ -897,23 +912,21 @@
 
     
   <url>
-    <loc>https://blog.nyrae.icu/blog/gitlab-djvu-rce/</loc>
-    <lastmod>2021-05-19T11:38:43.000Z</lastmod>
+    <loc>https://blog.nyrae.icu/blog/gitlab-exiftool-djvu-rce/</loc>
+    <lastmod>2021-07-19T11:38:43.000Z</lastmod>
     <data>
         <display>
-        <title>Gitlab 13.10.2 Remote Code Execution()</title>
-        <pubTime>2021-05-19T11:38:43.000Z</pubTime>
+        <title>Gitlab 13.10.2 Remote Code Execution漏洞分析(CVE-2021-22204、CVE-2021-22205)</title>
+        <pubTime>2021-07-19T11:38:43.000Z</pubTime>
         
-        <tag>Search-Engine</tag>
+        <tag>vulnerability analysis</tag>
          
-        <tag>network security</tag>
-         
-        <tag>port spoofing</tag>
+        <tag>Remote Code Execution</tag>
          
          
            
              
-              <breadCrumb title="scanning" url="https://blog.nyrae.icu/categories/scanning/"/>
+              <breadCrumb title="vulnerability analysis" url="https://blog.nyrae.icu/categories/vulnerability-analysis/"/>
           
         </display>
     </data>
@@ -928,9 +941,9 @@
         <title>空间搜索引擎与端口扫描欺骗</title>
         <pubTime>2021-05-19T11:38:43.000Z</pubTime>
         
-        <tag>Search-Engine</tag>
-         
         <tag>network security</tag>
+         
+        <tag>Search-Engine</tag>
          
         <tag>port spoofing</tag>
          

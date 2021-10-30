@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.nyrae.icu/blog/traffic-hiding-via-cdn/</loc>
+    
+    <lastmod>2021-10-23T13:23:35.200Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://blog.nyrae.icu/blog/socks-protocol-analysis/</loc>
     
     <lastmod>2021-09-11T15:00:00.848Z</lastmod>
@@ -303,9 +310,9 @@
   </url>
   
   <url>
-    <loc>https://blog.nyrae.icu/blog/gitlab-djvu-rce/</loc>
+    <loc>https://blog.nyrae.icu/blog/gitlab-exiftool-djvu-rce/</loc>
     
-    <lastmod>2021-05-19T11:38:43.000Z</lastmod>
+    <lastmod>2021-07-19T11:38:43.000Z</lastmod>
     
   </url>
   
