@@ -466,7 +466,6 @@
 
       
         <p>在整个<code>ATT&amp;CK</code>的链路中，资产扫描探测的结果对于最终的渗透效果有着重要的影响，对目标资产了解的越多，更容易分析出组织架构、脆弱点和突破点。为了减少扫描行为被防守队发现或封禁，<code>Shodan</code>, <code>Fofa</code>, <code>Zoomeye</code>等空间搜索引擎作为第三方的资产收录平台可以很好的辅助我们，免去扫描的步骤，直接搜索利用点。尤其是在攻防演练或者hw等时期，大量的蜜罐部署以及7*24小时的防守值班，任何轻微的可疑扫描行为都会引起防守队的察觉，从而被封IP。因此利用好第三方搜索引擎的结果，可以让我们更加容易和灵活的进行边界突破。本文将介绍空间搜索引擎的原理及一些常见特性，以及可能的对抗方式——扫描欺骗。</p>
-<a id="more"></a>
 <p>首先第一个问题，这些搜索引擎的作用是什么？根据个人经验，我将其划分为以下4类。</p>
 <ul>
 <li>资产发现与统计</li>
@@ -475,6 +474,7 @@
 <li>0day漏洞影响评估</li>
 </ul>
 <p>在本篇文章中，我们主要关注与原理层面的内容并尝试通过各种方式验证我们的猜测。除此之外，一些常用的用法及特性放在了附录中，可以作为清单进行查询。</p>
+<a id="more"></a>
 <h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><p>首先是第一阶段，端口扫描。大多数搜索引擎都会声称他们的产品扫描全网整个IPv4的地址空间并进行识别收录，根据我的实际测试结果，在公网服务器上部署任意一个服务，基本上这些引擎的数据库都会在1天之内进行收录，效率还是蛮高的。那么，他们是如果对整个IPv4空间进行扫描的？根据一些公开的分享和业界对于端口扫描的常见方式，基于无状态扫描的高效性，基本可以确定这些搜索引擎也是使用类似<code>zmap</code>,<code>masscan</code>这样的工具进行端口开放性探测，之后在第一步的基础上，利用<code>nmap</code>等工具进行服务的版本探测、指纹识别。</p>
 <p>对于TCP的服务扫描，其原理基本分为两大类:</p>
 <ol>
@@ -751,7 +751,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-count">64</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -762,7 +762,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -773,7 +773,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">74</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -861,7 +861,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     
     &emsp;&emsp;|&emsp;

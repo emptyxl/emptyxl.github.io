@@ -469,7 +469,7 @@
 <figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">\u003cimg</span> src=a onerror=alert(<span class="number">1</span>)<span class="string">\u003e</span></div></pre></td></tr></table></figure>
 <h3 id="JSON-1"><a href="#JSON-1" class="headerlink" title="JSON ]["></a>JSON ][</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</div><div class="line">  s = <span class="built_in">JSON</span>.stringify(s).replace(<span class="regexp">/&lt;\/script/gi</span>, <span class="string">''</span>);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> <span class="string">'&lt;script&gt;console.log('</span> + s + <span class="string">');&lt;/script&gt;'</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>通过重复构造出最终结果。</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;&lt;/<span class="keyword">script</span>/<span class="keyword">script</span>&gt;&lt;img src=<span class="comment"># onerror=alert(1)</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;&lt;<span class="regexp">/script/</span>script&gt;<span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">#</span> <span class="attr">onerror</span>=<span class="string">alert(1)</span></span></span></div></pre></td></tr></table></figure>
 <h3 id="Callback-1"><a href="#Callback-1" class="headerlink" title="Callback ]["></a>Callback ][</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">escape</span>(<span class="params">s</span>) </span>&#123;</div><div class="line">  <span class="comment">// Pass inn "callback#userdata"</span></div><div class="line">  <span class="keyword">var</span> thing = s.split(<span class="regexp">/#/</span>);</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (!<span class="regexp">/^[a-zA-Z\[\]']*$/</span>.test(thing[<span class="number">0</span>])) <span class="keyword">return</span> <span class="string">'Invalid callback'</span>;</div><div class="line">  <span class="keyword">var</span> obj = &#123;<span class="string">'userdata'</span>: thing[<span class="number">1</span>] &#125;;</div><div class="line">  <span class="keyword">var</span> json = <span class="built_in">JSON</span>.stringify(obj).replace(<span class="regexp">/\//g</span>, <span class="string">'\\/'</span>);</div><div class="line">  <span class="keyword">return</span> <span class="string">"&lt;script&gt;"</span> + thing[<span class="number">0</span>] + <span class="string">"("</span> + json +<span class="string">")&lt;/script&gt;"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>基本操作</p>
 <figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">'#'</span>;alert(<span class="number">1</span>)&lt;!<span class="comment">--</span></div></pre></td></tr></table></figure>
@@ -632,7 +632,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-count">64</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -643,7 +643,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -654,7 +654,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">74</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -742,7 +742,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     
     &emsp;&emsp;|&emsp;

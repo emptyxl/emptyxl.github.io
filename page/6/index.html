@@ -338,6 +338,679 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/sqli-labs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/sqli-labs/" itemprop="url">sqli-labs writeup</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-14T13:54:31+08:00">
+                2017-10-14
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:42:31+08:00">
+                2021-08-24
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><a href="https://github.com/Audi-1/sqli-labs" target="_blank" rel="external">Sqli-labs</a>是一个练习<code>SQL注入</code>的很好的一个平台，可以直接下载后使用。注意由于充满漏洞，推荐在虚拟机中使用，并使用<code>host-only</code>模式，不要让其联网。</p>
+<h3 id="平台搭建"><a href="#平台搭建" class="headerlink" title="平台搭建"></a>平台搭建</h3><p>我这里是采用了<code>虚拟机</code>+<code>win10</code>+<code>phpStudy</code>,然后直接将下载的<code>sqli-labs-master</code>放到<code>www</code>文件夹中即可。</p>
+<h3 id="Basic-Challenges"><a href="#Basic-Challenges" class="headerlink" title="Basic Challenges"></a>Basic Challenges</h3><p>每个<code>less</code>都有提示会告诉你是什么类型的题,我们也能看到后台源码，所以比较好去理解。</p>
+<h4 id="less-1"><a href="#less-1" class="headerlink" title="less-1"></a>less-1</h4><p>简单的<code>&#39;</code>绕过</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http:<span class="regexp">//</span><span class="number">10.37</span>.<span class="number">129.3</span><span class="regexp">/sqli-labs-master/</span>Less-<span class="number">1</span><span class="regexp">/?id=1' or 1=2 %23</span></div></pre></td></tr></table></figure>
+<p>发现正常运行，即注入成功。<br>之后是比较基础的脱裤步骤，具体操作可以看我的另一篇文章<a href="https://hellohxk.com/blog/sql-injection/" target="_blank" rel="external">SQL注入总结</a>总结了基本步骤。本例练习一下脱裤，之后如果不是有一些特殊方式，就不再贴出来了。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/sqli-labs/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/archives/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/archives/" itemprop="url">ZIP格式解析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-11T10:31:09+08:00">
+                2017-10-11
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:23:32+08:00">
+                2021-08-24
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/file-format-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">file format analysis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。目前，ZIP格式属于几种主流的压缩格式之一，其竞争者包括RAR格式以及开放源码的7z格式。</p>
+</blockquote>
+<p>ZIP官方文档中对ZIP文件格式作了总结：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">Overall .ZIP <span class="built_in">file</span> format:</div><div class="line"></div><div class="line">  [<span class="keyword">local</span> <span class="built_in">file</span> header <span class="number">1</span>]</div><div class="line">  [<span class="built_in">file</span> data <span class="number">1</span>]</div><div class="line">  [data descriptor <span class="number">1</span>]</div><div class="line">  .</div><div class="line">  .</div><div class="line">  .</div><div class="line">  [<span class="keyword">local</span> <span class="built_in">file</span> header n]</div><div class="line">  [<span class="built_in">file</span> data n]</div><div class="line">  [data descriptor n]</div><div class="line">  [archive decryption header] (EFS)</div><div class="line">  [archive extra data <span class="built_in">record</span>] (EFS)</div><div class="line">  [central directory]</div><div class="line">  [zip64 <span class="keyword">end</span> <span class="keyword">of</span> central directory <span class="built_in">record</span>]</div><div class="line">  [zip64 <span class="keyword">end</span> <span class="keyword">of</span> central directory locator]</div><div class="line">  [<span class="keyword">end</span> <span class="keyword">of</span> central directory <span class="built_in">record</span>]</div></pre></td></tr></table></figure>
+<p>即zip主要由三部分组成：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">压缩源文件数据区</th>
+<th style="text-align:center">核心目录</th>
+<th style="text-align:center">目录结束</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">local file header + file data + data descriptor</td>
+<td style="text-align:center">central directory</td>
+<td style="text-align:center">end of central directory record</td>
+</tr>
+</tbody>
+</table>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/archives/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/image/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/image/" itemprop="url">image文件格式解析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-05T11:08:28+08:00">
+                2017-10-05
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:35:13+08:00">
+                2021-08-24
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/file-format-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">file format analysis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="1-JPEG"><a href="#1-JPEG" class="headerlink" title="1. JPEG"></a>1. JPEG</h3><blockquote>
+<p><strong>JPEG(jay-peg)</strong>是一种针对照片视频而广泛使用的一种有损压缩标准方法，其本身只有描述如何将一个视频转换为字节的数据流。但并没有说明这些字节如何在任何特定的存储媒体上被封存起来。JPEG的压缩方式通常是<strong>破坏性数据压缩</strong>，意即在压缩过程中图像的质量会遭受到可见的破坏，有一种以JPEG为基础的标准Lossless JPEG是采用无损的压缩方式，但Lossless JPEG并没有受到广泛的支持。</p>
+<p>一个由C-Cube Microsystems等公司所创建的额外标准，称为<strong>JFIF</strong>（JPEG File Interchange Format，JPEG文件交换格式）详细说明如何从一个JPEG流，产出一个适合于电脑存储和传输（像是在互联网上）的文件。</p>
+<p>JPEG/JFIF是万维网（World Wide Web）上最普遍的被用来存储和传输照片的格式。它并不适合于线条绘图（drawing）和其他文字或图标（iconic）的图形，因为它的压缩方法用在这些类型的图形上，得到的结果并不好（PNG和GIF格式通常是用来存储这类的图形；GIF每个像素只有8比特，并不很适合于存储彩色照片，PNG可以无损地存储照片，但是文件太大的缺点让它不太适合在网络上传输）。</p>
+</blockquote>
+<p>简单概括下jpeg文件格式：</p>
+<ul>
+<li>整个内容由标记信息和数据组成，标记信息包括标记代码和具体字段组成，记录了图片的某些属性，数据为图像的具体数据。</li>
+<li><code>FF</code>为特殊值，如果后边跟的是<code>00</code>,即<code>FF 00</code>表示图像数据内容中的<code>FF</code>值，若后边不为0，类似<code>FF D8</code>为某个具体标记码的值，代表标记信息的开始。</li>
+<li>常用的标记有<code>SOI、APP0、DQT、SOF0、DHT、DRI、SOS、EOI</code>。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/image/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/xss-bypass-tricks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/xss-bypass-tricks/" itemprop="url">XSS利用与防御</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-02T11:56:17+08:00">
+                2017-10-02
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:44:19+08:00">
+                2021-08-24
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XSS/" itemprop="url" rel="index">
+                    <span itemprop="name">XSS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="XSS-知识"><a href="#XSS-知识" class="headerlink" title="XSS 知识"></a>XSS 知识</h3><p>利用XSS技术，攻击者可以在浏览器正在执行的原始服务器代码的上下文中插入远程代码。从浏览器角度来看，插入的代码看起来与合法应用一样，都源自同一个服务器，因此就会允许这些代码访问本地资源，最终将隐私数据泄露给攻击者，甚至会出现应用会话劫持现象。</p>
+<h4 id="xss-分类"><a href="#xss-分类" class="headerlink" title="xss 分类"></a>xss 分类</h4><p>xss大致分为：反射型、存储型、DOM型（这三种为主流）.</p>
+<p>无论反射型还是存储型，都是需要与服务端交互的，即<strong>服务端将提交的内容反馈到了html源码内，导致触发xss</strong>，也就是说返回到html源码中可以看到触发xss的代码；而<strong>DOM型xss是不与服务端交互的，只与客户端上的js交互</strong>，也就是说提交的恶意代码，被放到了js中执行，然后显示出来。那么这种形式有一个问题，就是html源码里面不存在触发xss的代码，因为服务端返回的源码都是一样的，<strong>只不过源码里面包含了一段js，这段js再执行后生成了一段xss代码</strong>，可以在审查元素中查看到。</p>
+<h5 id="反射型xss"><a href="#反射型xss" class="headerlink" title="反射型xss"></a>反射型xss</h5><p>只是简单地把用户输入的数据”反射”给浏览器，攻击时需要用户配合点击，也叫<code>非持久型xss</code></p>
+<h5 id="存储型xss"><a href="#存储型xss" class="headerlink" title="存储型xss"></a>存储型xss</h5><p>会把用户输入的数据”存储”在服务器端，也叫<code>持久性xss</code>，常见留言板等可以提交展示用户输入内容的功能点。</p>
+<h5 id="DOM型xss"><a href="#DOM型xss" class="headerlink" title="DOM型xss"></a>DOM型xss</h5><p>可通过修改页面的DOM节点形成的xss漏洞</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/xss-bypass-tricks/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/same-origin-policy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1310,665 +1983,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/nginx-uwsgi-django/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/nginx-uwsgi-django/" itemprop="url">Nginx+uwsgi+Django服务器部署</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-17T22:14:15+08:00">
-                2017-05-17
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:38:20+08:00">
-                2021-08-24
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web-development/" itemprop="url" rel="index">
-                    <span itemprop="name">web development</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>本文主要介绍使用<code>Django</code>框架编写的服务器部署方式，采用<code>Nginx+uwsgi</code>，建议去理解每一个部件的具体作用，而不是去遵循教程一步步设置。</p>
-<p><code>Nginx+uwsgi+Django</code>其主要原理是:<code>Nginx</code>负责接收所有访问服务器的请求，<code>静态资源(css、js、images等)</code>等内容直接由<code>Nginx</code>进行返回，<code>动态资源</code>通过<code>uwsgi</code>去请求。</p>
-<h3 id="Nginx-engine-X"><a href="#Nginx-engine-X" class="headerlink" title="Nginx(engine X)"></a>Nginx(engine X)</h3><blockquote>
-<p>Nginx is a web server, which can also be used as a reverse proxy, load balancer and HTTP cache. Nginx can be deployed to serve dynamic HTTP content on the network using FastCGI, SCGI handlers for scripts, WSGI application servers or Phusion Passenger modules, and it can serve as a software load balancer.Nginx uses an asynchronous event-driven approach to handling requests. Nginx’s modular event-driven architecture can provide more predictable performance under high loads.  </p>
-<p> 在Linux操作系统下，nginx使用epoll事件模型，得益于此，nginx在Linux操作系统下效率相当高。同时Nginx在OpenBSD或FreeBSD操作系统上采用类似于epoll的高效事件模型kqueue。</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/nginx-uwsgi-django/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/pages-blog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/pages-blog/" itemprop="url">Hexo+Pages搭建个人博客及相关配置</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-10T20:53:17+08:00">
-                2017-02-10
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:39:10+08:00">
-                2021-08-24
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web-development/" itemprop="url" rel="index">
-                    <span itemprop="name">web development</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>这里记录了通过hexo+pages服务搭建个人博客的一些常见问题和误区，都是血泪经验。</p>
-<h3 id="hexo环境搭建"><a href="#hexo环境搭建" class="headerlink" title="hexo环境搭建"></a>hexo环境搭建</h3><p><a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>基于<a href="https://nodejs.org/zh-cn/" target="_blank" rel="external">Node.js</a>，可以通过<a href="https://www.npmjs.com/" target="_blank" rel="external">npm</a>安装，具体使用可以看官网教程，很简单。<strong>推荐使用LTS版本</strong>，Mac下V8.x的nodejs安装的hexo有时候会提示<code>module not found</code>,所以最好用稳定版。推荐把官方文档仔细的看一遍，你要知道你自己在做什么。<br>hexo安装好了之后，初始化等等不在此赘述，配置好之后基本以下命令就够了：</p>
-<figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hexo clean              <span class="meta"># 清除生成的public folder内容</span></div><div class="line">hexo generate / hexo g  <span class="meta"># 生成发布的内容</span></div><div class="line">hexo <span class="keyword">server</span> / hexo s    <span class="meta"># 启动本地server</span></div><div class="line">hexo deploy / hexo d    <span class="meta"># 根据repo设置部署</span></div></pre></td></tr></table></figure>
-<h3 id="Pages搭建"><a href="#Pages搭建" class="headerlink" title="Pages搭建"></a>Pages搭建</h3><p><strong><a href="https://pages.github.com/" target="_blank" rel="external">Github Pages</a></strong>可以是由用户编写的、托管在github上的静态网页，因其空间免费、服务器稳定，作为Blog的托管方最为合适不过，不过需要注意的是，必须是<strong>public repo</strong>才可以。<br>当然也可以选择使用自己的云服务器然后用<code>Nginx</code>或<code>Apache</code>等方式，不在本文讨论范围内，可以参考<a href="https://hellohxk.com/blog/nginx-uwsgi-django/" target="_blank" rel="external">Nginx配置</a>将其中<code>server</code>改成如下即可，如有问题，可以在给我发邮件：</p>
-<figure class="highlight glsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">location</span> / &#123;</div><div class="line">    root [your deploy dir path];</div><div class="line">    <span class="keyword">index</span> <span class="keyword">index</span>.html <span class="keyword">index</span>.htm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/pages-blog/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/shadowsocks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/shadowsocks/" itemprop="url">使用shadowsocks搭建个人代理实现科学上网</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-17T00:00:00+08:00">
-                2017-01-17
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:41:21+08:00">
-                2021-08-24
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/development/" itemprop="url" rel="index">
-                    <span itemprop="name">development</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>Github、Google、StackOverflow访问慢还怎么干活😞</p>
-</blockquote>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述  "></a>概述 <span id="introduction"> </span></h2><p>本文首先简短的介绍了”墙”是什么以及shadowsocks的工作原理，让读者对于为什么翻墙以及如何翻墙有个基础的了解。之后对于shadowsocks(之后简称ss)的服务器端与客户端的配置提供了较为详细的配置步骤。在VPS(虚拟专用服务器)的选择上，这里采用了<a href="https://aws.amazon.com" target="_blank" rel="external">AWS</a>(Amazon Web Services)，对于新用户可以免费使用一年，网速经测试youtube720p没有问题，对于网速及机房位置要求较高的用户可使用AWS付费服务器或者推荐两个VPS提供商:<a href="https://www.vultr.com/" target="_blank" rel="external">Vultr</a>、<a href="https://bwh1.net/" target="_blank" rel="external">BandwagonHost</a>(其官网G20期间被墙了，提供一个官网备份网址)。</p>
-<h2 id="GFW"><a href="#GFW" class="headerlink" title="GFW  "></a>GFW <span id="GFW"> </span></h2><p>GFW(防火长城)也称中国国家防火墙,就是我们俗称的”墙”。<a href="https://zh.wikipedia.org/wiki/防火长城" target="_blank" rel="external">GFW</a>的作用主要是政府爸爸用于监管不当言论以及防止网络危害，以达到自我审查、全面监控的作用。GFW封锁网络常见的几种方法:  </p>
-<ul>
-<li><p><strong>DNS劫持</strong><br>当你访问不被允许的域名时，你ISP(互联网服务供应商)提供的DNS服务器将返回一个不正确的IP地址或不返回。</p>
-</li>
-<li><p><strong>DNS污染</strong><br>由于DNS劫持可以通过修改域名解析服务器的方式解决，所以系统需要使用DNS污染来封锁一些域名，在直接访问国外DNS服务器的时候，也会被GFW实施DNS污染。</p>
-</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/shadowsocks/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/hello-2017/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/hello-2017/" itemprop="url">Welcome to Empty_xL Blog</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-01T00:00:00+08:00">
-                2017-01-01
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2020-10-22T23:14:15+08:00">
-                2020-10-22
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/life/" itemprop="url" rel="index">
-                    <span itemprop="name">life</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>“Yeah It’s on. ”</p>
-</blockquote>
-<p>作为一个半路出家会一点前端的人，也算终于开通了这个博客。</p>
-<p>2017 年，终于不用忍受CSDN坑爹的服务器了，动不动就挂了，最主要还要审核！年纪大了，记性不好，现在也算有个地方记录我研究过的东西了。嗯，不为什么，只为了帮我回忆做过的东西。</p>
-<p>在这里的东西我会写的尽可能详细一些，所涉及的基本常识也会介绍一下，毕竟和我一样看到教程都不一定搞得定的小白还是很多的，很多文章省略了比较基础的东西，而这些基础对于一个不长在这个领域中学习的人来说还是需要花费一点精力才能弄明白，所以我会尽可能的详细记录每一步。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/hello-2017/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2014,7 +2033,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-count">64</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2025,7 +2044,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -2036,7 +2055,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">74</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -2108,7 +2127,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     
     &emsp;&emsp;|&emsp;

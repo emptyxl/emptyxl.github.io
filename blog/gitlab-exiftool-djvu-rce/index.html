@@ -475,9 +475,9 @@
       
         <p>这个漏洞其实影响也挺广的，虽然是需要授权，但其实在公网上暴露的很多gitlab都是开放注册的，其实也基本等于给了授权。除此之外，获取CSRF_TOKEN后也可以触发。这个漏洞本质不是<code>gitlab</code>的代码问题，而是<code>gitlab</code>在文件处理时的逻辑，引用了第三方<code>exiftool</code>组件导致在解析时出现问题，从而引起的任意文件执行。</p>
 <p>总结一下: <code>gitab</code>中的<code>gitlab-horse</code>会根据上传文件的标识符来判断文件类型，不同类型有着不同的处理逻辑，对于图片类的文件，会去调用<code>exiftool</code>组件来清除图片文件的元数据，而<code>exiftool</code>组件在处理<code>Djvu</code>格式文件的时候，存在缺陷，可以透过构造恶意的元数据造成双引号逃逸，从而执行任意指令。</p>
-<a id="more"></a>
 <h3 id="gitlab-数据传递逻辑"><a href="#gitlab-数据传递逻辑" class="headerlink" title="gitlab 数据传递逻辑"></a>gitlab 数据传递逻辑</h3><p>首先我们去下载个受影响版本的gitlab，<a href="https://github.com/gitlabhq/gitlabhq/tree/v13.10.2" target="_blank" rel="external">https://github.com/gitlabhq/gitlabhq/tree/v13.10.2</a>。官网对于gitlab-workhorse的描述可以见下图所示。可以看到，最前端nginx会将请求代理给gitlab-workhorse，按官方的说法，gitlab-workhorse用于处理负载量较大的HTTP请求，例如文件的上传下载、git操作等。</p>
 <img src="/blog/gitlab-exiftool-djvu-rce/architecture_simplified.png" alt="gitlab_workhorse_architecture_simplified" title="gitlab_workhorse_architecture_simplified">
+<a id="more"></a>
 <p>在gitlab-workhorse的文档中描述了，其安装时依赖<code>ExifTool</code>，用于擦除元数据。</p>
 <img src="/blog/gitlab-exiftool-djvu-rce/gitlab-workhorse-exiftool.png" alt="gitlab-workhorse-exiftool" title="gitlab-workhorse-exiftool">
 <p>我们来看一下程序里面实现的逻辑。首先会去判断上传的文件类型，如果是<code>exif</code>文件的话，会去调用<code>handleExifUpload</code>函数进行元数据清理。<code>handleExifUpload</code>中会去调用<code>NewCleaner--&gt;cleaner</code>，最终执行<code>exiftool</code>指令进行数据清除。</p>
@@ -689,7 +689,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-count">64</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -700,7 +700,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -711,7 +711,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">74</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -799,7 +799,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     
     &emsp;&emsp;|&emsp;

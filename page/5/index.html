@@ -338,6 +338,667 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/python-str-format-vulnerability/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/python-str-format-vulnerability/" itemprop="url">python字符串格式化漏洞利用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-04T16:07:12+08:00">
+                2018-01-04
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:40:21+08:00">
+                2021-08-24
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="python字符串格式"><a href="#python字符串格式" class="headerlink" title="python字符串格式"></a>python字符串格式</h3><p>python字符串的格式化输出有多种写法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="string">"hello %s , I'm %s"</span> % (<span class="string">'Alice'</span>,<span class="string">'Bob'</span>)</div><div class="line"><span class="string">"hello %(sname)s , I'm %(cname)s"</span> % &#123;<span class="string">'sname'</span>:<span class="string">'Alice'</span>,<span class="string">'cname'</span>:<span class="string">'Bob'</span>&#125;</div><div class="line"></div><div class="line"><span class="string">"hello &#123;&#125;"</span>.format(<span class="string">'Tom'</span>)</div><div class="line"><span class="string">"hello &#123;cname&#125;"</span>.format(cname=<span class="string">'Tom'</span>)</div></pre></td></tr></table></figure>
+<p>举一些例子:</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="string">"&#123;number:0.2f&#125;"</span>.<span class="built_in">format</span>(<span class="built_in">number</span>=<span class="number">0.5678</span>) <span class="comment"># 等同于 "%0.2f" % 0.5678，保留两位小数</span></div><div class="line"><span class="string">"int: &#123;0:d&#125;;  hex: &#123;0:#x&#125;;  oct: &#123;0:#o&#125;;  bin: &#123;0:#b&#125;"</span>.<span class="built_in">format</span>(<span class="number">42</span>) <span class="comment"># 转换进制</span></div><div class="line"><span class="string">"&#123;user.username&#125;"</span>.<span class="built_in">format</span>(user=request.username) <span class="comment"># 获取对象属性</span></div><div class="line"><span class="string">"&#123;arr[2]&#125;"</span>.<span class="built_in">format</span>(arr=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]) <span class="comment"># 获取数组键值</span></div><div class="line"><span class="string">"&#123;:&lt;30&#125;"</span>.<span class="built_in">format</span>(<span class="string">'left aligned'</span>)  <span class="comment"># 左对齐并占位30个字符</span></div><div class="line"><span class="string">'&#123;:^30&#125;'</span>.<span class="built_in">format</span>(<span class="string">'centered'</span>) <span class="comment"># 居中</span></div><div class="line"><span class="string">'&#123;:*^30&#125;'</span>.<span class="built_in">format</span>(<span class="string">'centered'</span>)  <span class="comment"># 用*填充</span></div></pre></td></tr></table></figure>
+<p>更多具体使用方式的可以参照python手册</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/python-str-format-vulnerability/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/ssti/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/ssti/" itemprop="url">SSTI攻击分析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-02T15:37:21+08:00">
+                2018-01-02
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2018-08-15T19:38:27+08:00">
+                2018-08-15
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>SSTI(Server-Side Template Injection) 服务端模板注入。顾名思义，服务器模板中拼接了恶意用户输入导致各种漏洞。</p>
+<p>通过模板，Web应用可以把输入转换成特定的HTML文件或者email格式。就拿一个销售软件来说，我们假设它会发送大量的邮件给客户，并在每封邮件前SKE插入问候语，它会通过Twig（一个模板引擎）做如下处理：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$output = $twig-&gt;render( $_GET[<span class="string">'custom_email'</span>] , <span class="keyword">array</span>(<span class="string">"first_name"</span> =&gt; $user.first_name) );</div></pre></td></tr></table></figure>
+<p>除了可能存在的XSS问题，还有更深层次的隐患，我们知道<code>Twig</code>模板中</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;content&#125;&#125;</div></pre></td></tr></table></figure>
+<p>被两个括号包裹的内容会输出其<strong>表达式的值</strong></p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">custom_email=&#123;&#123;<span class="number">7</span>*<span class="number">7</span>&#125;&#125; <span class="comment">// GET 参数</span></div><div class="line"></div><div class="line"><span class="number">49</span>  <span class="comment">// $output 结果</span></div></pre></td></tr></table></figure>
+<p>可以看到，服务器执行了我们传过去的数据，这时，漏洞就产生了。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/ssti/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/jsonp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/jsonp/" itemprop="url">JSONP注入利用与防御</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-01T10:20:40+08:00">
+                2018-01-01
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2018-08-15T20:57:01+08:00">
+                2018-08-15
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="JSONP基础"><a href="#JSONP基础" class="headerlink" title="JSONP基础"></a>JSONP基础</h3><p>JSONP(JSON with Padding) 其目的是为了绕过诸如同源策略强制执行<code>XMLHttpRequest</code>(AJAX requests)去请求JSON数据。举个例子:</p>
+<p>网站A: <code>www.competition.com</code> 提供赛事信息 其接口 <code>competition.com/data.json</code> 以<code>json</code>格式返回了赛事数据,其分析子站B: <code>analysis.competition.com</code> 根据赛事信息进行分析 并展示给用户</p>
+<p>那么B站的<code>ajax</code>想要获取data怎么做？</p>
+<p>答案是很困难的，普通的<code>ajax</code>是无法完成的</p>
+<p>因为<code>ajax</code>遵守同源策略，A、B是异源，异源资源共享通常是不允许的(除了脚本、链接等 <a href="https://hellohxk.com/blog/same-origin-policy/" target="_blank" rel="external">详情可以看同源策略这篇文章</a>)</p>
+<p>那么怎么办呢？</p>
+<p>我们可以发现，同源策略是允许跨域加载脚本的，我们的思路就是把<strong>数据放进js文件中，由于跨域脚本嵌入是可行的，从而跨域加载数据</strong>，但直接把json数据方式js文件格式是不正确的，我们的思路是<strong>设置一个函数调用，把json数据作为实参传递进来</strong>，然后在B中对形参进行处理，这样就跨域获取到了json数据。即script标签不受同源安全策略限制，它可以向别的域发送get请求。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/jsonp/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/xxe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/xxe/" itemprop="url">XXE利用与防御</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-15T20:38:17+08:00">
+                2017-12-15
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-04T23:10:35+08:00">
+                2018-02-04
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="XML-简介"><a href="#XML-简介" class="headerlink" title="XML 简介"></a>XML 简介</h3><p><code>XML</code> 即 可扩展标记语言（EXtensible Markup Language），是一种标记语言，其标签没有预定义，您需要自行定义标签，是<code>W3C</code>的推荐标准。其于<code>HTML</code>的区别是：</p>
+<ul>
+<li><code>HTML</code> 被设计用来显示数据</li>
+<li><code>XML</code> 被设计用来传输和存储数据</li>
+</ul>
+<h4 id="XML作用"><a href="#XML作用" class="headerlink" title="XML作用"></a>XML作用</h4><blockquote>
+<p>数据分离</p>
+</blockquote>
+<p>如果你需要在<code>HTML</code>文档中显示动态数据，那么每当数据改变时将花费大量的时间来编辑<code>HTML</code>。<br>通过<code>XML</code>，数据能够存储在独立的<code>XML</code>文件中。这样你就可以专注于使用<code>HTML</code>进行布局和显示，并确保修改底层数据不再需要对<code>HTML</code>进行任何的改变。<br>通过使用几行<code>JavaScript</code>，你就可以读取一个外部<code>XML</code>文件，然后更新<code>HTML</code>中的数据内容。</p>
+<blockquote>
+<p>简化数据共享</p>
+</blockquote>
+<p>在真实的世界中，计算机系统和数据使用不兼容的格式来存储数据。<br><code>XML</code>数据以纯文本格式进行存储，因此提供了一种独立于软件和硬件的数据存储方法。<br>这让创建不同应用程序可以共享的数据变得更加容易。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/xxe/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/ssrf/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1336,684 +1997,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/sqli-labs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/sqli-labs/" itemprop="url">sqli-labs writeup</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-14T13:54:31+08:00">
-                2017-10-14
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:42:31+08:00">
-                2021-08-24
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web-security/" itemprop="url" rel="index">
-                    <span itemprop="name">web security</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><a href="https://github.com/Audi-1/sqli-labs" target="_blank" rel="external">Sqli-labs</a>是一个练习<code>SQL注入</code>的很好的一个平台，可以直接下载后使用。注意由于充满漏洞，推荐在虚拟机中使用，并使用<code>host-only</code>模式，不要让其联网。</p>
-<h3 id="平台搭建"><a href="#平台搭建" class="headerlink" title="平台搭建"></a>平台搭建</h3><p>我这里是采用了<code>虚拟机</code>+<code>win10</code>+<code>phpStudy</code>,然后直接将下载的<code>sqli-labs-master</code>放到<code>www</code>文件夹中即可。</p>
-<h3 id="Basic-Challenges"><a href="#Basic-Challenges" class="headerlink" title="Basic Challenges"></a>Basic Challenges</h3><p>每个<code>less</code>都有提示会告诉你是什么类型的题,我们也能看到后台源码，所以比较好去理解。</p>
-<h4 id="less-1"><a href="#less-1" class="headerlink" title="less-1"></a>less-1</h4><p>简单的<code>&#39;</code>绕过</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http:<span class="regexp">//</span><span class="number">10.37</span>.<span class="number">129.3</span><span class="regexp">/sqli-labs-master/</span>Less-<span class="number">1</span><span class="regexp">/?id=1' or 1=2 %23</span></div></pre></td></tr></table></figure>
-<p>发现正常运行，即注入成功。<br>之后是比较基础的脱裤步骤，具体操作可以看我的另一篇文章<a href="https://hellohxk.com/blog/sql-injection/" target="_blank" rel="external">SQL注入总结</a>总结了基本步骤。本例练习一下脱裤，之后如果不是有一些特殊方式，就不再贴出来了。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/sqli-labs/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/archives/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/archives/" itemprop="url">ZIP格式解析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-11T10:31:09+08:00">
-                2017-10-11
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:23:32+08:00">
-                2021-08-24
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/file-format-analysis/" itemprop="url" rel="index">
-                    <span itemprop="name">file format analysis</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。目前，ZIP格式属于几种主流的压缩格式之一，其竞争者包括RAR格式以及开放源码的7z格式。</p>
-</blockquote>
-<p>ZIP官方文档中对ZIP文件格式作了总结：</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">Overall .ZIP <span class="built_in">file</span> format:</div><div class="line"></div><div class="line">  [<span class="keyword">local</span> <span class="built_in">file</span> header <span class="number">1</span>]</div><div class="line">  [<span class="built_in">file</span> data <span class="number">1</span>]</div><div class="line">  [data descriptor <span class="number">1</span>]</div><div class="line">  .</div><div class="line">  .</div><div class="line">  .</div><div class="line">  [<span class="keyword">local</span> <span class="built_in">file</span> header n]</div><div class="line">  [<span class="built_in">file</span> data n]</div><div class="line">  [data descriptor n]</div><div class="line">  [archive decryption header] (EFS)</div><div class="line">  [archive extra data <span class="built_in">record</span>] (EFS)</div><div class="line">  [central directory]</div><div class="line">  [zip64 <span class="keyword">end</span> <span class="keyword">of</span> central directory <span class="built_in">record</span>]</div><div class="line">  [zip64 <span class="keyword">end</span> <span class="keyword">of</span> central directory locator]</div><div class="line">  [<span class="keyword">end</span> <span class="keyword">of</span> central directory <span class="built_in">record</span>]</div></pre></td></tr></table></figure>
-<p>即zip主要由三部分组成：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">压缩源文件数据区</th>
-<th style="text-align:center">核心目录</th>
-<th style="text-align:center">目录结束</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">local file header + file data + data descriptor</td>
-<td style="text-align:center">central directory</td>
-<td style="text-align:center">end of central directory record</td>
-</tr>
-</tbody>
-</table>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/archives/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/image/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/image/" itemprop="url">image文件格式解析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-05T11:08:28+08:00">
-                2017-10-05
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:35:13+08:00">
-                2021-08-24
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/file-format-analysis/" itemprop="url" rel="index">
-                    <span itemprop="name">file format analysis</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="1-JPEG"><a href="#1-JPEG" class="headerlink" title="1. JPEG"></a>1. JPEG</h3><blockquote>
-<p><strong>JPEG(jay-peg)</strong>是一种针对照片视频而广泛使用的一种有损压缩标准方法，其本身只有描述如何将一个视频转换为字节的数据流。但并没有说明这些字节如何在任何特定的存储媒体上被封存起来。JPEG的压缩方式通常是<strong>破坏性数据压缩</strong>，意即在压缩过程中图像的质量会遭受到可见的破坏，有一种以JPEG为基础的标准Lossless JPEG是采用无损的压缩方式，但Lossless JPEG并没有受到广泛的支持。</p>
-<p>一个由C-Cube Microsystems等公司所创建的额外标准，称为<strong>JFIF</strong>（JPEG File Interchange Format，JPEG文件交换格式）详细说明如何从一个JPEG流，产出一个适合于电脑存储和传输（像是在互联网上）的文件。</p>
-<p>JPEG/JFIF是万维网（World Wide Web）上最普遍的被用来存储和传输照片的格式。它并不适合于线条绘图（drawing）和其他文字或图标（iconic）的图形，因为它的压缩方法用在这些类型的图形上，得到的结果并不好（PNG和GIF格式通常是用来存储这类的图形；GIF每个像素只有8比特，并不很适合于存储彩色照片，PNG可以无损地存储照片，但是文件太大的缺点让它不太适合在网络上传输）。</p>
-</blockquote>
-<p>简单概括下jpeg文件格式：</p>
-<ul>
-<li>整个内容由标记信息和数据组成，标记信息包括标记代码和具体字段组成，记录了图片的某些属性，数据为图像的具体数据。</li>
-<li><code>FF</code>为特殊值，如果后边跟的是<code>00</code>,即<code>FF 00</code>表示图像数据内容中的<code>FF</code>值，若后边不为0，类似<code>FF D8</code>为某个具体标记码的值，代表标记信息的开始。</li>
-<li>常用的标记有<code>SOI、APP0、DQT、SOF0、DHT、DRI、SOS、EOI</code>。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/image/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/xss-bypass-tricks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/xss-bypass-tricks/" itemprop="url">XSS利用与防御</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-02T11:56:17+08:00">
-                2017-10-02
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:44:19+08:00">
-                2021-08-24
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/XSS/" itemprop="url" rel="index">
-                    <span itemprop="name">XSS</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="XSS-知识"><a href="#XSS-知识" class="headerlink" title="XSS 知识"></a>XSS 知识</h3><p>利用XSS技术，攻击者可以在浏览器正在执行的原始服务器代码的上下文中插入远程代码。从浏览器角度来看，插入的代码看起来与合法应用一样，都源自同一个服务器，因此就会允许这些代码访问本地资源，最终将隐私数据泄露给攻击者，甚至会出现应用会话劫持现象。</p>
-<h4 id="xss-分类"><a href="#xss-分类" class="headerlink" title="xss 分类"></a>xss 分类</h4><p>xss大致分为：反射型、存储型、DOM型（这三种为主流）.</p>
-<p>无论反射型还是存储型，都是需要与服务端交互的，即<strong>服务端将提交的内容反馈到了html源码内，导致触发xss</strong>，也就是说返回到html源码中可以看到触发xss的代码；而<strong>DOM型xss是不与服务端交互的，只与客户端上的js交互</strong>，也就是说提交的恶意代码，被放到了js中执行，然后显示出来。那么这种形式有一个问题，就是html源码里面不存在触发xss的代码，因为服务端返回的源码都是一样的，<strong>只不过源码里面包含了一段js，这段js再执行后生成了一段xss代码</strong>，可以在审查元素中查看到。</p>
-<h5 id="反射型xss"><a href="#反射型xss" class="headerlink" title="反射型xss"></a>反射型xss</h5><p>只是简单地把用户输入的数据”反射”给浏览器，攻击时需要用户配合点击，也叫<code>非持久型xss</code></p>
-<h5 id="存储型xss"><a href="#存储型xss" class="headerlink" title="存储型xss"></a>存储型xss</h5><p>会把用户输入的数据”存储”在服务器端，也叫<code>持久性xss</code>，常见留言板等可以提交展示用户输入内容的功能点。</p>
-<h5 id="DOM型xss"><a href="#DOM型xss" class="headerlink" title="DOM型xss"></a>DOM型xss</h5><p>可通过修改页面的DOM节点形成的xss漏洞</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/xss-bypass-tricks/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2059,7 +2047,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-count">64</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2070,7 +2058,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -2081,7 +2069,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">74</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -2153,7 +2141,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     
     &emsp;&emsp;|&emsp;

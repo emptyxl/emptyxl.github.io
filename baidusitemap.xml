@@ -4,6 +4,80 @@
 
     
   <url>
+    <loc>https://blog.nyrae.icu/blog/defence-in-depth/</loc>
+    <lastmod>2022-08-27T04:22:11.995Z</lastmod>
+    <data>
+        <display>
+        <title>defence-in-depth</title>
+        <pubTime>2022-08-27T04:22:11.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://blog.nyrae.icu/blog/ak-exploit/</loc>
+    <lastmod>2022-08-27T04:13:55.516Z</lastmod>
+    <data>
+        <display>
+        <title>ak-exploit</title>
+        <pubTime>2022-08-27T04:13:55.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://blog.nyrae.icu/blog/security-overview/</loc>
+    <lastmod>2022-08-27T00:14:02.758Z</lastmod>
+    <data>
+        <display>
+        <title>安全大图&趋势</title>
+        <pubTime>2022-05-16T13:07:44.000Z</pubTime>
+        
+        <tag>overview</tag>
+         
+         
+           
+             
+              <breadCrumb title="overview" url="https://blog.nyrae.icu/categories/overview/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://blog.nyrae.icu/blog/iam-and-idaas/</loc>
+    <lastmod>2022-04-17T13:01:30.000Z</lastmod>
+    <data>
+        <display>
+        <title>IAM and IDaaS, 纵深防御的强对抗点</title>
+        <pubTime>2022-04-17T13:01:30.000Z</pubTime>
+        
+        <tag>IAM</tag>
+         
+        <tag>IDaaS</tag>
+         
+        <tag>zero trust</tag>
+         
+         
+           
+             
+              <breadCrumb title="IAM" url="https://blog.nyrae.icu/categories/IAM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://blog.nyrae.icu/blog/traffic-hiding-via-cdn/</loc>
     <lastmod>2021-10-23T13:23:35.200Z</lastmod>
     <data>
@@ -63,9 +137,9 @@
         <title>Weblogic 常见漏洞分析</title>
         <pubTime>2018-07-21T12:32:51.000Z</pubTime>
         
-        <tag>vulnerability analysis</tag>
-         
         <tag>web security</tag>
+         
+        <tag>vulnerability analysis</tag>
          
         <tag>weblogic</tag>
          
@@ -321,9 +395,9 @@
         <title>PHP反序列化相关漏洞总结[CVE-2016-7124、SugarCRM、session 反序列化、HITCON 2016]</title>
         <pubTime>2018-04-15T13:14:21.000Z</pubTime>
         
-        <tag>vulnerability analysis</tag>
-         
         <tag>web security</tag>
+         
+        <tag>vulnerability analysis</tag>
          
         <tag>php</tag>
          
