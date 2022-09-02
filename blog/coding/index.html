@@ -652,7 +652,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>a = bytearray(<span class="string">b'\xe4\xbd\xa0'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a</div><div class="line">bytearray(<span class="string">b'\xe4\xbd\xa0'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">0</span>]</div><div class="line"><span class="number">228</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">1</span>]</div><div class="line"><span class="number">189</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a = bytearray(<span class="string">'好'</span>,encoding=<span class="string">'utf-8'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a</div><div class="line">bytearray(<span class="string">b'\xe5\xa5\xbd'</span>)</div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>a = bytearray(<span class="string">'好'</span>)</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">TypeError: string argument without an encoding</div></pre></td></tr></table></figure>
 <p>我相信你能够很容易理解它。</p>
 <h4 id="16进制数转换"><a href="#16进制数转换" class="headerlink" title="16进制数转换"></a>16进制数转换</h4><p>经常遇见16进制原始字符串或者16进制数表示一个字符串的情况，其实就是字符串bytes格式去掉相关的<code>\x</code>等内容。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="string">'你好abc'</span></div><div class="line">E4BDA0E5A5BD616263</div><div class="line"><span class="number">0xE4BDA0E5A5BD616263</span></div><div class="line"><span class="string">'E4BDA0E5A5BD616263'</span></div></pre></td></tr></table></figure>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="string">'你好abc'</span></div><div class="line">E4BDA0E5A5BD616263</div><div class="line"><span class="number">0xE4BDA0E5A5BD616263</span></div><div class="line"><span class="string">'E4BDA0E5A5BD616263'</span></div></pre></td></tr></table></figure>
 <p>在某些语言中可以使用这种16进制数或字符串来表示一个字符串，在python中，相关的转换可以使用<code>binascii</code>模块或者<code>hex 编码来实现</code></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> binascii</div><div class="line">&gt;&gt;&gt;</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.b2a_hex(<span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>))</div><div class="line"><span class="string">b'e4bda0e5a5bd616263313233'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.hexlify(<span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>))</div><div class="line"><span class="string">b'e4bda0e5a5bd616263313233'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.b2a_hex(<span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>)).upper()</div><div class="line"><span class="string">b'E4BDA0E5A5BD616263313233'</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'你好abc123'</span>.encode(<span class="string">'utf-8'</span>).hex()</div><div class="line"><span class="string">'e4bda0e5a5bd616263313233'</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.a2b_hex(<span class="string">b'e4bda0e5a5bd616263'</span>)</div><div class="line"><span class="string">b'\xe4\xbd\xa0\xe5\xa5\xbdabc'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>binascii.unhexlify(<span class="string">b'e4bda0e5a5bd616263'</span>)</div><div class="line"><span class="string">b'\xe4\xbd\xa0\xe5\xa5\xbdabc'</span></div></pre></td></tr></table></figure>
 
@@ -810,7 +810,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-count">65</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -821,7 +821,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -832,7 +832,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">83</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

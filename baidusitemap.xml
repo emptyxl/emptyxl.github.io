@@ -3,6 +3,7 @@
 
 
     
+    
   <url>
     <loc>https://blog.nyrae.icu/blog/defence-in-depth/</loc>
     <lastmod>2022-08-27T04:22:11.995Z</lastmod>
@@ -47,6 +48,28 @@
            
              
               <breadCrumb title="overview" url="https://blog.nyrae.icu/categories/overview/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://blog.nyrae.icu/blog/cloud-metadata-exploit/</loc>
+    <lastmod>2022-05-01T08:01:30.000Z</lastmod>
+    <data>
+        <display>
+        <title>云平台metadata利用</title>
+        <pubTime>2022-05-01T08:01:30.000Z</pubTime>
+        
+        <tag>metadata</tag>
+         
+        <tag>cloud security</tag>
+         
+         
+           
+             
+              <breadCrumb title="cloud security" url="https://blog.nyrae.icu/categories/cloud-security/"/>
           
         </display>
     </data>
@@ -137,9 +160,9 @@
         <title>Weblogic 常见漏洞分析</title>
         <pubTime>2018-07-21T12:32:51.000Z</pubTime>
         
-        <tag>web security</tag>
-         
         <tag>vulnerability analysis</tag>
+         
+        <tag>web security</tag>
          
         <tag>weblogic</tag>
          
@@ -395,9 +418,9 @@
         <title>PHP反序列化相关漏洞总结[CVE-2016-7124、SugarCRM、session 反序列化、HITCON 2016]</title>
         <pubTime>2018-04-15T13:14:21.000Z</pubTime>
         
-        <tag>web security</tag>
-         
         <tag>vulnerability analysis</tag>
+         
+        <tag>web security</tag>
          
         <tag>php</tag>
          
@@ -909,7 +932,6 @@
     </url>
 
     
-    
   <url>
     <loc>https://blog.nyrae.icu/blog/intrusion-respone/</loc>
     <lastmod>2021-08-24T12:34:02.148Z</lastmod>
@@ -972,14 +994,23 @@
     
   <url>
     <loc>https://blog.nyrae.icu/blog/encrypted-traffic-analysis/</loc>
-    <lastmod>2021-08-24T12:29:52.600Z</lastmod>
+    <lastmod>2021-08-24T12:29:52.000Z</lastmod>
     <data>
         <display>
-        <title>encrypted_traffic_analysis</title>
+        <title>加密流量检测的一些思路</title>
         <pubTime>2021-08-24T12:29:52.000Z</pubTime>
         
+        <tag>加密流量</tag>
+         
+        <tag>流量指纹</tag>
+         
+        <tag>traffic analysis</tag>
+         
          
            
+             
+              <breadCrumb title="traffic analysis" url="https://blog.nyrae.icu/categories/traffic-analysis/"/>
+          
         </display>
     </data>
     </url>

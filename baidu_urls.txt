@@ -1,6 +1,7 @@
 https://blog.nyrae.icu/blog/defence-in-depth/
 https://blog.nyrae.icu/blog/ak-exploit/
 https://blog.nyrae.icu/blog/security-overview/
+https://blog.nyrae.icu/blog/cloud-metadata-exploit/
 https://blog.nyrae.icu/blog/iam-and-idaas/
 https://blog.nyrae.icu/blog/traffic-hiding-via-cdn/
 https://blog.nyrae.icu/blog/socks-protocol-analysis/

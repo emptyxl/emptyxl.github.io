@@ -22,6 +22,18 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[云平台metadata利用]]></title>
+    <url>%2Fblog%2Fcloud-metadata-exploit%2F</url>
+    <content type="text"><![CDATA[实例元数据(metadata)是关于实例信息的一组信息合集，用于配置和管理运行中的实例，metadata包含不同类型的数据，包括DNS信息，主机名，region相关信息，VPC信息，网络类型与安全组，账号，RAM角色、系统事件等信息。一般分为一下两大类: 基本实例元数据，包括基本信息与系统事件信息 动态实例元数据，包含动态生成的标识数据，一般用于身份的标识验证 需要注意的是，虽然metadata只能通过在实例本身进行访问获取，但是获取到的数据是不受身份验证或加密保护的。这一点的存在也导致了SSRF漏洞在云平台、甚至云服务上有了新的用处，即获取metadata实例元数据进而利用。 metadata的利用大部分集中在实例具有RAM角色或者存在IAM角色，这时可以通过metadata的接口获取到临时Token，这个临时Token具有该角色的所有权限，如读取存储桶、读取日志、执行指令、甚至创建后门账号、后门实例等等。 下面以Alibaba Cloud和Gppgle Cloud Platform的metadata利用为例。 Alibaba Cloud Metadata Exploit首先是阿里云，在阿里云ECS实例中即可访问100.100.100.200/latest/meta-data，会返回所涉及的基础元数据信息。当然这些数据虽然比较敏感，但其实只是机器的基本信息，并没有什么太大的危害，而当只有该实例被授权了RAM角色时，这时候通过metadata可以获取临时STS token，进而获取该角色的所有权限。 要可以被利用，则首先需要该实例具有RAM角色权限，通过如下方式授权。RAM角色是阿里云的身份管理的一个概念，可以理解为一组权限列表的集合。 这里我们新建一个AliyunTestRole并只授权Logstore的读取权限。之后再在ECS访问时，便会新出现/ram路径，通过/ram/security-credentials/可以获取RoleName，再通过/ram/security-credentials/RoleName即可获得STS Token. 这样我们拿到了临时Token，之后我们在尝试通过这个token来获取logstore日志: 1aliyunlog log get_log --project=xxx --logstore=xxx --from_time=xxx --to_time=xxx --size=1 --sts-token=xxx --region-endpoint=xxx --access-id=xxx --access-key=xxx 可以看到，通过aliyun-cli利用STS Token即可做该角色所有权限的事情。这里再介绍最为常见高危的一种，创建账号并可以登陆控制台。当然，这个要求该角色具备这些权限。 首先通过STS Token的 createUser 创建一个用户，并配置密码，之后授权AdministratorAccess管理员权限， 之后登录便可具有控制台的权限，注意登录名是userName@账号id的形式，账号id可以通过aliyun ram GetAccountAlias获取。 至此利用成功，除了可以创建后门账号登陆外，有了token也有很多其他的利用方式，这里不再赘述，有兴趣可以看我的云上利用常见总结。 Google Cloud Platform Exploit和aliyun类似的思路和步骤,GCP的整体思路和流程也基本一致。谷歌的metadata使用域名的方式进行访问，因此使用metadata.google.internal或直接使用其解析的保留地址IP 169.254.169.254均可。我们首先在VM里面去直接请求下，我们可以看到，直接通过curl请求显示403错误，缺失了Metadata-Flavor:Google header字段。可以看到，这一点google的有着更严格的限制，基本杜绝了通过SSRF漏洞来获取metadata的数据内容，因为正常业务请求时基本不会带上这个字段，这一点确实比阿里云做的好。除此之外，还有以下的限制： 请求需带Metadata-Flavor:Google header 不接受任何包含X-Forwarded-For字段的请求，这些请求一般是转发过来的 我们带上Metadata-Flavor:Googleheader之后，可以正常返回了。 GCP对新建的每个实例会默认附带一个服务账号，这个服务账号有3种可选的访问权限范围，默认、全部及自定义。可以通过metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token获取token并根据metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/scopes获取访问权限范围。这里注意token会返回一堆.....这个忽略去掉就好了，我一开始还以为是脱敏处理拿不到token。拿到token后可以使用google api来进行token验证。 我们来看看默认的策略具有什么权限： 12345678[xxx@empty-xl-gcp ~]$ curl http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/scopes -H "Metadata-Flavor: Google"https://www.googleapis.com/auth/devstorage.read_onlyhttps://www.googleapis.com/auth/logging.writehttps://www.googleapis.com/auth/monitoring.writehttps://www.googleapis.com/auth/service.management.readonlyhttps://www.googleapis.com/auth/servicecontrolhttps://www.googleapis.com/auth/trace.append 我们可以看到，其实这里访问范围是对存储桶有读权限的，这里的读是针对项目的所有bucket生效，这一点非常重要。 我们通过API即可获取存储桶，进而获取文件内容。 除了读取数据，我们还可以通过写入元数据SSH密钥的方式获取实例控制权限，前提是具有auth/compute访问范围。首先是获取metadata fingerprint, 1234567891011121314151617181920212223242526272829303132331.获取fingerprintcurl https://compute.googleapis.com/compute/v1/projects/proud-archive-360203 -H "Authorization":"Bearer ya29.c.xxxxx"&#123; "kind": "compute#project", "id": "3341288xxxxx", "creationTimestamp": "", "name": "proud-archive-360203", "commonInstanceMetadata": &#123; "kind": "compute#metadata", "fingerprint": "TkjH3rLXXAw=", "items": [ "key":"ssh-keys", "value":"xxxxxx" ]2. 使用setCommonInstanceMetadata API 设置 ssh元数据 添加一个ssh key进去ssh-keygen -t rsa -b 2048 -C "user@server"curl -X POST -vv https://compute.googleapis.com/compute/v1/projects/proud-archive-360203/setCommonInstanceMetadata -H "Authorization":"Bearer ya29.c.b0AXv0zTOigiF6adb2QoyoYI-DTtENRneyg5jSSEod4MefSZJX_8i6S2tkiAwP6smC5WAfNHv2L5iDfliyFuz_AZqCceDelY599T2CSLe7LV-tTPaBy64k6YfHP8Sudgr9suhLqoc1yZIrJrhKOcDWoTx7HmbmTu1HunG9XbR0kYrPliokQ6m4uQvfhSleVAtnVjU0HlVFihzeVGUJVjp6QVmRgQ" -d @/root/data_metadata.jsonpost_data:&#123; "fingerprint": "d6ZUq4Nc2Qw=", "items": [ &#123; "key": "ssh-keys", "value":"user:ssh-rsa AAAAB3NzaC1xxx user@empty-xl-gcp-123" &#125; ]&#125; 最后即可通过密钥证书直接登录获取服务器权限。]]></content>
+      <categories>
+        <category>cloud security</category>
+      </categories>
+      <tags>
+        <tag>metadata</tag>
+        <tag>cloud security</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[IAM and IDaaS, 纵深防御的强对抗点]]></title>
     <url>%2Fblog%2Fiam-and-idaas%2F</url>
     <content type="text"><![CDATA[随着外部环境的进一步恶化，攻击勒索事件频发，钓鱼以及鱼叉式攻击已经变得越来越频繁且成本越来越低，甚至已经出现有体系化的钓鱼平台和钓鱼小分队。这一点其实在内部对抗，国家级攻防演练，甚至披露的APT组织中也经常发生。而随着企业组织人员的不断扩充，鱼叉式攻击的风险并没有得到有效收敛，反而风险系数甚至随人员的增长而成比例递增，这一点在任何安全建设中都是无法接受的。除此之外，组织内部的应用为了实现安全管理，所有应用都要去维护认证、鉴权的逻辑，众多冗余且参差不齐的认证鉴权系统，并没有增强身份认证的安全性，反而制约了研发的专注度，因此将身份鉴权认证剥离出来并统一进行管理的思想，构成了IAM(Identity and access management)，他的核心思想是the right individuals to access the right resources at the right times for the right reasons. IAM的引入可以大大降低了企业对于身份管理的成本，最简单的例子是员工的离职无需在各个系统重手动的撤销权限。 疫情的突然爆发，使得越来越多的企业进行远程办公，这种混合办公的模式也对办公安全提出了更大的挑战，同时也激发了大量IAM的需求与机遇。可以从Gartner的2022安全趋势中可以看到，基于身份的攻击防御已经成为了趋势(这个在后面会提到)，而okta也称为了市值TOP的公司。而随着企业上云的步伐逐步加快(客户性质决定了国内更偏向专有云，国外更偏向公有云)，PasS的思想也促使IAM向IDaaS转变(Identity as a Service). IDaaS不仅具有开箱即用，支持云环境的特点，他和IAM最大的区别是IDaaS的目标是构建一个身份认证生态，可以支持各种原有身份体系的接入，这一点对于有大量历史包袱的企业和海外大量多云环境客户来说，非常友好。这里插一句，目前来说多云环境的安全建设和管理也是一个新的方向，但国内这方面需求看起来比较少，反而海外的公司需求会多一些，这可能也是okta可以快速增长的原因之一。 数字身份与多因素认证(Digital Identity &amp; Multi-factor Authentication)对于身份的管理，数字身份与多因素认证是无法绕不开的基础。数字身份是计算机系统或应用用来代表个人、设备、组织的数字化身份信息，系统或应用通过确认身份从而进行相应的数据处理或反馈，例如返回对应的用户页面或者相应数据，又或返回管理页面还是普通用户页面。数字身份主要包含三部分: Authentication(自我认证，我有这个身份) Identification(身份认证，我是什么身份) Authorization(权限确认，我可以访问什么资源) Authentication也是我们熟知的”登陆”操作，历史最悠久的账号+密码组合大家肯定不会陌生，直到现在很多网站还存在这样的认证方式，危害显而易见，全球的各种数据库被脱了无数次。再此之后，出现了账号+token的方式，使用一个可以轮转的token来代替明文密钥。这个方式也是github今年全面推广的安全策略，通过develop access token代替密码进行代码部署与发布，我猜很有可能跟日益严重的供应链攻击有关，大量开发人员的账密被撞库后进行恶意代码的插入，再利用开源项目的广泛关注度以达到入侵全球企业的目的。 除此之外，随着移动设备的普及和不同等级场景的需要，又新出现了一系列认证手法，如上图所示，包含了一系列的验证方式，密保卡、动态密码、短信、扫描、app消息、邮件、指纹、人脸、虹膜、声纹、硬件密钥、U盾等等，而基于用户当前的风险状况采用额外不同的认证方式，也叫做多因素认证MFA，一般情况下，在最初认证是会采用账号+密码+其他的组合进行认证，也叫2FA。在IAM中，这种多因素认证会贯穿整个交互中，当系统认为存在操作风险时，便会根据场景要求新的认证方式以确保当前的操作时符合预期的。 如上图所示，是一个典型的MFA认证流程，整体过程也比较简单，通过多个有效因子综合验证得到合法身份和权限信息。 Identification侧重于身份的类别区分，更强调与现实世界关系的绑定，比如登陆的人是研发、运营还是管理员又或是外包同学。Authorization则侧重于所属身份具有的权限信息，例如是否拥有该系统的访问权限，又或者只有临时的部分目录访问权限等等。 IAMIAM被认为是身份管理的解决方案，其核心功能包含4点，也常被称为4A厂商: 认证(Authentication) 授权(Authorization) 账号(Account) 审计(Audit) 认证和授权的含义在上面已经提到过了，账号指的是针对身份的全流程管理，包括账号创建、权限修改及移除、账号转交、账号销毁等流程。而审计是指整个身份的全生命流程及操作都有响应的记录，便于溯源及安全检测，一旦发现可疑或高危的操作行为，有能力进行二次验证甚至告警，人工干预进行事件响应。这里多说一点，在身份盗用成本和难度比较低的今天，审计功能日志记录对于安全能力的建设至关重要，异常的登陆尝试、授权甚至后门账号的添加修改，都往往是整个企业生产网沦陷的开始。 在传统的身份认证体系当中，当通过认证系统后，会在数据包中加入token字段以代替账密的输入，服务端业务的通信会去校验token值从而正常的访问，由于这个token一般失效时间都非常久，因此攻击者只要从各种途径获取到此token值，便可以窃取真实身份。对于此，一般通过设置两个不同失效时间的token来缓解此类问题，access token与refresh token。如下图，是一个典型的OAuth2的使用流程，OAuth的好处是解耦了认证和授权，可以使第三方服务在不获取到凭据的情况下，得到访问资源的权限。 客户端与授权服务器和资源服务器通讯，客户端首先跟授权服务器进行认证过程，认证成功后授权服务器会返回access token和refresh token，其中access token是客户端与资源方交互的token，失效时间较短，这样攻击者即使获取到也会因为token的失效而攻击失败。refresh token为客户端保有的刷新密钥，当access token失效时，客户端通过refresh token去授权服务器换取新的access token，这样的好处是客户端不用频繁的进行验证操作，且refresh token保有在客户端，在通信中被获取的概率大大降低。 IDaaS相比于IAM，IDaaS(Identity as a Service)最大的优势是可以将多个应用程序的身份整合到一个简化的系统中，且原生支持了云的特性、云服务接入和云原生化部署。举个例子，在过去，IAM产品只支持本地化的部署，而随着业务上云以及组织扩张收购，可能出现多个子公司的IAM系统，其实又变回了以前混乱的状态。而IDaaS作为轻量云化的服务，天生支持基于云的服务接入与易扩展性，可以将多个IAM系统整个到同一套集中化的SSO当中来，这样即使人员企业扩张，也无需很大的修改原有鉴权体系，简单高效的提高了身份认证的水位，也无需担心会随着人员增长风险成比例增加。因此，IDaaS的三个特性显而易见: 单点登录(SSO) 多因素认证(MFA) 身份管理(LDP) 除此之外，由于接入的高效性，IDaaS产品不仅仅适用于办公应用(与人交互的服务)，生产应用间、k8s、API等都可以通过SDK的方式统一高效的获取身份认证安全能力，同时由于审计能力的存在，使得这部分东西向流量访问也被记录下来，用于安全检测和溯源。 Azure Activity Directory接下来，我们通过Azure Active Directory来学习下微软在IAM领域的设计思路和经验。之所以选Azure的，主要因为其处于领导者象限且天生依附于Azure云平台，更有借鉴的意义。 Azure Active Directory (Azure AD) 是一种基于云的身份和访问管理服务。此服务可帮助您的员工访问外部资源，例如 Microsoft 365、Azure 门户和数以千计的其他 SaaS 应用程序。Azure Active Directory 还可以帮助他们访问内部资源，例如您的公司 Intranet 网络上的应用程序，以及为您自己的组织开发的任何云应用程序。 AD架构体系与定位首先是AD的架构，这一点和其他云服务一样，主要包括可用性、主从容灾备份、可扩展性、容错性、数据一致性方面的考虑，并提供了服务的监控与审计，这些不再赘述。如下图，AD采用异地备份的方式，当主副本写入数据时便会立即同步复制至从副本。 由于任何服务都存在性能瓶颈，AD服务也不例外，如果所有的接入方都频繁的进行鉴权验证，同样会打挂AD服务，所以实际生产中AD的逃逸和稳定性也是需要考量的重要指标之一，如下图为Azure推荐的降低请求量的方式，其实从这个图可以体现微软对于AD的定位，统一的身份管理服务，用于接入各种不同的生态体系方并提供了MFA进行认证。 基于零信任的身份验证策略Azure AD基于零信任的思想，设计了一套身份认证策略，即什么时候需要MFA挑战，什么时候不需要。这一点也是安全性和用户体验平衡的矛盾点。对于AD的身份认证，核心点有4个: 使用身份去访问资源(任何凭据都有可能泄露，账密、AK、私钥) 使用统一的身份认证管理体系，保持云上身份与已有身份系统的一致性(确保安全水位一致性) 使用无密码或现代密码方式(减少明文密码、弱口令，采用MFA、证书、OAuth等认证策略) 启用条件身份验证策略(根据操作和风险进行MFA挑战) 下图是AD身份验证及限制示意图，其利用策略与机器学习模型，实时分析用户和设备的位置信息及行为数据，针对可能存在的用户或会话风险进行不同的响应，包括放行阻断、访问限制、MFA验证、重置、拦截。除此之外，其集成了与其他安全产品的联动，例如与Microsoft Defender for Endpoint的威胁联动，及时进行身份异常行为的检测与阻止。当然，所有的身份验证都存留有审计日志，可以在SIEM中进行查看与分析。 单点SSO单点登录SSO(single sign-on)是指使用一组凭证登录多个不同的独立系统。由于AD是一个统一的身份认证平台，代替和整合原有各个认证系统形成统一的认证鉴权接口就显得很有必要，通过这样的单点SSO验证身份登陆后，在有权限的各个系统的访问均不再需要提供身份认证对于用户来说也是一个极大的便利。 不同的系统可以选择不同的SSO登录方式，例如云应用可以使用联邦身份认证，例如OpenID Connect、OAuth、SAML,又或者其他应用使用密码或基于链接的SSO。 下面介绍下OIDC(OpenID Connect),他已经成为了行业单点登录和身份管理的通用标准。它基于OAuth2的基础上，又新增了一个身份层。OIDC允许客户端基于授权服务器或身份提供商(ldP)来进行身份的验证和授权，采用RESTful API并通过JSON格式进行数据传递。 如图所示，基本的逻辑和OAuth类似，增加了id_token来表述身份的概念。具体的id_token字段详见id_token字段详解 反向代理与多应用集成AD反向代理可以使用户通过AD来对本地应用程序进行代理，从而将本地应用接入到整个体系当中，并可以通过互联网进行访问。 除了反向代理之外，AD也支持大量的SaaS化服务，这些服务支持的多少也是IDaaS生态的核心竞争力之一，便于系统轻松的接入各个生态。 角色访问策略和其他所有云的访问控制类似，都是基于角色来精细化配置可访问的资源类型和内容。角色可以理解为权限的集合，一般会对应于达成某个目的最小权限集合，当然这里大多数的配置都会与现实中身份或者生产应用有关。 安全报警、身份保护与审计这里体现了AD的审计功能，包括各类登陆日志的异常告警，特定活动的展示信息，以及和其他安全产品的联动审计识别，除此之外，AD还具有身份保护功能。当AD识别到当前该身份的使用存在风险时，会针对该身份进行封禁以保护企业的安全。 回到最开始的话题，随着上云以及云原生化的普及，传统的账密泄露风险已经慢慢转变为身份凭据泄露的风险，例如AK，证书的泄露。而随着企业组织人员的不断庞大以及漏洞管理的重视情况有所好转，在身份管理与访问控制上，必定是一个需要发力的正向建设点，也会是攻防双方对抗的火力点。]]></content>
@@ -85,9 +97,17 @@
     <content type="text"></content>
   </entry>
   <entry>
-    <title><![CDATA[encrypted_traffic_analysis]]></title>
+    <title><![CDATA[加密流量检测的一些思路]]></title>
     <url>%2Fblog%2Fencrypted-traffic-analysis%2F</url>
     <content type="text"></content>
+      <categories>
+        <category>traffic analysis</category>
+      </categories>
+      <tags>
+        <tag>加密流量</tag>
+        <tag>流量指纹</tag>
+        <tag>traffic analysis</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[Gitlab 13.10.2 Remote Code Execution漏洞分析(CVE-2021-22204、CVE-2021-22205)]]></title>
@@ -173,8 +193,8 @@
         <category>vulnerability analysis</category>
       </categories>
       <tags>
-        <tag>web security</tag>
         <tag>vulnerability analysis</tag>
+        <tag>web security</tag>
         <tag>weblogic</tag>
       </tags>
   </entry>
@@ -284,8 +304,8 @@
         <category>vulnerability analysis</category>
       </categories>
       <tags>
-        <tag>web security</tag>
         <tag>vulnerability analysis</tag>
+        <tag>web security</tag>
         <tag>php</tag>
       </tags>
   </entry>

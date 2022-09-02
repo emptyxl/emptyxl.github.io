@@ -338,6 +338,181 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/memcached-ddos/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/memcached-ddos/" itemprop="url">Memcached UDP DDoS利用复现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T15:14:25+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:37:15+08:00">
+                2021-08-24
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vulnerability-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">vulnerability analysis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="Memcached-简介"><a href="#Memcached-简介" class="headerlink" title="Memcached 简介"></a>Memcached 简介</h3><blockquote>
+<p>Memcached是一种基于内存的key-value存储，用来存储小块的任意数据（字符串、对象）。这些数据可以是数据库调用、API调用或者是页面渲染的结果。<br>它是一个简洁的key-value存储系统。<br>一般的使用目的是，通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度、提高可扩展性。</p>
+</blockquote>
+<img src="/blog/memcached-ddos/mem.png" alt="memcached flow" title="memcached flow">  
+<p>具体的命令使用方法，可以在<a href="http://www.runoob.com/Memcached/Memcached-tutorial.html" target="_blank" rel="external">这里</a>看到，非常简单，很容易学习上手。</p>
+<h3 id="UDP-Reflection-DDoS"><a href="#UDP-Reflection-DDoS" class="headerlink" title="UDP Reflection DDoS"></a>UDP Reflection DDoS</h3><p>memcached作为中间件，在之前爆出过整数溢出漏洞，详情可以看另一篇文章，而在最近，由于其低版本默认支持UDP协议，加上默认连接方式不需要认证，使得其可以通过利用，造成<code>UDP Reflection DDoS</code>，这里对其利用方式进行了复现。</p>
+<p>这里总共有3台机子:</p>
+<ul>
+<li>memcached服务器 IP:<code>192.168.1.100</code></li>
+<li>正常用户 IP:<code>192.168.1.101</code></li>
+<li>攻击者 IP:<code>192.168.1.103</code></li>
+</ul>
+<p>其利用的主要流程如下:  </p>
+<ol>
+<li><code>memcached</code> 默认连接不需要身份认证，这成为了利用的潜在条件</li>
+<li><code>memcached</code> 低版本默认支持UDP协议，这成为了UDP DDoS的条件</li>
+<li>在<code>memcached</code>中存储一个<code>key</code>字段很小，但<code>value</code>值很长的键值对，这提供了反射DDoS的可能</li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/memcached-ddos/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/php-deserialization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1838,166 +2013,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/remote-code-execute/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/remote-code-execute/" itemprop="url">远程代码执行利用与防御</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-07T11:23:43+08:00">
-                2018-01-07
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2018-08-15T19:35:49+08:00">
-                2018-08-15
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web-security/" itemprop="url" rel="index">
-                    <span itemprop="name">web security</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>RCE(remote code execute)远程代码执行，其核心思想<strong>利用一些可以将参数作为代码执行的函数，构造恶意输入从而实施攻击。</strong></p>
-<h3 id="PHP相关敏感函数"><a href="#PHP相关敏感函数" class="headerlink" title="PHP相关敏感函数"></a>PHP相关敏感函数</h3><p>常见的敏感函数如下:</p>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">eval</span><span class="params">()</span>、<span class="title">preg_replace</span> /<span class="title">e</span>、<span class="title">assert</span>、<span class="title">call_user_func</span><span class="params">()</span>、<span class="title">call_user_func_array</span><span class="params">()</span>、<span class="title">create_function</span><span class="params">()</span>、</span></div><div class="line"><span class="title">system</span><span class="params">()</span>、<span class="title">exec</span><span class="params">()</span>、<span class="title">shell_exec</span><span class="params">()</span>、<span class="title">passthru</span><span class="params">()</span>、 <span class="title">escapeshellcmd</span><span class="params">()</span>、<span class="title">pcntl_exec</span><span class="params">()</span></div><div class="line"></div><div class="line">还有一些文件包含等函数在文件包含相关文章中剖析，这里不再重复</div></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/remote-code-execute/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2048,7 +2063,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-count">65</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2059,7 +2074,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -2070,7 +2085,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">83</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
