@@ -469,137 +469,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/ak-exploit/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/ak-exploit/" itemprop="url">ak-exploit</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-08-27T12:13:55+08:00">
-                2022-08-27
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2022-08-27T12:13:55+08:00">
-                2022-08-27
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/security-overview/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1083,7 +952,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/traffic-hiding-via-cdn/">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/encrypted-traffic-analysis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="empty_xl">
@@ -1102,7 +971,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/traffic-hiding-via-cdn/" itemprop="url">traffic-hiding-via-cdn</a></h1>
+                <a class="post-title-link" href="/blog/encrypted-traffic-analysis/" itemprop="url">加密流量检测的一些思路</a></h1>
         
 
         <div class="post-meta">
@@ -1114,8 +983,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-10-23T21:23:35+08:00">
-                2021-10-23
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-08-24T20:29:52+08:00">
+                2021-08-24
               </time>
             
 
@@ -1130,12 +999,34 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2021-10-23T21:23:35+08:00">
-                2021-10-23
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T20:29:52+08:00">
+                2021-08-24
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/traffic-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">traffic analysis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1165,9 +1056,17 @@
 
       
         
-          
-            
-          
+          <p>随着互联网攻击愈发频繁且攻击手段逐步提升，传统的明文数据传输已经无法满足企业和个人的隐私保护和安全需求。最为常见的HTTP明文数据的窃取，对于不可信的中间链路来说，轻而易举。因此，通过流量加密的方式在不可信的信道上进行传输，成为迫在眉睫的需求。<code>Netscape</code>在1995年提出了安全套接字层<code>SSL</code>协议,直到后来被传输层安全性<code>TLS</code>取代。目前根据Cisco的统计数据显示，目前超82%的流量都会经过加密处理。<code>SSL/TLS</code>也是目前使用最为广泛的加密层协议，<code>HTTP</code>、<code>FTP</code>、<code>SMTP</code>等协议都可以通过TLS来进行加密封装，从而实现安全传输。</p>
+<p>除了业务越来越多使用加密流量之外，攻击者、僵尸网络以及蠕虫们也越来越多的使用加密流量来进行安全设备检测规避，例如常见的IDS、防火墙等设备由于无法获取证书，进而无法解密https流量，因此无法对这类流量进行检测，这也是这些产品的一些缺陷。当然WAF以及一些新版云防火墙逐渐开始支持用户上传证书从而进行流量解密，也可以达到检测的目的。虽然这些方式都有着一定的适用场景，但大部分其实都是针对南北向流量，特别是针对对外提供标准服务的web接口进行解密检测，对于入侵中后截断，例如载荷投递、命令通道以及横向移动，这些链路往往是主动出向且不是什么标准产品行为，目前据我所知并没有产品可以覆盖或者说无法针对这部分的加密流量进行解密后检测。</p>
+<p>针对这类中控通信的流量检测，大部分产品会基于黑规则来去进行异常告警，例如去分析<code>metasploit</code> stage加载特征，<code>cobaltstrike</code>的握手特性等等，这些主要依靠人工分析的结果，这部分也是攻击者最易绕过或者对抗的地方。越来越多的攻击队会魔改工具，更高级一点的团队专有会有武器开发的员工进行自定义的武器实现，这部分攻击行为在你被入侵之前，是无法得知攻击特征的，这一点是毋庸置疑的。除此之外，有很多基于威胁情报的产品声称通过威胁情报可以检测这类攻击，效果嘛，谁用谁知道。个人觉得，威胁情报适用于2类场景，1类是无差别攻击类，例如僵尸网络、蠕虫、矿池通信等使用威胁情报会很精确，当然此类的时效性也非常重要(例如云主机的资产变动带来的影响)；第2类是同一组织针对不同目标展开的同类型行动，例如APT组织入侵A企业后经过溯源提取出的IOC，很有可能可以帮助B企业及时感知到攻击行为。</p>
+<p>除此之外，其实还有第三类，就是攻防演练场景下的对抗或者针对特定目标的入侵与打击。这类攻击链路，从头到尾往往所使用的IOC、基础设施甚至攻击手法对防守方来说，都是新颖的，这也是笔者所面临的问题。当然，针对这类痛点，安全产品往往会采用机器学习+黑规则的方式声称可以检测xxx的攻击手法，并且检出率多少个9。当然我们不去评价他们的检测能力在实战的效果，但对于超大规模组织架构，超大规模网络流量以及超低告警延时要求的关键基础设施类甲方公司，此类检测能力所需要的数据和计算资源是否可以满足，也是一个未知数。因此，在此篇文章中，我们集中讨论<code>中控通信</code>类场景的另一种检测检测思路。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/encrypted-traffic-analysis/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1214,7 +1113,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/socks-protocol-analysis/">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/gitlab-exiftool-djvu-rce/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="empty_xl">
@@ -1233,7 +1132,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/socks-protocol-analysis/" itemprop="url">socks-protocol-analysis</a></h1>
+                <a class="post-title-link" href="/blog/gitlab-exiftool-djvu-rce/" itemprop="url">Gitlab 13.10.2 Remote Code Execution漏洞分析(CVE-2021-22204、CVE-2021-22205)</a></h1>
         
 
         <div class="post-meta">
@@ -1245,8 +1144,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-09-11T23:00:00+08:00">
-                2021-09-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-07-19T19:38:43+08:00">
+                2021-07-19
               </time>
             
 
@@ -1261,12 +1160,34 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2021-09-11T23:00:00+08:00">
-                2021-09-11
+              <time title="Post modified" itemprop="dateModified" datetime="2021-07-19T19:38:43+08:00">
+                2021-07-19
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vulnerability-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">vulnerability analysis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1296,9 +1217,17 @@
 
       
         
-          
-            
-          
+          <p>这个漏洞其实影响也挺广的，虽然是需要授权，但其实在公网上暴露的很多gitlab都是开放注册的，其实也基本等于给了授权。除此之外，获取CSRF_TOKEN后也可以触发。这个漏洞本质不是<code>gitlab</code>的代码问题，而是<code>gitlab</code>在文件处理时的逻辑，引用了第三方<code>exiftool</code>组件导致在解析时出现问题，从而引起的任意文件执行。</p>
+<p>总结一下: <code>gitab</code>中的<code>gitlab-horse</code>会根据上传文件的标识符来判断文件类型，不同类型有着不同的处理逻辑，对于图片类的文件，会去调用<code>exiftool</code>组件来清除图片文件的元数据，而<code>exiftool</code>组件在处理<code>Djvu</code>格式文件的时候，存在缺陷，可以透过构造恶意的元数据造成双引号逃逸，从而执行任意指令。</p>
+<h3 id="gitlab-数据传递逻辑"><a href="#gitlab-数据传递逻辑" class="headerlink" title="gitlab 数据传递逻辑"></a>gitlab 数据传递逻辑</h3><p>首先我们去下载个受影响版本的gitlab，<a href="https://github.com/gitlabhq/gitlabhq/tree/v13.10.2" target="_blank" rel="external">https://github.com/gitlabhq/gitlabhq/tree/v13.10.2</a>。官网对于gitlab-workhorse的描述可以见下图所示。可以看到，最前端nginx会将请求代理给gitlab-workhorse，按官方的说法，gitlab-workhorse用于处理负载量较大的HTTP请求，例如文件的上传下载、git操作等。</p>
+<img src="/blog/gitlab-exiftool-djvu-rce/architecture_simplified.png" alt="gitlab_workhorse_architecture_simplified" title="gitlab_workhorse_architecture_simplified">
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/gitlab-exiftool-djvu-rce/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1345,7 +1274,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/spoof-defense/">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/some-analysis-of-the-Internet-spatial-search-engine/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="empty_xl">
@@ -1364,7 +1293,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/spoof-defense/" itemprop="url">spoof-defense</a></h1>
+                <a class="post-title-link" href="/blog/some-analysis-of-the-Internet-spatial-search-engine/" itemprop="url">空间搜索引擎与端口扫描欺骗</a></h1>
         
 
         <div class="post-meta">
@@ -1376,8 +1305,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-08-24T21:16:00+08:00">
-                2021-08-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-05-19T19:38:43+08:00">
+                2021-05-19
               </time>
             
 
@@ -1392,12 +1321,34 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:16:00+08:00">
-                2021-08-24
+              <time title="Post modified" itemprop="dateModified" datetime="2021-05-19T19:38:43+08:00">
+                2021-05-19
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/scanning/" itemprop="url" rel="index">
+                    <span itemprop="name">scanning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1427,9 +1378,22 @@
 
       
         
-          
-            
-          
+          <p>在整个<code>ATT&amp;CK</code>的链路中，资产扫描探测的结果对于最终的渗透效果有着重要的影响，对目标资产了解的越多，更容易分析出组织架构、脆弱点和突破点。为了减少扫描行为被防守队发现或封禁，<code>Shodan</code>, <code>Fofa</code>, <code>Zoomeye</code>等空间搜索引擎作为第三方的资产收录平台可以很好的辅助我们，免去扫描的步骤，直接搜索利用点。尤其是在攻防演练或者hw等时期，大量的蜜罐部署以及7*24小时的防守值班，任何轻微的可疑扫描行为都会引起防守队的察觉，从而被封IP。因此利用好第三方搜索引擎的结果，可以让我们更加容易和灵活的进行边界突破。本文将介绍空间搜索引擎的原理及一些常见特性，以及可能的对抗方式——扫描欺骗。</p>
+<p>首先第一个问题，这些搜索引擎的作用是什么？根据个人经验，我将其划分为以下4类。</p>
+<ul>
+<li>资产发现与统计</li>
+<li>基于版本、banner的漏洞利用</li>
+<li>脆弱性信息发现 (包括弱口令、回显包含hacked by xx)</li>
+<li>0day漏洞影响评估</li>
+</ul>
+<p>在本篇文章中，我们主要关注与原理层面的内容并尝试通过各种方式验证我们的猜测。除此之外，一些常用的用法及特性放在了附录中，可以作为清单进行查询。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/some-analysis-of-the-Internet-spatial-search-engine/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1476,7 +1440,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/zero-trust/">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/mysql-load-local-data/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="empty_xl">
@@ -1495,7 +1459,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/zero-trust/" itemprop="url">zero-trust</a></h1>
+                <a class="post-title-link" href="/blog/mysql-load-local-data/" itemprop="url">mysql本地文件任意读取分析/rogue-mysql(ssl)-server</a></h1>
         
 
         <div class="post-meta">
@@ -1507,8 +1471,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-08-24T21:15:16+08:00">
-                2021-08-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-12T21:45:02+08:00">
+                2020-12-12
               </time>
             
 
@@ -1523,12 +1487,34 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:15:16+08:00">
-                2021-08-24
+              <time title="Post modified" itemprop="dateModified" datetime="2020-12-12T21:45:02+08:00">
+                2020-12-12
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vulnerability-analysis/" itemprop="url" rel="index">
+                    <span itemprop="name">vulnerability analysis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1558,9 +1544,16 @@
 
       
         
-          
-            
-          
+          <p><code>Mysql</code>存在一个特性，即如果使用<code>LOAD DATE LOCAL INFILE</code>，便可以从连接到数据库的客户端读取一个本地文件并写入数据库指定数据表中。而在这个逻辑中，客户端真正传送哪个文件到数据表中是由服务端发送的数据字段决定的，因此这样的特性很容易构造出一个恶意的mysql服务器从而造成任意客户端连接此服务器之后的任意本地文件读取。</p>
+<h3 id="LOAD-DATE-LOCAL-INFILE"><a href="#LOAD-DATE-LOCAL-INFILE" class="headerlink" title="LOAD DATE LOCAL INFILE"></a>LOAD DATE LOCAL INFILE</h3><p>创建一个test表并配置好其字段，之后客户端连接mysql服务器，执行以下指令，可以看到<code>/etc/passwd</code>的内容已经被写入test表中。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> <span class="keyword">infile</span> <span class="string">"/etc/passwd"</span> <span class="keyword">into</span> <span class="keyword">table</span> <span class="keyword">test</span> <span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\n'</span>;</div></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/mysql-load-local-data/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1607,7 +1600,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/cobaltstrike-analysis/">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/zeroday-capture/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="empty_xl">
@@ -1626,7 +1619,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/cobaltstrike-analysis/" itemprop="url">cobaltstrike-analysis</a></h1>
+                <a class="post-title-link" href="/blog/zeroday-capture/" itemprop="url">0day捕获/Win the 0-Day Racing Game Against Botnet on Cloud</a></h1>
         
 
         <div class="post-meta">
@@ -1638,8 +1631,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-08-24T21:14:56+08:00">
-                2021-08-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-20T07:38:43+08:00">
+                2020-11-20
               </time>
             
 
@@ -1654,12 +1647,34 @@
               
                 <span class="post-meta-item-text">Post modified</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:14:56+08:00">
-                2021-08-24
+              <time title="Post modified" itemprop="dateModified" datetime="2020-11-20T07:38:43+08:00">
+                2020-11-20
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/0day/" itemprop="url" rel="index">
+                    <span itemprop="name">0day</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1689,9 +1704,173 @@
 
       
         
+          <p>关于0day捕获的一些工作有幸在BlackHat Asia 2020进行分享 —— “Win the 0-Day Racing Game Against Botnet on Public Cloud”</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/zeroday-capture/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/exploit-exercises-vulnhub-01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/exploit-exercises-vulnhub-01/" itemprop="url">vulnhub 渗透测试练习 lampiao & FristiLeaks</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-01T21:11:34+08:00">
+                2018-09-01
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:32:00+08:00">
+                2021-08-24
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/writeup/" itemprop="url" rel="index">
+                    <span itemprop="name">writeup</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
           
             
           
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="lampiao"><a href="#lampiao" class="headerlink" title="lampiao"></a>lampiao</h2><p><a href="https://www.vulnhub.com/entry/lampiao-1,249/" target="_blank" rel="external">镜像在这里</a>，是<code>vulnhub</code>提供的一个虚拟机，用VM打开之后便开始渗透测试。</p>
+<h3 id="主机发现"><a href="#主机发现" class="headerlink" title="主机发现"></a>主机发现</h3><p>首先是主机发现，因为并不知道靶机的IP地址，于是使用<code>nmap</code>，进行扫描，这里我扫了vm虚拟网卡的C段<code>nmap -sn 192.168.0.0/16</code>，结果如下:</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/exploit-exercises-vulnhub-01/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1729,7 +1908,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1775,7 +1954,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">65</span>
+                <span class="site-state-item-count">54</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

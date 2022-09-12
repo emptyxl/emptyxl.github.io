@@ -16,13 +16,6 @@
   </url>
   
   <url>
-    <loc>https://blog.nyrae.icu/blog/ak-exploit/</loc>
-    
-    <lastmod>2022-08-27T04:13:55.516Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://blog.nyrae.icu/blog/security-overview/</loc>
     
     <lastmod>2022-08-27T00:14:02.758Z</lastmod>
@@ -40,20 +33,6 @@
     <loc>https://blog.nyrae.icu/blog/iam-and-idaas/</loc>
     
     <lastmod>2022-04-17T13:01:30.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.nyrae.icu/blog/traffic-hiding-via-cdn/</loc>
-    
-    <lastmod>2021-10-23T13:23:35.200Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.nyrae.icu/blog/socks-protocol-analysis/</loc>
-    
-    <lastmod>2021-09-11T15:00:00.848Z</lastmod>
     
   </url>
   
@@ -278,62 +257,6 @@
     <loc>https://blog.nyrae.icu/blog/archives/</loc>
     
     <lastmod>2021-08-24T13:23:32.392Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.nyrae.icu/blog/spoof-defense/</loc>
-    
-    <lastmod>2021-08-24T13:16:00.137Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.nyrae.icu/blog/zero-trust/</loc>
-    
-    <lastmod>2021-08-24T13:15:16.581Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.nyrae.icu/blog/cobaltstrike-analysis/</loc>
-    
-    <lastmod>2021-08-24T13:14:56.907Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.nyrae.icu/blog/metasploit-analysis/</loc>
-    
-    <lastmod>2021-08-24T13:14:29.987Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.nyrae.icu/blog/intrusion-respone/</loc>
-    
-    <lastmod>2021-08-24T12:34:02.148Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.nyrae.icu/blog/att-ck-matrix/</loc>
-    
-    <lastmod>2021-08-24T12:32:43.446Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.nyrae.icu/blog/container-security/</loc>
-    
-    <lastmod>2021-08-24T12:31:52.568Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.nyrae.icu/blog/hids-summary/</loc>
-    
-    <lastmod>2021-08-24T12:30:48.142Z</lastmod>
     
   </url>
   

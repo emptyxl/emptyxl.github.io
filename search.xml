@@ -6,11 +6,6 @@
     <content type="text"></content>
   </entry>
   <entry>
-    <title><![CDATA[ak-exploit]]></title>
-    <url>%2Fblog%2Fak-exploit%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
     <title><![CDATA[安全大图&趋势]]></title>
     <url>%2Fblog%2Fsecurity-overview%2F</url>
     <content type="text"><![CDATA[此篇用于收集各大机构公开发布的安全领域相关趋势和大图。]]></content>
@@ -47,59 +42,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[traffic-hiding-via-cdn]]></title>
-    <url>%2Fblog%2Ftraffic-hiding-via-cdn%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[socks-protocol-analysis]]></title>
-    <url>%2Fblog%2Fsocks-protocol-analysis%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[spoof-defense]]></title>
-    <url>%2Fblog%2Fspoof-defense%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[zero-trust]]></title>
-    <url>%2Fblog%2Fzero-trust%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[cobaltstrike-analysis]]></title>
-    <url>%2Fblog%2Fcobaltstrike-analysis%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[metasploit-analysis]]></title>
-    <url>%2Fblog%2Fmetasploit-analysis%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[intrusion-respone]]></title>
-    <url>%2Fblog%2Fintrusion-respone%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[att&ck-matrix]]></title>
-    <url>%2Fblog%2Fatt-ck-matrix%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[container-security]]></title>
-    <url>%2Fblog%2Fcontainer-security%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[hids_summary]]></title>
-    <url>%2Fblog%2Fhids-summary%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
     <title><![CDATA[加密流量检测的一些思路]]></title>
     <url>%2Fblog%2Fencrypted-traffic-analysis%2F</url>
-    <content type="text"></content>
+    <content type="text"><![CDATA[随着互联网攻击愈发频繁且攻击手段逐步提升，传统的明文数据传输已经无法满足企业和个人的隐私保护和安全需求。最为常见的HTTP明文数据的窃取，对于不可信的中间链路来说，轻而易举。因此，通过流量加密的方式在不可信的信道上进行传输，成为迫在眉睫的需求。Netscape在1995年提出了安全套接字层SSL协议,直到后来被传输层安全性TLS取代。目前根据Cisco的统计数据显示，目前超82%的流量都会经过加密处理。SSL/TLS也是目前使用最为广泛的加密层协议，HTTP、FTP、SMTP等协议都可以通过TLS来进行加密封装，从而实现安全传输。 除了业务越来越多使用加密流量之外，攻击者、僵尸网络以及蠕虫们也越来越多的使用加密流量来进行安全设备检测规避，例如常见的IDS、防火墙等设备由于无法获取证书，进而无法解密https流量，因此无法对这类流量进行检测，这也是这些产品的一些缺陷。当然WAF以及一些新版云防火墙逐渐开始支持用户上传证书从而进行流量解密，也可以达到检测的目的。虽然这些方式都有着一定的适用场景，但大部分其实都是针对南北向流量，特别是针对对外提供标准服务的web接口进行解密检测，对于入侵中后截断，例如载荷投递、命令通道以及横向移动，这些链路往往是主动出向且不是什么标准产品行为，目前据我所知并没有产品可以覆盖或者说无法针对这部分的加密流量进行解密后检测。 针对这类中控通信的流量检测，大部分产品会基于黑规则来去进行异常告警，例如去分析metasploit stage加载特征，cobaltstrike的握手特性等等，这些主要依靠人工分析的结果，这部分也是攻击者最易绕过或者对抗的地方。越来越多的攻击队会魔改工具，更高级一点的团队专有会有武器开发的员工进行自定义的武器实现，这部分攻击行为在你被入侵之前，是无法得知攻击特征的，这一点是毋庸置疑的。除此之外，有很多基于威胁情报的产品声称通过威胁情报可以检测这类攻击，效果嘛，谁用谁知道。个人觉得，威胁情报适用于2类场景，1类是无差别攻击类，例如僵尸网络、蠕虫、矿池通信等使用威胁情报会很精确，当然此类的时效性也非常重要(例如云主机的资产变动带来的影响)；第2类是同一组织针对不同目标展开的同类型行动，例如APT组织入侵A企业后经过溯源提取出的IOC，很有可能可以帮助B企业及时感知到攻击行为。 除此之外，其实还有第三类，就是攻防演练场景下的对抗或者针对特定目标的入侵与打击。这类攻击链路，从头到尾往往所使用的IOC、基础设施甚至攻击手法对防守方来说，都是新颖的，这也是笔者所面临的问题。当然，针对这类痛点，安全产品往往会采用机器学习+黑规则的方式声称可以检测xxx的攻击手法，并且检出率多少个9。当然我们不去评价他们的检测能力在实战的效果，但对于超大规模组织架构，超大规模网络流量以及超低告警延时要求的关键基础设施类甲方公司，此类检测能力所需要的数据和计算资源是否可以满足，也是一个未知数。因此，在此篇文章中，我们集中讨论中控通信类场景的另一种检测检测思路。 流量指纹首先我们来介绍下流量指纹。流量指纹是一种提取流量特征的技术，其目的是通过指纹的方式，对流量进行分类识别。那么特征越多且越有区分度，那么提取出来的指纹更趋向与唯一，能更好的表现和区分不同的流量数据。 由于我们关注的尝试是中控通信类的流量，那我们的核心目的就是一个，区分出恶意流量以及正常流量。一般来说，恶意流量总是通过恶意代码或恶意程序发出的，而恶意代码天然就和业务代码存在差异，那么这种代码层面的差异，是否可以体现在流量数据包的差异性。当然，这里我们不考虑内存马这种特殊情况，因为内存马发出的流量和业务代码很有可能具备相同的指纹信息。 TCP4层流量的指纹提取主要通过TCP字段中的值来进行，如下图，为典型的TCP栈指纹识别所涉及的字段。当然，不同的产品或者分析师会给出不同的字段提取方法以及hash计算方式。可以看到，这个指纹计算使用的字段并没有使用到IP_id字段，而这个字段在扫描器识别中有着很重要的作用。所以不通的产品以及检测点，对于指纹识别的方式都是会有一定差异的。这里TCP的指纹识别主要用于4层扫描、DDoS、脏数据污染甚至fuzz网络设备的解析等等场景，这里我们不做过度的展开。 HTTP我们来到应用层协议，HTTP协议是最为常见的协议也是我们用到最多的。市面上大多数的HTTP指纹指的是服务端HTTP服务的指纹，例如使用什么CMS，使用什么代理引擎，Nginx又或者是Tengine等。这种服务端HTTP指纹一般是通过response header以及respose body的keywords提取得到的，常用于漏洞的快速排查和资产的探测，这里不展开说，有兴趣的可以看我空间搜索引擎文章相关的介绍。我们这里说的HTTP协议指纹是指的request包的特征。 我们刚说了，我们的目的是中控通信类的场景，因此我们更加关注从我们内部网络通过隐秘隧道外联C2的场景。那在这种场景下，HTTP 的request就是我们重点关注的对象了。这里我来介绍一种思路。 我们来分析，当一个恶意程序通过HTTP报文与C2通信时，他和正常业务的HTTP请求最大的差异是什么。这里，其实是2部分，1是字段，2是字段顺序。我们来举个例子： 123456789101112131415161718192021222324252627# chrome打开网站GET / HTTP/1.1Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9Accept-Encoding: gzip, deflate, brAccept-Language: zh-CN,zh;q=0.9,en;q=0.8Cache-Control: no-cacheConnection: keep-aliveHost: www.baidu.comPragma: no-cacheSec-Fetch-Dest: documentSec-Fetch-Mode: navigateSec-Fetch-Site: noneSec-Fetch-User: ?1Upgrade-Insecure-Requests: 1User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36sec-ch-ua: "Google Chrome";v="105", "Not)A;Brand";v="8", "Chromium";v="105"sec-ch-ua-mobile: ?0sec-ch-ua-platform: "macOS"# curl程序打开baiduGET / HTTP/1.1Host: www.baidu.comUser-Agent: curl/7.64.1Accept: */* 我们可以看到，不同应用程序对于相同网站的访问存在很大差异，这和程序的实现及策略是密切相关的。同时，不同应用程序所涉及的字段也会有很大差异，比如代理类的会附加proxy-ip,trace_id，正常业务请求会附带cookie，以及很多业务会升级使用websocket来进行通信，而恶意程序的header字段往往很少或者包含一些特定的关键字段或内容，这都是比较关键的特征。除了header字段，header的顺序也非常重要，这个顺序可以构建成链，生成http的指纹信息。除此之外，user-agent,content-type等字段的内容对于特征的构建也十分重要。 TLS/SSL除了HTTP之外，https是目前最为广泛使用的协议类型。而TLS/SSL协议作为专门的加密层，也是承担了很重要的工作。SSL/TLS的具体握手逻辑详见我的协议分析文章，这里不再阐述。值得注意的是，在对称密钥协商完成之前，所有的握手包都是明文的。因此这些明文数据是提取TLS指纹的核心所在。 这里我们介绍一种业界熟知的JA3/JA3S指纹，且这类指纹计算已经广泛应用与各大安全产品中，例如cisco，VT等平台，我们这里来简单介绍下他的原理和计算逻辑。JA3与JA3S都是利用TLS握手包的各个字段提取信息进行hash。 JA3从client_hello包中提取以下字段作为指纹计算的输入，分别是： SSLVersion(handshake版本) Cipher(密码学套件) SSLExtension(SSL扩展字段) EllipticCurve(支持的椭圆曲线) EllipticCurvePointFormat(椭圆曲线参数是否压缩) 字段的值内部以,的方式分割，不同类型字段通过-进行连接。类似以下的形式，没有的字段置空即可。 1234567769,47-53-5-10-49161-49162-49171-49172-50-56-19-4,0-10-11,23-24-25,0769,47-53-5-10-49161-49162-49171-49172-50-56-19-4,0-10-11,,0之后对于拼接好的字符串进行MD5 hash即可769,47-53-5-10-49161-49162-49171-49172-50-56-19-4,0-10-11,23-24-25,0 --&gt; ada70206e40642a3e4461f35503241d5769,4-5-10-9-100-98-3-6-19-18-99,,, --&gt; de350869b8c85de67a350c8d186f11e6 JA3S是针对服务端server_hello包的特征提取并hash，其思路类似，提取3个字段并计算hash： SSLVersion(handshake版本) Cipher(密码学套件) SSLExtension(SSL扩展字段) SSH与JA3一样，对于最为常见的SSH协议同样可以可以通过握手包的字段进行提取。这里同样介绍一种hassh的指纹计算方式。如下图，指纹提取选用了ssh-key-exchange的字段，包括: Key Exchange methods(支持的密钥交换方法) Encryption(支持的加密策略) Message Authentication(支持的MAC策略) Compression(支持的压缩策略) 与JA3、JA3S类似，使用,;的方式进行字段拼接和组装，之后再使用MD5进行哈希即可得到指纹。 123ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group1-sha1;aes128-ctr,aes128-cbc,3des-ctr,3des-cbc,blowfish-cbc,aes192-ctr,aes192-cbc,aes256-ctr,aes256-cbc;hmac-md5,hmac-sha1,hmac-sha2-256,hmac-sha1-96,hmac-md5-96;none--&gt; 871d02a306268601bda0fc2af469da7e 流量指纹应用上面介绍了常见的一些协议的指纹，下面来说说这些指纹在实际中有什么具体作用。根据上面的特征提取流量我们可以看到，这些指纹的核心思想都是利用了不同程序在握手阶段不同字段的选择偏好，这种偏好体现在算法策略的选择和顺序上。因此相同的应用程序发出的流量指纹是一致的，准确的说，和具体发送流量包所实现的代码逻辑有关。 举个例子，当我们使用python代码时，最常使用requests是否具有相同的TLS指纹。我们写一段最简单的代码，然后通过单步调试观察requests是如何发包的。 1requests.get("https://x.x.x.x",verify=False) 当不指定ssl context参数时，则会默认创建context参数 由此我们可以得出结论，在默认不指定参数情况下，使用ssl.py库作为握手context产生的指纹都是一致的。也就是说，只要是python代码，无论是使用requests还是urllib在默认情况下的指纹都一致。我们也可以推并验证断出python、go、java应用的实现不一致，导致其流量的指纹也是不一致的。这种情况甚至在java7/java8中也是不一致的。这些区别，能够帮助我们很好的区分出，业务流量和黑客程序的流量，因为后门很有可能与业务不是同一种代码构建的，或者版本会有差异，又甚至是自己实现的整个握手流程。 所以，真的可以通过指纹来区分恶意流量吗？答案是否定的。我们首先不考虑攻击者的后门和业务逻辑使用相同的代码版本和发包库这种概率事件，仅仅单凭指纹来进行黑白判断是草率的，且你永远无法在入侵前计算出恶意程序的流量指纹。 Abuse创建了了一个SSL blacklist的网站，用于检索和上传恶意的JA3指纹作为情报。当然，不排除一些比较知名的后门程序从底层开始构建整个模块，因此他的流量指纹是独一无二的，更多的攻击者或者红军工具编写者都会基于python/go/java/C等高级语言的现有模块，进行封装从而完成中控通信的各种功能。所以仅仅从指纹层面进行黑白判断是不可靠的，主要是2方面原因： 误报高，恶意指纹容易与业务指纹相同，单纬度告警不可行 解释性差，例如只是存在一个go指纹的流量也不能100%确认是后门的通信 因此，应用层的流量指纹其实是无法黑白区分的，但是要理解他背后的深意，它映射着一类固定的应用程序。理解了这个，那么指纹其实根据场景以及其他辅助信息，也有着不错的效果，因此，笔者总结了流量指纹较为不错的应用场景: 特定恶意程序的识别(定制后门，自定义实现了协议通信逻辑) 异常流量过滤 XDR关联检测，利用流量指纹+进程 基线模型输入 有证书卸载场景下的指纹与声明不符检测(例如代理类，burp)]]></content>
       <categories>
         <category>traffic analysis</category>
       </categories>
@@ -193,8 +138,8 @@
         <category>vulnerability analysis</category>
       </categories>
       <tags>
-        <tag>web security</tag>
         <tag>vulnerability analysis</tag>
+        <tag>web security</tag>
         <tag>weblogic</tag>
       </tags>
   </entry>
@@ -304,8 +249,8 @@
         <category>vulnerability analysis</category>
       </categories>
       <tags>
-        <tag>web security</tag>
         <tag>vulnerability analysis</tag>
+        <tag>web security</tag>
         <tag>php</tag>
       </tags>
   </entry>

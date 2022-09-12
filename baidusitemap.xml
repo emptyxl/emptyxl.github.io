@@ -20,21 +20,6 @@
 
     
   <url>
-    <loc>https://blog.nyrae.icu/blog/ak-exploit/</loc>
-    <lastmod>2022-08-27T04:13:55.516Z</lastmod>
-    <data>
-        <display>
-        <title>ak-exploit</title>
-        <pubTime>2022-08-27T04:13:55.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://blog.nyrae.icu/blog/security-overview/</loc>
     <lastmod>2022-08-27T00:14:02.758Z</lastmod>
     <data>
@@ -101,36 +86,6 @@
 
     
   <url>
-    <loc>https://blog.nyrae.icu/blog/traffic-hiding-via-cdn/</loc>
-    <lastmod>2021-10-23T13:23:35.200Z</lastmod>
-    <data>
-        <display>
-        <title>traffic-hiding-via-cdn</title>
-        <pubTime>2021-10-23T13:23:35.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://blog.nyrae.icu/blog/socks-protocol-analysis/</loc>
-    <lastmod>2021-09-11T15:00:00.848Z</lastmod>
-    <data>
-        <display>
-        <title>socks-protocol-analysis</title>
-        <pubTime>2021-09-11T15:00:00.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://blog.nyrae.icu/blog/xss-bypass-tricks/</loc>
     <lastmod>2021-08-24T13:44:19.755Z</lastmod>
     <data>
@@ -160,9 +115,9 @@
         <title>Weblogic 常见漏洞分析</title>
         <pubTime>2018-07-21T12:32:51.000Z</pubTime>
         
-        <tag>web security</tag>
-         
         <tag>vulnerability analysis</tag>
+         
+        <tag>web security</tag>
          
         <tag>weblogic</tag>
          
@@ -418,9 +373,9 @@
         <title>PHP反序列化相关漏洞总结[CVE-2016-7124、SugarCRM、session 反序列化、HITCON 2016]</title>
         <pubTime>2018-04-15T13:14:21.000Z</pubTime>
         
-        <tag>web security</tag>
-         
         <tag>vulnerability analysis</tag>
+         
+        <tag>web security</tag>
          
         <tag>php</tag>
          
@@ -867,126 +822,6 @@
              
               <breadCrumb title="file format analysis" url="https://blog.nyrae.icu/categories/file-format-analysis/"/>
           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://blog.nyrae.icu/blog/spoof-defense/</loc>
-    <lastmod>2021-08-24T13:16:00.137Z</lastmod>
-    <data>
-        <display>
-        <title>spoof-defense</title>
-        <pubTime>2021-08-24T13:16:00.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://blog.nyrae.icu/blog/zero-trust/</loc>
-    <lastmod>2021-08-24T13:15:16.581Z</lastmod>
-    <data>
-        <display>
-        <title>zero-trust</title>
-        <pubTime>2021-08-24T13:15:16.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://blog.nyrae.icu/blog/cobaltstrike-analysis/</loc>
-    <lastmod>2021-08-24T13:14:56.907Z</lastmod>
-    <data>
-        <display>
-        <title>cobaltstrike-analysis</title>
-        <pubTime>2021-08-24T13:14:56.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://blog.nyrae.icu/blog/metasploit-analysis/</loc>
-    <lastmod>2021-08-24T13:14:29.987Z</lastmod>
-    <data>
-        <display>
-        <title>metasploit-analysis</title>
-        <pubTime>2021-08-24T13:14:29.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://blog.nyrae.icu/blog/intrusion-respone/</loc>
-    <lastmod>2021-08-24T12:34:02.148Z</lastmod>
-    <data>
-        <display>
-        <title>intrusion-respone</title>
-        <pubTime>2021-08-24T12:34:02.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://blog.nyrae.icu/blog/att-ck-matrix/</loc>
-    <lastmod>2021-08-24T12:32:43.446Z</lastmod>
-    <data>
-        <display>
-        <title>att&ck-matrix</title>
-        <pubTime>2021-08-24T12:32:43.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://blog.nyrae.icu/blog/container-security/</loc>
-    <lastmod>2021-08-24T12:31:52.568Z</lastmod>
-    <data>
-        <display>
-        <title>container-security</title>
-        <pubTime>2021-08-24T12:31:52.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://blog.nyrae.icu/blog/hids-summary/</loc>
-    <lastmod>2021-08-24T12:30:48.142Z</lastmod>
-    <data>
-        <display>
-        <title>hids_summary</title>
-        <pubTime>2021-08-24T12:30:48.000Z</pubTime>
-        
-         
-           
         </display>
     </data>
     </url>
