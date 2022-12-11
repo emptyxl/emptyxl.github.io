@@ -338,169 +338,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/sqli-labs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/sqli-labs/" itemprop="url">sqli-labs writeup</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-14T13:54:31+08:00">
-                2017-10-14
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:42:31+08:00">
-                2021-08-24
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web-security/" itemprop="url" rel="index">
-                    <span itemprop="name">web security</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><a href="https://github.com/Audi-1/sqli-labs" target="_blank" rel="external">Sqli-labs</a>是一个练习<code>SQL注入</code>的很好的一个平台，可以直接下载后使用。注意由于充满漏洞，推荐在虚拟机中使用，并使用<code>host-only</code>模式，不要让其联网。</p>
-<h3 id="平台搭建"><a href="#平台搭建" class="headerlink" title="平台搭建"></a>平台搭建</h3><p>我这里是采用了<code>虚拟机</code>+<code>win10</code>+<code>phpStudy</code>,然后直接将下载的<code>sqli-labs-master</code>放到<code>www</code>文件夹中即可。</p>
-<h3 id="Basic-Challenges"><a href="#Basic-Challenges" class="headerlink" title="Basic Challenges"></a>Basic Challenges</h3><p>每个<code>less</code>都有提示会告诉你是什么类型的题,我们也能看到后台源码，所以比较好去理解。</p>
-<h4 id="less-1"><a href="#less-1" class="headerlink" title="less-1"></a>less-1</h4><p>简单的<code>&#39;</code>绕过</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http:<span class="regexp">//</span><span class="number">10.37</span>.<span class="number">129.3</span><span class="regexp">/sqli-labs-master/</span>Less-<span class="number">1</span><span class="regexp">/?id=1' or 1=2 %23</span></div></pre></td></tr></table></figure>
-<p>发现正常运行，即注入成功。<br>之后是比较基础的脱裤步骤，具体操作可以看我的另一篇文章<a href="https://hellohxk.com/blog/sql-injection/" target="_blank" rel="external">SQL注入总结</a>总结了基本步骤。本例练习一下脱裤，之后如果不是有一些特殊方式，就不再贴出来了。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/sqli-labs/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/archives/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1983,6 +1820,169 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/nginx-uwsgi-django/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/nginx-uwsgi-django/" itemprop="url">Nginx+uwsgi+Django服务器部署</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-17T22:14:15+08:00">
+                2017-05-17
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:38:20+08:00">
+                2021-08-24
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-development/" itemprop="url" rel="index">
+                    <span itemprop="name">web development</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>本文主要介绍使用<code>Django</code>框架编写的服务器部署方式，采用<code>Nginx+uwsgi</code>，建议去理解每一个部件的具体作用，而不是去遵循教程一步步设置。</p>
+<p><code>Nginx+uwsgi+Django</code>其主要原理是:<code>Nginx</code>负责接收所有访问服务器的请求，<code>静态资源(css、js、images等)</code>等内容直接由<code>Nginx</code>进行返回，<code>动态资源</code>通过<code>uwsgi</code>去请求。</p>
+<h3 id="Nginx-engine-X"><a href="#Nginx-engine-X" class="headerlink" title="Nginx(engine X)"></a>Nginx(engine X)</h3><blockquote>
+<p>Nginx is a web server, which can also be used as a reverse proxy, load balancer and HTTP cache. Nginx can be deployed to serve dynamic HTTP content on the network using FastCGI, SCGI handlers for scripts, WSGI application servers or Phusion Passenger modules, and it can serve as a software load balancer.Nginx uses an asynchronous event-driven approach to handling requests. Nginx’s modular event-driven architecture can provide more predictable performance under high loads.  </p>
+<p> 在Linux操作系统下，nginx使用epoll事件模型，得益于此，nginx在Linux操作系统下效率相当高。同时Nginx在OpenBSD或FreeBSD操作系统上采用类似于epoll的高效事件模型kqueue。</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/nginx-uwsgi-django/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -2033,7 +2033,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">54</span>
+                <span class="site-state-item-count">53</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

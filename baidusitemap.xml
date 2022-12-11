@@ -3,31 +3,15 @@
 
 
     
-    
-  <url>
-    <loc>https://blog.nyrae.icu/blog/defence-in-depth/</loc>
-    <lastmod>2022-08-27T04:22:11.995Z</lastmod>
-    <data>
-        <display>
-        <title>defence-in-depth</title>
-        <pubTime>2022-08-27T04:22:11.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
   <url>
     <loc>https://blog.nyrae.icu/blog/security-overview/</loc>
-    <lastmod>2022-08-27T00:14:02.758Z</lastmod>
+    <lastmod>2022-12-11T05:59:55.129Z</lastmod>
     <data>
         <display>
-        <title>安全大图&趋势</title>
+        <title>安全架构&趋势</title>
         <pubTime>2022-05-16T13:07:44.000Z</pubTime>
         
-        <tag>overview</tag>
+        <tag>overview,architecture,trend</tag>
          
          
            
@@ -38,6 +22,7 @@
     </data>
     </url>
 
+    
     
   <url>
     <loc>https://blog.nyrae.icu/blog/cloud-metadata-exploit/</loc>

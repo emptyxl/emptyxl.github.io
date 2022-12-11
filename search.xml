@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[defence-in-depth]]></title>
-    <url>%2Fblog%2Fdefence-in-depth%2F</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[安全大图&趋势]]></title>
+    <title><![CDATA[安全架构&趋势]]></title>
     <url>%2Fblog%2Fsecurity-overview%2F</url>
     <content type="text"><![CDATA[此篇用于收集各大机构公开发布的安全领域相关趋势和大图。]]></content>
       <categories>
         <category>overview</category>
       </categories>
       <tags>
-        <tag>overview</tag>
+        <tag>overview,architecture,trend</tag>
       </tags>
   </entry>
   <entry>

@@ -338,168 +338,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/python-str-format-vulnerability/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="empty_xl">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="empty_xl Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/python-str-format-vulnerability/" itemprop="url">python字符串格式化漏洞利用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-04T16:07:12+08:00">
-                2018-01-04
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:40:21+08:00">
-                2021-08-24
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web-security/" itemprop="url" rel="index">
-                    <span itemprop="name">web security</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="python字符串格式"><a href="#python字符串格式" class="headerlink" title="python字符串格式"></a>python字符串格式</h3><p>python字符串的格式化输出有多种写法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="string">"hello %s , I'm %s"</span> % (<span class="string">'Alice'</span>,<span class="string">'Bob'</span>)</div><div class="line"><span class="string">"hello %(sname)s , I'm %(cname)s"</span> % &#123;<span class="string">'sname'</span>:<span class="string">'Alice'</span>,<span class="string">'cname'</span>:<span class="string">'Bob'</span>&#125;</div><div class="line"></div><div class="line"><span class="string">"hello &#123;&#125;"</span>.format(<span class="string">'Tom'</span>)</div><div class="line"><span class="string">"hello &#123;cname&#125;"</span>.format(cname=<span class="string">'Tom'</span>)</div></pre></td></tr></table></figure>
-<p>举一些例子:</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="string">"&#123;number:0.2f&#125;"</span>.<span class="built_in">format</span>(<span class="built_in">number</span>=<span class="number">0.5678</span>) <span class="comment"># 等同于 "%0.2f" % 0.5678，保留两位小数</span></div><div class="line"><span class="string">"int: &#123;0:d&#125;;  hex: &#123;0:#x&#125;;  oct: &#123;0:#o&#125;;  bin: &#123;0:#b&#125;"</span>.<span class="built_in">format</span>(<span class="number">42</span>) <span class="comment"># 转换进制</span></div><div class="line"><span class="string">"&#123;user.username&#125;"</span>.<span class="built_in">format</span>(user=request.username) <span class="comment"># 获取对象属性</span></div><div class="line"><span class="string">"&#123;arr[2]&#125;"</span>.<span class="built_in">format</span>(arr=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]) <span class="comment"># 获取数组键值</span></div><div class="line"><span class="string">"&#123;:&lt;30&#125;"</span>.<span class="built_in">format</span>(<span class="string">'left aligned'</span>)  <span class="comment"># 左对齐并占位30个字符</span></div><div class="line"><span class="string">'&#123;:^30&#125;'</span>.<span class="built_in">format</span>(<span class="string">'centered'</span>) <span class="comment"># 居中</span></div><div class="line"><span class="string">'&#123;:*^30&#125;'</span>.<span class="built_in">format</span>(<span class="string">'centered'</span>)  <span class="comment"># 用*填充</span></div></pre></td></tr></table></figure>
-<p>更多具体使用方式的可以参照python手册</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/python-str-format-vulnerability/" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/ssti/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1997,6 +1835,169 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.nyrae.icu/blog/sqli-labs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="empty_xl">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="empty_xl Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/sqli-labs/" itemprop="url">sqli-labs writeup</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-14T13:54:31+08:00">
+                2017-10-14
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2021-08-24T21:42:31+08:00">
+                2021-08-24
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web-security/" itemprop="url" rel="index">
+                    <span itemprop="name">web security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><a href="https://github.com/Audi-1/sqli-labs" target="_blank" rel="external">Sqli-labs</a>是一个练习<code>SQL注入</code>的很好的一个平台，可以直接下载后使用。注意由于充满漏洞，推荐在虚拟机中使用，并使用<code>host-only</code>模式，不要让其联网。</p>
+<h3 id="平台搭建"><a href="#平台搭建" class="headerlink" title="平台搭建"></a>平台搭建</h3><p>我这里是采用了<code>虚拟机</code>+<code>win10</code>+<code>phpStudy</code>,然后直接将下载的<code>sqli-labs-master</code>放到<code>www</code>文件夹中即可。</p>
+<h3 id="Basic-Challenges"><a href="#Basic-Challenges" class="headerlink" title="Basic Challenges"></a>Basic Challenges</h3><p>每个<code>less</code>都有提示会告诉你是什么类型的题,我们也能看到后台源码，所以比较好去理解。</p>
+<h4 id="less-1"><a href="#less-1" class="headerlink" title="less-1"></a>less-1</h4><p>简单的<code>&#39;</code>绕过</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http:<span class="regexp">//</span><span class="number">10.37</span>.<span class="number">129.3</span><span class="regexp">/sqli-labs-master/</span>Less-<span class="number">1</span><span class="regexp">/?id=1' or 1=2 %23</span></div></pre></td></tr></table></figure>
+<p>发现正常运行，即注入成功。<br>之后是比较基础的脱裤步骤，具体操作可以看我的另一篇文章<a href="https://hellohxk.com/blog/sql-injection/" target="_blank" rel="external">SQL注入总结</a>总结了基本步骤。本例练习一下脱裤，之后如果不是有一些特殊方式，就不再贴出来了。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/sqli-labs/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -2047,7 +2048,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">54</span>
+                <span class="site-state-item-count">53</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

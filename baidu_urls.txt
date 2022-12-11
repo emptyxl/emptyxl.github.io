@@ -1,4 +1,3 @@
-https://blog.nyrae.icu/blog/defence-in-depth/
 https://blog.nyrae.icu/blog/security-overview/
 https://blog.nyrae.icu/blog/cloud-metadata-exploit/
 https://blog.nyrae.icu/blog/iam-and-idaas/
